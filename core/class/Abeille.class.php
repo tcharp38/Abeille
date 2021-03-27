@@ -607,6 +607,33 @@ if (0) {
         // log::add( 'Abeille', 'debug', 'cron1: Start ------------------------------------------------------------------------------------------------------------------------' );
         $param = AbeilleTools::getParameters();
 
+        $status = AbeilleTools::checkAllDaemons($param, AbeilleTools::getRunningDaemons());
+        $shm = shm_attach(12, 16384, 0600);
+        if ($shm == FALSE) {
+            log::add('Abeille', 'debug', "cron1: ERROR shm_attach()");
+        } else {
+            log::add('Abeille', 'debug', "cron1: status['state']=".$status['state']);
+            shm_put_var($shm, 13, $status['state']);
+            shm_detach($shm);
+        }
+
+        // Check ipcs situation pour detecter des soucis eventuels
+        // Moved from deamon_info()
+        if (msg_stat_queue(msg_get_queue(queueKeyAbeilleToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyAbeilleToAbeille');
+        if (msg_stat_queue(msg_get_queue(queueKeyAbeilleToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyAbeilleToCmd');
+        if (msg_stat_queue(msg_get_queue(queueKeyParserToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToAbeille');
+        if (msg_stat_queue(msg_get_queue(queueKeyParserToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToCmd');
+        if (msg_stat_queue(msg_get_queue(queueKeyParserToLQI))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToLQI');
+        if (msg_stat_queue(msg_get_queue(queueKeyCmdToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyCmdToAbeille');
+        if (msg_stat_queue(msg_get_queue(queueKeyCmdToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyCmdToCmd');
+        if (msg_stat_queue(msg_get_queue(queueKeyLQIToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyLQIToAbeille');
+        if (msg_stat_queue(msg_get_queue(queueKeyLQIToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyLQIToCmd');
+        if (msg_stat_queue(msg_get_queue(queueKeyXmlToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyXmlToAbeille');
+        if (msg_stat_queue(msg_get_queue(queueKeyXmlToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyXmlToCmd');
+        if (msg_stat_queue(msg_get_queue(queueKeyFormToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyFormToCmd');
+        if (msg_stat_queue(msg_get_queue(queueKeySerieToParser))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeySerieToParser');
+        if (msg_stat_queue(msg_get_queue(queueKeyParserToCmdSemaphore))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToCmdSemaphore');
+
         // https://github.com/jeelabs/esp-link
         // The ESP-Link connections on port 23 and 2323 have a 5 minute inactivity timeout.
         // so I need to create a minimum of traffic, so pull zigate every minutes
@@ -690,64 +717,59 @@ if (0) {
         if (count($count) > 1) message::add("Abeille", "Danger vous avez plusieurs Zigate en mode inclusion: " . json_encode($count) . ". L equipement peut se joindre a l un ou l autre resau zigbee.", "Vérifier sur quel reseau se joint l equipement.");
 
         // log::add( 'Abeille', 'debug', 'cron1: Fin ------------------------------------------------------------------------------------------------------------------------' );
-        AbeilleTools::checkAllDaemons($param, AbeilleTools::getRunningDaemons());
     }
 
     /**
-     * daemon info monitor the daemons and report information to update configuration page in jeedom
+     * Jeedom required function: report plugin & config status
      * @param none
      * @return array with state, launchable, launchable_message
      */
     public static function deamon_info()
     {
-        $debug_deamon_info = 0;
-        // log::add('Abeille', 'debug', 'deamon_info(): Démarrage'); // Useless
+        /* Notes:
+           Since Abeille has its own way to restart missing daemons, reporting only
+           cron status as global Abeille status to avoid conflict between
+           - Jeedom asking daemons restart (automatic management)
+           - Abeille internal daemons restart */
 
-        // On suppose que tout est bon et on cherche les problemes.
-        $return = array('state' => 'ok',  // On couvre le fait que le process tourne en tache de fond
-            'launchable' => 'ok',  // On couvre la configuration de plugin
-            'launchable_message' => "",);
+        /* Init with no valid status */
+        $status = array(
+            'state' => 'nok',  // On couvre le fait que le process tourne en tache de fond
+            'launchable' => 'nok',  // On couvre la configuration de plugin
+            'launchable_message' => ""
+        );
 
-        // On vérifie que le demon est demarrable
-        // On verifie qu'on n'a pas d erreur dans la recuperation des parametres
+        /* Reading daemons status from shared mem (updated by cron 1min) */
+        // $shm = shm_attach(12, 16384, 0600);
+        // if ($shm == FALSE) {
+        //     log::add('Abeille', 'debug', 'deamon_info: shm_attach() failed');
+        // } else if (!shm_get_var($shm, 13))
+        //     log::add('Abeille', 'debug', 'deamon_info: shm_get_var(13) failed');
+        // else {
+        //     $dStatus = shm_get_var($shm, 13);
+        //     if ($dStatus != "")
+        //         $status['state'] = $dStatus;
+        //     shm_detach($shm);
+        // }
+
+        /* Checking there is no error getting parameters and daemon can be started. */
+        // TODO: Tcharp38. To be optimized. Each deamon_info() call leads to mysql DB interrogation.
         $parameters = AbeilleTools::getParameters();
         if ($parameters['parametersCheck'] != "ok") {
             log::add('Abeille', 'warning', 'deamon_info(): parametersCheck NOT ok');
-            $return['launchable'] = $parameters['parametersCheck'];
-            $return['launchable_message'] = $parameters['parametersCheck_message'];
         }
+        $status['launchable'] = $parameters['parametersCheck'];
+        // Tcharp38: Where is reported 'launchable_message' ?
+        $status['launchable_message'] = $parameters['parametersCheck_message'];
 
         // si la cron tourne alors le plugin a été démarré.
-        if (AbeilleTools::isAbeilleCronRunning() == false) {
-            $return['state'] = "nok";
+        if (AbeilleTools::isAbeilleCronRunning() == TRUE) {
+            $status['state'] = "ok";
             // log::add('Abeille', 'warning', 'deamon_info(): Le plugin n\'est pas démarré. la cron ne tourne pas');
-            return $return;
         }
-        // log::add('Abeille', 'info', 'deamon_info(): Le plugin est démarré. la cron tourne');
 
-        // Nb de demon devant tourner: Parser + cmd + n x ( Zigate serial ) + socat si wifi
-
-        // Comptons les process prevus.
-        AbeilleTools::checkAllDaemons($parameters, AbeilleTools::getRunningDaemons());
-
-        // Check ipcs situation pour detecter des soucis eventuels
-        if (msg_stat_queue(msg_get_queue(queueKeyAbeilleToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyAbeilleToAbeille');
-        if (msg_stat_queue(msg_get_queue(queueKeyAbeilleToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyAbeilleToCmd');
-        if (msg_stat_queue(msg_get_queue(queueKeyParserToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToAbeille');
-        if (msg_stat_queue(msg_get_queue(queueKeyParserToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToCmd');
-        if (msg_stat_queue(msg_get_queue(queueKeyParserToLQI))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToLQI');
-        if (msg_stat_queue(msg_get_queue(queueKeyCmdToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyCmdToAbeille');
-        if (msg_stat_queue(msg_get_queue(queueKeyCmdToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyCmdToCmd');
-        if (msg_stat_queue(msg_get_queue(queueKeyLQIToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyLQIToAbeille');
-        if (msg_stat_queue(msg_get_queue(queueKeyLQIToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyLQIToCmd');
-        if (msg_stat_queue(msg_get_queue(queueKeyXmlToAbeille))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyXmlToAbeille');
-        if (msg_stat_queue(msg_get_queue(queueKeyXmlToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyXmlToCmd');
-        if (msg_stat_queue(msg_get_queue(queueKeyFormToCmd))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyFormToCmd');
-        if (msg_stat_queue(msg_get_queue(queueKeySerieToParser))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeySerieToParser');
-        if (msg_stat_queue(msg_get_queue(queueKeyParserToCmdSemaphore))["msg_qnum"] > 100) log::add('Abeille', 'info', 'deamon_info(): --------- ipcs queue too full: queueKeyParserToCmdSemaphore');
-
-        if ($debug_deamon_info) log::add('Abeille', 'debug', 'deamon_info(): Terminé, return=' . json_encode($return));
-        return $return;
+        log::add('Abeille', 'debug', 'deamon_info(): '.json_encode($status));
+        return $status;
     }
 
     /* This function is used before starting daemons to
@@ -796,14 +818,6 @@ if (0) {
     public static function deamon_start($_debug = false)
     {
         log::add('Abeille', 'debug', 'deamon_start(): Démarrage');
-
-        /* Developers debug features.
-               Since deamon_start() is static, could not find a way to reuse global variables.
-               WARNING: Since php file is cached, it sometimes requires delay or restart to
-                 get last content of 'debug.json' */
-        $dbgFile = __DIR__ . "/../../tmp/debug.json";
-        // if (file_exists($dbgFile))
-        //     include $dbgFile; // TODO: To be revisited with debug.json
 
         /* Some checks before starting daemons
                - Are dependancies ok ?
@@ -868,9 +882,23 @@ if (0) {
         //demarrage d'un cron pour le plugin.
         cron::byClassAndFunction('Abeille', 'deamon')->run();
 
-        $parameters = AbeilleTools::getParameters();
-        $running = AbeilleTools::getRunningDaemons();
-        AbeilleTools::restartMissingDaemons($parameters, $running);
+        // $parameters = AbeilleTools::getParameters();
+        // $running = AbeilleTools::getRunningDaemons();
+        // AbeilleTools::restartMissingDaemons($parameters, $running);
+
+        /* Starting all required daemons */
+        AbeilleTools::startDaemons($param);
+
+        /* Starting 'AbeilleMonitor' daemon too if required */
+        /* Reread 'debug.json' to avoid PHP cache issues */
+        if (file_exists(dbgFile)) {
+            $dbgConfig = json_decode(file_get_contents(dbgFile), TRUE);
+        }
+        if (isset($dbgConfig["dbgMonitorAddr"])) {
+            log::add('Abeille', 'debug', 'deamon_start(): Démarrage AbeilleMonitor');
+            $cmd = AbeilleTools::getStartCommand($param, "AbeilleMonitor");
+            exec($cmd.' &');
+        }
 
         // Send a message to Abeille to ask for Abeille Object creation: inclusion, ...
         for ($i = 1; $i <= $param['zigateNb']; $i++) {
@@ -950,45 +978,37 @@ if (0) {
     {
         log::add('Abeille', 'debug', 'deamon_stop(): Démarrage');
 
-        // Stop socat if exist
-        // exec("ps -e -o '%p %a' --cols=10000 | awk '/socat /' | awk '/\/dev\/zigate/' | awk '{print $1}' | tr  '\n' ' '", $output);
-        exec("ps -e -o '%p %a' --cols=10000 | awk '/socat /' | awk '/\/dev\/zigate/' | awk '{print $1}' | awk '{printf \"%s \",$0} END {print \"\"}'", $output);
-        log::add('Abeille', 'debug', 'deamon_stop(): Killing deamons socat: ' . implode($output, '!'));
-        system::kill(implode($output, ' '), true);
-        exec(system::getCmdSudo() . "kill -15 " . implode($output, ' ') . " 2>&1");
-        exec(system::getCmdSudo() . "kill -9 " . implode($output, ' ') . " 2>&1");
-
-        /* Stop other deamons */
-        exec("ps -e -o '%p %a' --cols=10000 | awk '/Abeille(Parser|SerialRead|Cmd|Socat|Interrogate|LQI).php /' | awk '{print $1}' | awk '{printf \"%s \",$0} END {print \"\"}'", $output);
-        log::add('Abeille', 'debug', 'deamon stop: Killing deamons: ' . implode($output, '!'));
-        system::kill(implode($output, ' '), true);
-        exec(system::getCmdSudo() . "kill -15 " . implode($output, ' ') . " 2>&1");
-        exec(system::getCmdSudo() . "kill -9 " . implode($output, ' ') . " 2>&1");
-
-        // Stop main deamon
-        log::add('Abeille', 'debug', 'deamon_stop(): Arret du cron');
+        /* Stopping cron */
         $cron = cron::byClassAndFunction('Abeille', 'deamon');
-        if (is_object($cron)) {
-            $cron->halt();
-            // log::add('Abeille', 'error', 'deamon_stop(): demande d arret du cron faite');
-        } else {
+        if (!is_object($cron))
             log::add('Abeille', 'error', 'deamon_stop(): Tache cron introuvable');
-        }
+        else if ($cron->running()) {
+            log::add('Abeille', 'debug', 'deamon_stop(): Arret du cron');
+            $cron->halt();
+while ($cron->running()) {
+    usleep(500000);
+    log::add('Abeille', 'debug', 'deamon_stop(): cron STILL running');
+}
+        } else
+            log::add('Abeille', 'debug', 'deamon_stop(): cron déja arrété');
 
-        msg_remove_queue(msg_get_queue(queueKeyAbeilleToAbeille));
-        msg_remove_queue(msg_get_queue(queueKeyAbeilleToCmd));
-        msg_remove_queue(msg_get_queue(queueKeyParserToAbeille));
-        msg_remove_queue(msg_get_queue(queueKeyParserToCmd));
-        msg_remove_queue(msg_get_queue(queueKeyParserToLQI));
-        msg_remove_queue(msg_get_queue(queueKeyCmdToAbeille));
-        msg_remove_queue(msg_get_queue(queueKeyCmdToCmd));
-        msg_remove_queue(msg_get_queue(queueKeyLQIToAbeille));
-        msg_remove_queue(msg_get_queue(queueKeyLQIToCmd));
-        msg_remove_queue(msg_get_queue(queueKeyXmlToAbeille));
-        msg_remove_queue(msg_get_queue(queueKeyXmlToCmd));
-        msg_remove_queue(msg_get_queue(queueKeyFormToCmd));
-        msg_remove_queue(msg_get_queue(queueKeySerieToParser));
-        msg_remove_queue(msg_get_queue(queueKeyParserToCmdSemaphore));
+        /* Stopping all 'Abeille' daemons */
+        AbeilleTools::stopDaemons();
+
+        /* Removing all queues */
+        $all = array(
+            queueKeyAbeilleToAbeille, queueKeyAbeilleToCmd,
+            queueKeyCmdToMon, queueKeyParserToMon, queueKeyMonToCmd,
+            queueKeyAssistToParser, queueKeyParserToAssist, queueKeyAssistToCmd,
+            queueKeyParserToLQI, queueKeyLQIToAbeille, queueKeyLQIToCmd,
+            queueKeyParserToAbeille, queueKeyParserToCmd, queueKeyCmdToAbeille, queueKeyCmdToCmd,
+            queueKeyXmlToAbeille, queueKeyXmlToCmd, queueKeyFormToCmd, queueKeySerieToParser, queueKeySerialToParser, queueKeyParserToCmdSemaphore
+        );
+        foreach ($all as $queueId) {
+            $queue = msg_get_queue($queueId);
+            if ($queue != FALSE)
+                msg_remove_queue($queue);
+        }
 
         log::add('Abeille', 'debug', 'deamon_stop(): Terminé');
     }
