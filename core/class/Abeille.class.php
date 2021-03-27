@@ -804,6 +804,9 @@ if (0) {
             $status['launchable_message'] = $config['parametersCheck_message'];
             log::add('Abeille', 'warning', 'deamon_info(): Config zigate invalide');
         }
+        $status['launchable'] = $parameters['parametersCheck'];
+        // Tcharp38: Where is reported 'launchable_message' ?
+        $status['launchable_message'] = $parameters['parametersCheck_message'];
 
         /* Checking main cron = main Abeille's daemon */
         if (AbeilleTools::isAbeilleCronRunning() == false) {
