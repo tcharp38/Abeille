@@ -31,6 +31,12 @@
 
             /* Exclude feature */
             echo '<a onclick="removeBees('.$i.')" class="btn btn-primary btn-xs" style="margin-left:8px" title="Supprime les équipement(s) sélectionné(s) si fonctionnent SUR SECTEUR.">{{Exclure}}</a>';
+
+            /* Monitoring feature */
+            echo '<a onclick="monitorIt('.$i.', \''.$port.'\')" class="btn btn-primary btn-xs" style="margin-left:8px" title="Surveillance des messages vers/de l\'équipement sélectionné. Sortie dans \'AbeilleMonitor\'.">{{Surveiller}}</a>';
+
+            /* TODO: What about Wifi zigate ? */
+            echo '<a onclick="cleanBees('.$i.', \''.$port.'\')" class="btn btn-primary btn-xs" style="margin-left:8px" title="Comparaison des périphériques connus entre Zigate & Jeedom, et nettoyage.">{{Nettoyer}}</a>';
         }
 
 		echo '<div class="eqLogicThumbnailContainer">';
