@@ -29,20 +29,9 @@
     /* Called from AbeilleParser to add a message to monitor.
        'addr' is either short address if 2 bytes, or IEEE address if 8 bytes.
        'logSetConf()' must be called first from parser. */
-    function monMsgFromZigate($addr, $msgDecoded)
+    function monMsgFromZigate($msgDecoded)
     {
         // logMessage("debug", "monMsgFromZigate('".$addr."', '".$msgDecoded."')");
-
-        /* $addr currently unused. Filtered at upper level */
-        // if (strlen($addr) == 4) {
-            // global $dbgMonitorAddr;
-            // if (strtolower($addr) != strtolower($dbgMonitorAddr))
-                // return;
-        // } else { // Extended address
-            // global $dbgMonitorAddrExt;
-            // if (strtolower($addr) != strtolower($dbgMonitorAddrExt))
-                // return;
-        // }
 
         /* Check queue */
         if (!msg_queue_exists(queueKeyParserToMon))
