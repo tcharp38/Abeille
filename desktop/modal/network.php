@@ -170,25 +170,35 @@
                         <br />
                         <br />
 
-                        <label class="control-label" data-toggle="tooltip" title="Filtre les noeuds par emetteur">{{Source}}</label>
+                        <!-- Tcharp38: Hidden since does not work and no time to spend on.
+                        <label class="control-label" data-toggle="tooltip" title="Filtre par routeur">{{Routeur}}</label>
                         <select class="filter" id="nodeFrom"> </select>
+                        <label class="control-label" data-toggle="tooltip" title="Filtre par noeuds voisins">{{Voisin}}</label>
+                        <select class="filter" id="nodeTo"> </select> -->
 
-                        <label class="control-label" data-toggle="tooltip" title="Filtre les noeuds par destinataire">{{Destinataire}}</label>
-                        <select class="filter" id="nodeTo"> </select>
+                        <br />
+                        <br />
 
                         <table class="table table-condensed tablesorter" id="idLinksTable">
                             <thead>
                                 <tr>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{ID}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{NE_Objet}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Name}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Voisine}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Voisine_Objet}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Voisine_Name}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Relation}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Profondeur}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{LQI}}</th>
-                                    <th class="header" data-toggle="tooltip" title="Trier par">{{Type}}</th>
+                                    <th class="header" data-toggle="tooltip" colspan=3 bgcolor="gainsboro">{{Routeur}}</th>
+                                    <th class="header" data-toggle="tooltip" colspan=4 bgcolor="ghostwhite">{{Voisinage}}</th>
+                                    <th class="header" data-toggle="tooltip" colspan=3 bgcolor="gainsboro">{{Relation}}</th>
+                                </tr>
+                                <tr>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="gainsboro">{{Nom}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="gainsboro">{{Objet}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="gainsboro">{{ID}}</th>
+
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="ghostwhite">{{Nom}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="ghostwhite">{{Objet}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="ghostwhite">{{ID}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="ghostwhite">{{Type}}</th>
+
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="gainsboro">{{Relation}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="gainsboro">{{Profondeur}}</th>
+                                    <th class="header" data-toggle="tooltip" title="Trier par" bgcolor="gainsboro">{{LQI}}</th>
                                 </tr>
                             </thead>
                             <tbody>

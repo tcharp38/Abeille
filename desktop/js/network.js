@@ -523,18 +523,19 @@ function displayLinksTable(zigateX) {
                     nodeJId = 'not found in jeedom DB';
                 }
 
-                //console.log('nodeJName NE 2 (@ zigbee): ' + nodeJName + " , nodeJId: "+ nodeJId);
-                tbody += '<td id="neId">';
-                tbody += '<span  class="label label-primary" style="font-size : 1em;" data-nodeid="' + nodeJName + '">' + nodeJName + '</span> ';
+                /* RouterName/RouterObjet/RouterId */
+                tbody += '<td id="neObjet" bgcolor="gainsboro">';
+                tbody += '<div style="opacity:0.5"><i>' + nodes[nodeFromJson].NE_Name + '</i></div>';
                 tbody += '</td>';
 
-                tbody += '<td id="neName">';
+                tbody += '<td id="neName" bgcolor="gainsboro">';
                 tbody += '<div style="opacity:0.5"><i>' + nodes[nodeFromJson].NE_Objet + '</i></div>';
                 tbody += '</td>';
 
-                tbody += '<td id="neObjet">';
-                tbody += '<div style="opacity:0.5"><i>' + nodes[nodeFromJson].NE_Name + '</i></div>';
+                tbody += '<td id="neId" bgcolor="gainsboro">';
+                tbody += '<span class="label label-primary" style="font-size : 1em;" data-nodeid="' + nodeJName + '">' + nodeJName + '</span> ';
                 tbody += '</td>';
+
 
                 //Process Voisine to jeedom Id
                 nodeJName = nodes[nodeFromJson].Voisine;
@@ -546,36 +547,31 @@ function displayLinksTable(zigateX) {
                 }
                 //console.log('nodeJName Voisine 2 (@ zigbee): ' + nodeJName + " , nodeJId: "+ nodeJId);
 
-                tbody += '<td id="vid">';
-                tbody += '<span class="label label-primary" style="font-size : 1em;" data-nodeid="' + nodes[nodeFromJson].Voisine + '">' + nodes[nodeFromJson].Voisine + '</span>';
-                tbody += '</td>';
-
-                tbody += '<td id="vObjet">';
-                tbody += nodes[nodeFromJson].Voisine_Objet;
-                tbody += '</td>';
-
-                tbody += '<td id="vname">';
+                tbody += '<td id="vname" bgcolor="ghostwhite">';
                 tbody += nodes[nodeFromJson].Voisine_Name;
                 tbody += '</td>';
+                tbody += '<td id="vObjet" bgcolor="ghostwhite">';
+                tbody += nodes[nodeFromJson].Voisine_Objet;
+                tbody += '</td>';
+                tbody += '<td id="vid" bgcolor="ghostwhite">';
+                tbody += '<span class="label label-primary" style="font-size : 1em;" data-nodeid="' + nodes[nodeFromJson].Voisine + '">' + nodes[nodeFromJson].Voisine + '</span>';
+                tbody += '</td>';
+                tbody += '<td bgcolor="ghostwhite">';
+                tbody += '<span class="label label-success" style="font-size : 1em;" >' + nodes[nodeFromJson].Type + '</span>';
+                tbody += '</td>';
 
-                tbody += '<td>';
+                tbody += '<td bgcolor="gainsboro">';
                 tbody += '<span class="label label-success" style="font-size : 1em;">' + nodes[nodeFromJson].Relationship + '</span>';
                 tbody += '</td>';
-
-                tbody += '<td>';
+                tbody += '<td bgcolor="gainsboro">';
                 tbody += '<span class="label label-success" style="font-size : 1em;">' + nodes[nodeFromJson].Depth + '</span>';
                 tbody += '</td>';
-
-                tbody += '<td id="lqi">';
+                tbody += '<td id="lqi" bgcolor="gainsboro">';
                 // tbody += '<span class="label label-success" style="font-size : 1em;">' + nodes[nodeFromJson].LinkQualityDec + '  ';
                 tbody += (nodes[nodeFromJson].LinkQualityDec <=  50) ? '<span class="label label-danger"  style="font-size : 1em;" >' : '';
                 tbody += ((nodes[nodeFromJson].LinkQualityDec > 50)&&(nodes[nodeFromJson].LinkQualityDec <= 100)) ? '<span class="label label-warning" style="font-size : 1em;">'  : '';
                 tbody += (nodes[nodeFromJson].LinkQualityDec >  100) ? '<span class="label label-success" style="font-size : 1em;">'  : '';
                 tbody += nodes[nodeFromJson].LinkQualityDec +'</span></td>';
-
-                tbody += '<td>';
-                tbody += '<span class="label label-success" style="font-size : 1em;" >' + nodes[nodeFromJson].Type + '</span>';
-                tbody += '</td>';
                 tbody += '<td></tr>';
             }
 
@@ -585,14 +581,11 @@ function displayLinksTable(zigateX) {
                 nodeTo = $('#nodeTo').empty();
 
             nodeFrom.append('<option value="All">{{Tous}}</option>');
-            nodeFrom.append('<option value="None">{{Aucun}}</option>');
-
-            nodeTo.append('<option value="All">{{Tous}}</option>');
-            nodeTo.append('<option value="None">{{Aucun}}</option>');
-
             $.each(nodesFrom, function (idx, item) {
                 nodeFrom.append(new Option(item, idx));
             });
+
+            nodeTo.append('<option value="All">{{Tous}}</option>');
             $.each(nodesTo, function (idx, item) {
                 nodeTo.append(new Option(item, idx));
             });
