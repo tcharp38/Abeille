@@ -732,9 +732,17 @@ console.log(eq);
                 "cmd2" : { "name" : "IdentifyQuery" },
                 "cmd3" : { "name" : "TriggerEffect" },
             },
-            // "0004": { // Groups cluster
-            //     "0000" : "zbNameSupport",
-            // },
+            "0004": { // Groups cluster
+                // Attributes
+                "0000" : { "name" : "NameSupport", "type" : "R" },
+                // Cmds
+                "cmd1" : { "name" : "AddGroup" },
+                "cmd2" : { "name" : "ViewGroup" },
+                "cmd3" : { "name" : "GetGroupMembership" },
+                "cmd4" : { "name" : "RemoveGroup" },
+                "cmd5" : { "name" : "RemoveAllGroups" },
+                "cmd6" : { "name" : "AddGroupIfIdent" },
+            },
             // "0005": { // Scene cluster
             //     "0000" : "zbNameSupport",
             // }
@@ -768,6 +776,36 @@ console.log(eq);
                 "cmd7" : { "name" : "StepWithOnOff" },
                 // "cmd8" : { "name" : "Stop" }, // Another "stop" (0x07) ?
             },
+            "0009": { // Alarm cluster
+                "0000" : { "name" : "AlarmCount", "type" : "R" },
+                "cmd1" : { "name" : "ResetAlarm" },
+                "cmd2" : { "name" : "ResetAllAlarms" },
+                "cmd3" : { "name" : "GetAlarm" },
+                "cmd4" : { "name" : "ResetAlarmLog" },
+            },
+            "000A": { // Time cluster
+                "0000" : { "name" : "Time", "type" : "RW" },
+                "0001" : { "name" : "TimeStatus", "type" : "RW" },
+                "0002" : { "name" : "TimeZone", "type" : "RW" },
+                "0003" : { "name" : "DstStart", "type" : "RW" },
+                "0004" : { "name" : "DstEnd", "type" : "RW" },
+                "0005" : { "name" : "DstShift", "type" : "RW" },
+                "0006" : { "name" : "StandardTime", "type" : "R" },
+                "0007" : { "name" : "LocalTime", "type" : "R" },
+                "0008" : { "name" : "LastSetTime", "type" : "R" },
+                "0009" : { "name" : "ValidUntilTime", "type" : "RW" },
+                // No cmds
+            },
+            "0020": { // Poll control cluster
+                "0000" : { "name" : "CheckInInterval", "type" : "RW" },
+                "0001" : { "name" : "LongPollInterval", "type" : "R" },
+                "0002" : { "name" : "ShortPollInterval", "type" : "R" },
+                "0003" : { "name" : "FastPollTimeout", "type" : "RW" },
+                "0004" : { "name" : "CheckInIntervalMin", "type" : "R" },
+                "0005" : { "name" : "LongPollIntervalMin", "type" : "R" },
+                "0006" : { "name" : "FastPollTimeoutMax", "type" : "R" },
+                "cmd1" : { "name" : "CheckIn" },
+            },
             "0102": { // Window covering cluster
                 // Information attributes
                 "0000" : { "name" : "WindowCoveringType", "type" : "R" },
@@ -799,6 +837,20 @@ console.log(eq);
                 "cmd5" : { "name" : "GotoLiftPercent" },
                 "cmd6" : { "name" : "GotoTiltVal" },
                 "cmd7" : { "name" : "GotoTiltPercent" },
+            },
+            "1000": { // Touchlink commissioning cluster
+                // No attributes in this cluster
+                // Cmds
+                "cmd1" : { "name" : "ScanRequest" },
+                "cmd2" : { "name" : "DevInfoReq" },
+                "cmd3" : { "name" : "IdentifyReq" },
+                "cmd4" : { "name" : "ResetToFactoryReq" },
+                "cmd5" : { "name" : "NetworkStartReq" },
+                "cmd6" : { "name" : "NetworkJoinRouterReq" },
+                "cmd7" : { "name" : "NetworkJoinEndDeviceReq" },
+                "cmd8" : { "name" : "NetworkUpdateReq" },
+                "cmd9" : { "name" : "GetGroupIdReq" },
+                "cmd10" : { "name" : "GetEPListReq" },
             }
         };
         var cmds = new Object();
