@@ -93,7 +93,7 @@
             <label class="col-sm-3 control-label">Assistant EQ</label>
             <div class="col-sm-5">
                 <?php
-                    echo '<a class="btn btn-warning" onclick="window.location.href = \'index.php?v=d&m=Abeille&p=AbeilleTcharp38&id='.$eqId.'\'">Lancer</a>';
+                    echo '<a class="btn btn-warning" onclick="window.location.href = \'index.php?v=d&m=Abeille&p=AbeilleEqAssist&id='.$eqId.'\'">Lancer</a>';
                 ?>
             </div>
         </div>
