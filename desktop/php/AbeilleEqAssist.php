@@ -260,7 +260,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
             data: {
                 action: 'detectAttributs',
                 zgNb: js_zgNb,
@@ -325,7 +325,7 @@
         }
         $.ajax({
             type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
             data: {
                 action: 'getAttrDiscResp',
                 zgNb: js_zgNb,
@@ -387,7 +387,7 @@
         /* Do the request to EQ */
         $.ajax({
             type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
             data: {
                 action: 'getSingleDescResp',
                 zgNb: js_zgNb,
@@ -457,7 +457,7 @@ console.log(eq);
         document.getElementById("idStatus").value = "Recherche des 'End Points'";
         return $.ajax({
             type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
             data: {
                 action: 'getEPList',
                 zgNb: js_zgNb,
@@ -535,7 +535,7 @@ console.log(eq);
         // return new Promise((resolve, reject) => {
         return $.ajax({
                 type: 'POST',
-                url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+                url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
                 data: {
                     action: 'readAttributResponse',
                     zgNb: js_zgNb,
@@ -587,7 +587,7 @@ console.log(eq);
         document.getElementById("idStatus").value = "Pinging";
         $.ajax({
             type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
             data: {
                 action: 'readAttributResponse',
                 zgNb: js_zgNb,
@@ -937,7 +937,7 @@ console.log(eq);
 
         $.ajax({
             type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleTcharp38.ajax.php',
+            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
             data: {
                 action: 'writeConfigJson',
                 jsonName: js_jsonName,
