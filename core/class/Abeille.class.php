@@ -1478,7 +1478,7 @@ while ($cron->running()) {
         // KiwiHC16: Please leave this line log::add commented otherwise too many messages in log Abeille
         // and keep the 3 lines below which print all messages except Time-Time, Time-TimeStamp and Link-Quality that we get for every message.
         // Divide by 3 the log quantity and ease the log reading
-log::add('Abeille', 'debug', "message(topic='".$message->topic."', payload='".$message->payload."')");
+        // log::add('Abeille', 'debug', "message(topic='".$message->topic."', payload='".$message->payload."')");
 
         $topicArray = explode("/", $message->topic);
         if (sizeof($topicArray) != 3) {
