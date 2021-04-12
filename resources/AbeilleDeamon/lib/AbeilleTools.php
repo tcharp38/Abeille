@@ -322,12 +322,12 @@ class AbeilleTools
         AbeilleTools::clearSystemMessage($parameters,'all');
 
         $status['state'] = "ok";
-        if (AbeilleTools::isMissingDaemons($parameters, $running) == TRUE) {
+        if (AbeilleTools::isMissingDaemons($parameters, $running) == true) {
             $status['state'] = "nok";
             AbeilleTools::restartMissingDaemons($parameters, $running);
 
             //After restart daemons, if still are missing, then no hope.
-            if (AbeilleTools::isMissingDaemons($parameters, $running) == FALSE) {
+            if (AbeilleTools::isMissingDaemons($parameters, $running) == false) {
                 $status['state'] = "ok"; // Finally missing ones restarted properly
             } else {
                 /* There are still some missing daemons */

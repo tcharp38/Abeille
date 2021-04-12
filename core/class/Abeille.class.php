@@ -617,7 +617,7 @@ if (0) {
 
         $status = AbeilleTools::checkAllDaemons($param, AbeilleTools::getRunningDaemons());
         $shm = shm_attach(12, 16384, 0600);
-        if ($shm == FALSE) {
+        if ($shm == false) {
             log::add('Abeille', 'debug', "cron1: ERROR shm_attach()");
         } else {
             log::add('Abeille', 'debug', "cron1: status['state']=".$status['state']);
@@ -738,42 +738,29 @@ if (0) {
            Since Abeille has its own way to restart missing daemons, reporting only
            cron status as global Abeille status to avoid conflict between
            - Jeedom asking daemons restart (automatic management)
-           - Abeille internal daemons restart */
+           - Abeille internal daemons restart mecanism */
 
-        /* Init with no valid status */
+        /* Init with valid status */
         $status = array(
-            'state' => 'nok',  // On couvre le fait que le process tourne en tache de fond
-            'launchable' => 'nok',  // On couvre la configuration de plugin
+            'state' => 'ok',  // Assuming cron is running
+            'launchable' => 'ok',  // Assuming config ok
             'launchable_message' => ""
         );
 
-        /* Reading daemons status from shared mem (updated by cron 1min) */
-        // $shm = shm_attach(12, 16384, 0600);
-        // if ($shm == FALSE) {
-        //     log::add('Abeille', 'debug', 'deamon_info: shm_attach() failed');
-        // } else if (!shm_get_var($shm, 13))
-        //     log::add('Abeille', 'debug', 'deamon_info: shm_get_var(13) failed');
-        // else {
-        //     $dStatus = shm_get_var($shm, 13);
-        //     if ($dStatus != "")
-        //         $status['state'] = $dStatus;
-        //     shm_detach($shm);
-        // }
-
         /* Checking there is no error getting parameters and daemon can be started. */
-        // TODO: Tcharp38. To be optimized. Each deamon_info() call leads to mysql DB interrogation.
-        $parameters = AbeilleTools::getParameters();
-        if ($parameters['parametersCheck'] != "ok") {
-            log::add('Abeille', 'warning', 'deamon_info(): parametersCheck NOT ok');
+        // TODO: Tcharp38. Can it be optimized ?. Each deamon_info() call leads to mysql DB interrogation.
+        $config = AbeilleTools::getParameters();
+        if ($config['parametersCheck'] != "ok") {
+            $status['launchable'] = $config['parametersCheck'];
+            // Tcharp38: Where is reported 'launchable_message' ?
+            $status['launchable_message'] = $config['parametersCheck_message'];
+            log::add('Abeille', 'warning', 'deamon_info(): Config zigate invalide');
         }
-        $status['launchable'] = $parameters['parametersCheck'];
-        // Tcharp38: Where is reported 'launchable_message' ?
-        $status['launchable_message'] = $parameters['parametersCheck_message'];
 
-        // si la cron tourne alors le plugin a été démarré.
-        if (AbeilleTools::isAbeilleCronRunning() == TRUE) {
-            $status['state'] = "ok";
-            // log::add('Abeille', 'warning', 'deamon_info(): Le plugin n\'est pas démarré. la cron ne tourne pas');
+        /* Checking cron. If not running can't monitor daemons status */
+        if (AbeilleTools::isAbeilleCronRunning() == false) {
+            $status['state'] = "nok";
+            log::add('Abeille', 'warning', 'deamon_info(): Le cron ne tourne pas');
         }
 
         log::add('Abeille', 'debug', 'deamon_info(): '.json_encode($status));
@@ -900,7 +887,7 @@ if (0) {
         /* Starting 'AbeilleMonitor' daemon too if required */
         /* Reread 'debug.json' to avoid PHP cache issues */
         if (file_exists(dbgFile)) {
-            $dbgConfig = json_decode(file_get_contents(dbgFile), TRUE);
+            $dbgConfig = json_decode(file_get_contents(dbgFile), true);
         }
         if (isset($dbgConfig["dbgMonitorAddr"])) {
             log::add('Abeille', 'debug', 'deamon_start(): Démarrage AbeilleMonitor');
@@ -1014,7 +1001,7 @@ while ($cron->running()) {
         );
         foreach ($all as $queueId) {
             $queue = msg_get_queue($queueId);
-            if ($queue != FALSE)
+            if ($queue != false)
                 msg_remove_queue($queue);
         }
 
