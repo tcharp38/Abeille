@@ -641,9 +641,11 @@
             $firstAnnounce = false;
             if (!isset($GLOBALS['eqStatus'][$IEEE]))
                 $firstAnnounce = true; // For sure it's the first announce
-            $eqStatus = $GLOBALS['eqStatus'][$IEEE];
-            if ($eqStatus['time'] + 2 < time()) // Too old
-                $firstAnnounce = true;
+            else {
+                $eqStatus = $GLOBALS['eqStatus'][$IEEE];
+                if ($eqStatus['time'] + 2 < time()) // Too old
+                    $firstAnnounce = true;
+            }
             $GLOBALS['eqStatus'][$IEEE] = array(
                 // 'status' => "devAnnounce", // Not required yet
                 'time' => time()
