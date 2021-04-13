@@ -636,6 +636,23 @@
 
             $this->whoTalked[] = $dest.'/'.$Addr;
 
+            /* Tcharp38: Often 2 consecutives 'device announce' leading to duplicated requests to device
+               overloading the system for nothing. Ignoring first dev announce. */
+            $firstAnnounce = false;
+            if (!isset($GLOBALS['eqStatus'][$IEEE]))
+                $firstAnnounce = true; // For sure it's the first announce
+            $eqStatus = $GLOBALS['eqStatus'][$IEEE];
+            if ($eqStatus['time'] + 2 < time()) // Too old
+                $firstAnnounce = true;
+            $GLOBALS['eqStatus'][$IEEE] = array(
+                // 'status' => "devAnnounce", // Not required yet
+                'time' => time()
+            );
+            if ($firstAnnounce) {
+                parserLog('debug', '  Ignoring this first device announce');
+                return;
+            }
+
             // Envoie de la IEEE a Jeedom qui le processera dans la cmd de l objet si celui ci existe deja dans Abeille, sinon sera drop
             $this->mqqtPublish($dest."/".$Addr, "IEEE", "Addr", $IEEE);
 
