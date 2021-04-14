@@ -92,9 +92,9 @@
                 </div>
             </div>
             <div class="row">
-                <label class="col-lg-2 control-label" for="fname">nameJeedom:</label>
+                <label class="col-lg-2 control-label" for="fname">Nom:</label>
                 <div class="col-lg-10">
-                    <input type="text" value="" id="idDesc">
+                    <input type="text" value="" id="idName">
                 </div>
             </div>
 
@@ -230,6 +230,10 @@
         //         a = new Object(); // Attribut object
         //         a.type = "00"; // Attribut type, hex string
         //         a.id = "0000"; // Attribut id, hex string
+
+    /* Read JSON if defined */
+    if (js_jsonName != '')
+        readJSON();
 
     /* Attempt to detect main supported attributs */
     function refreshAttributsList(epIdx, outClust, clustIdx) {
@@ -909,13 +913,17 @@ console.log(eq);
         }
 
         var jeq2 = new Object();
-        // jeq2.nameJeedom = "";
+        jeq2.manufacturer = document.getElementById("idManuf").value;
+        jeq2.model = document.getElementById("idModel").value;
+        jeq2.nameJeedom = document.getElementById("idName").value;
         jeq2.timeout = document.getElementById("idTimeout").value;
         // jeq2.Comment = // Optional
         var cat = new Object();
         cat.automatism = 1;
         jeq2.Categorie = cat;
-        // jeq2.configuration =
+        /* 'configuration' */
+        jeq2.configuration.icone = document.getElementById("idIcon").value;
+        jeq2.configuration.battery_type = document.getElementById("idBattery").value;
         jeq2.Commandes = cmds;
         var jeq = new Object();
         jeq[js_jsonName] = jeq2;
@@ -992,7 +1000,9 @@ console.log(eq);
                     jeq2 = jeq[js_jsonName];
 
                     /* Refresh display */
-                    document.getElementById("idDesc").value = jeq2.nameJeedom;
+                    document.getElementById("idManuf").value = jeq2.manufacturer;
+                    document.getElementById("idModel").value = jeq2.model;
+                    document.getElementById("idName").value = jeq2.nameJeedom;
                     document.getElementById("idTimeout").value = jeq2.timeout;
                     for (i = 0; i < js_categories.length; i++) {
                         cat = js_categories[i];
