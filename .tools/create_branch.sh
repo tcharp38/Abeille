@@ -19,13 +19,23 @@ FORCE=0 # Force creation from branch != 'master' & 'beta'
 # Usage: create_branch.sh [-f] [target_branch]
 #   where -f = force creation from current branch (not master or beta)
 #   target_branch = 'beta' or 'stable'
-if [ $# -gt 1 ]; then
+if [ $# -gt 0 ]; then
     echo "Checking arguments"
     while (( "$#" )); do
         case "$1" in
             -f)
                 FORCE=1
+                echo "- Info: 'forced' source"
                 shift
+            ;;
+            -h)
+                echo
+                echo "Usage: create_branch.sh [-f] <target>";
+                echo "where";
+                echo "  -f    : force branch creation even if not from master or beta"
+                echo "  target: 'beta' or 'stable'"
+                echo
+                exit 0
             ;;
             beta)
                 TARG_BRANCH=$1
