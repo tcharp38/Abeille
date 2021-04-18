@@ -496,6 +496,12 @@ if (0) {
      */
     public static function cron15()
     {
+        /* If main daemon is not running, cron must do nothing */
+        if (AbeilleTools::isAbeilleCronRunning() == false) {
+            log::add('Abeille', 'debug', 'cron15: Main daemon stopped => cron15 canceled');
+            return;
+        }
+
         log::add('Abeille', 'debug', 'cron15: Démarrage --------------------------------');
 
         /* Look every 15 minutes if the kernel driver is not in error */
@@ -574,6 +580,12 @@ if (0) {
      * @return          Does not return anything as all action are triggered by sending messages in queues
      */
     public static function cron10() {
+        /* If main daemon is not running, cron must do nothing */
+        if (AbeilleTools::isAbeilleCronRunning() == false) {
+            log::add('Abeille', 'debug', 'cron10: Main daemon stopped => cron10 canceled');
+            return;
+        }
+
         // Poll Cmd
         self::pollingCmd("cron10");
     }
@@ -586,6 +598,12 @@ if (0) {
      * @return          Does not return anything as all action are triggered by sending messages in queues
      */
     public static function cron5() {
+        /* If main daemon is not running, cron must do nothing */
+        if (AbeilleTools::isAbeilleCronRunning() == false) {
+            log::add('Abeille', 'debug', 'cron5: Main daemon stopped => cron5 canceled');
+            return;
+        }
+
         // Poll Cmd
         self::pollingCmd("cron5");
     }
@@ -604,6 +622,12 @@ if (0) {
      */
     public static function cron()
     {
+        /* If main daemon is not running, cron must do nothing */
+        if (AbeilleTools::isAbeilleCronRunning() == false) {
+            log::add('Abeille', 'debug', 'cron1: Main daemon stopped => cron1 canceled');
+            return;
+        }
+
         // log::add( 'Abeille', 'debug', 'cron1: Start ------------------------------------------------------------------------------------------------------------------------' );
         $param = AbeilleTools::getParameters();
 
@@ -749,10 +773,10 @@ if (0) {
             log::add('Abeille', 'warning', 'deamon_info(): Config zigate invalide');
         }
 
-        /* Checking cron. If not running can't monitor daemons status */
+        /* Checking main cron = main Abeille's daemon */
         if (AbeilleTools::isAbeilleCronRunning() == false) {
             $status['state'] = "nok";
-            log::add('Abeille', 'warning', 'deamon_info(): Le cron ne tourne pas');
+            log::add('Abeille', 'warning', 'deamon_info(): Main daemon is not runnning.');
         }
 
         log::add('Abeille', 'debug', 'deamon_info(): '.json_encode($status));
@@ -1015,6 +1039,7 @@ while ($cron->running()) {
         $return['progress_file'] = jeedom::getTmpFolder('Abeille') . '/dependance';
 
         // Check package socat
+        // Tcharp38: Wrong. This dependancy is required only if wifi zigate. Should not impact those using USB or PI
         $cmd = "command -v socat";
         exec($cmd, $output_dpkg, $return_var);
         if ($return_var == 1) {
@@ -1157,11 +1182,13 @@ while ($cron->running()) {
 
     public static function postSave()
     {
-        // log::add('Abeille', 'debug', 'deamon_postSave: IN');
-        $cron = cron::byClassAndFunction('Abeille', 'deamon');
-        if (is_object($cron) && !$cron->running()) {
-            $cron->run();
-        }
+        /* Tcharp38: Strange. postSave() called when starting daemons.
+           No sense to re-start main daemon from their then */
+        // log::add('Abeille', 'debug', 'postSave()');
+        // $cron = cron::byClassAndFunction('Abeille', 'deamon');
+        // if (is_object($cron) && !$cron->running()) {
+        //     $cron->run();
+        // }
         // log::add('Abeille', 'debug', 'deamon_postSave: OUT');
     }
 
