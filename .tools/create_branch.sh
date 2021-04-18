@@ -127,7 +127,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Updating MD5 file
-.tools/gen_md5.sh
+.tools/update_md5.sh
 if [ $? -ne 0 ]; then
     echo "= ERROR"
     exit 23
