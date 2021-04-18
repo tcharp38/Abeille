@@ -1,21 +1,20 @@
 {
   "sensor_magnet.aq2": {
-    "nameJeedom": "Xiaomi Aquara door sensor",
+    "desc": "Xiaomi Aquara door sensor",
     "manufacturer": "Xiaomi",
     "model": "MCCGQ11LM",
     "timeout": "60",
-    "Categorie": {
+    "category": {
       "security": "1"
     },
     "configuration": {
       "uniqId": "5c07c7662639b",
       "icone": "XiaomiPorte",
-      "battery_type": "1x3V CR1632",
+      "batteryType": "1x3V CR1632",
       "mainEP": "#EP#"
     },
-    "Commandes": {
-      "include1": "SW",
-      "include2": "nom",
+    "commands": {
+      "include2": "0000-ModelIdentifier",
       "include3": "etatDoor",
       "include4": "Batterie-Volt",
       "include5": "Batterie-Pourcent",

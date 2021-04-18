@@ -9,6 +9,7 @@ class AbeilleTools
 {
     const templateDir = __DIR__.'/../../../core/config/devices/Template/';
     const devicesDir = __DIR__.'/../../../core/config/devices/';
+    const cmdsDir = __DIR__.'/../../../core/config/commands/';
     const configDir = __DIR__.'/../../../core/config/';
     // const daemonDir = __DIR__.'/../';
     const logDir = __DIR__."/../../../../../log/";
@@ -84,21 +85,20 @@ class AbeilleTools
 
     /**
      * Needed for Template Generation
-     *
-     *
-     *
      */
     public static function getJSonConfigFilebyCmd($cmd)
     {
-        $cmdFilename = self::templateDir.$cmd.'.json';
-
-        if (!is_file($cmdFilename)) {
-            log::add('Abeille', 'error', 'getJSonConfigFilebyDevices: filename is not a file: '.$cmdFilename);
-            return array();
+        if (is_file(self::cmdsDir.$cmd.'.json')) {
+            $cmdFilename = self::cmdsDir.$cmd.'.json';
+        } else {
+            $cmdFilename = self::templateDir.$cmd.'.json';
+            if (!is_file($cmdFilename)) {
+                log::add('Abeille', 'error', 'getJSonConfigFilebyDevices: filename is not a file: '.$cmdFilename);
+                return array();
+            }
         }
 
         $content = file_get_contents($cmdFilename);
-
         $cmdJson = json_decode($content, true);
         if (json_last_error() != JSON_ERROR_NONE) {
             log::add('Abeille', 'error', 'getJSonConfigFilebyDevices: filename content is not a json: '.$content);
@@ -144,14 +144,23 @@ class AbeilleTools
         $deviceCmds += self::getJSonConfigFilebyCmd("online");
 
         // Recupere les templates Cmd instanciées
-        foreach ($deviceTemplate[$device]['Commandes'] as $cmd => $file) {
-            if (substr($cmd, 0, 7) == "include") {
-                $deviceCmds += self::getJSonConfigFilebyCmd($file);
+        if (isset($deviceTemplate[$device]['commands'])) {
+            foreach ($deviceTemplate[$device]['commands'] as $cmd => $file) {
+                if (substr($cmd, 0, 7) == "include") {
+                    $deviceCmds += self::getJSonConfigFilebyCmd($file);
+                }
             }
+            // Ajoute les commandes au master
+            $deviceTemplate[$device]['commands'] = $deviceCmds;
+        } else if (isset($deviceTemplate[$device]['Commandes'])) {
+            foreach ($deviceTemplate[$device]['Commandes'] as $cmd => $file) {
+                if (substr($cmd, 0, 7) == "include") {
+                    $deviceCmds += self::getJSonConfigFilebyCmd($file);
+                }
+            }
+            // Ajoute les commandes au master
+            $deviceTemplate[$device]['Commandes'] = $deviceCmds;
         }
-
-        // Ajoute les commandes au master
-        $deviceTemplate[$device]['Commandes'] = $deviceCmds;
 
         // log::add('Abeille', 'debug', 'getJSonConfigFilebyDevicesTemplate end');
         return $deviceTemplate;

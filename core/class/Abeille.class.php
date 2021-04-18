@@ -1636,7 +1636,10 @@ while ($cron->running()) {
             // timeout
             $elogic->setTimeout($objetDefSpecific["timeout"]);
 
-            $elogic->setCategory(array_keys($objetDefSpecific["Categorie"])[0], $objetDefSpecific["Categorie"][array_keys($objetDefSpecific["Categorie"])[0]]);
+            if (isset($objetDefSpecific["category"]))
+                $elogic->setCategory(array_keys($objetDefSpecific["category"])[0], $objetDefSpecific["category"][array_keys($objetDefSpecific["category"])[0]]);
+            else if (isset($objetDefSpecific["Categorie"]))
+                $elogic->setCategory(array_keys($objetDefSpecific["Categorie"])[0], $objetDefSpecific["Categorie"][array_keys($objetDefSpecific["Categorie"])[0]]);
             // display
             // order
             // comment
@@ -1652,88 +1655,171 @@ while ($cron->running()) {
                 print_r($objetDefSpecific['Commandes']);
             }
 
-            foreach ($objetDefSpecific['Commandes'] as $cmd => $cmdValueDefaut) {
-                log::add('Abeille', 'info', 'Creation de la commande: ' . $cmdValueDefaut["name"].' ('.$cmd.')' . ' suivant le model de l objet pour l objet: ' . $name);
-                // 'Creation de la commande: ' . $nodeid . '/' . $cmd . ' suivant model de l objet pour l objet: ' . $name
+            if (isset($objetDefSpecific['commands'])) {
+                foreach ($objetDefSpecific['commands'] as $cmd => $cmdValueDefaut) {
+                    log::add('Abeille', 'debug', "Eq ".$name.": Creating command '".$cmdValueDefaut["name"]."' => '".$cmd."'");
+                    // 'Creation de la commande: ' . $nodeid . '/' . $cmd . ' suivant model de l objet pour l objet: ' . $name
 
-                $cmdlogic = new AbeilleCmd();
-                // id
-                $cmdlogic->setEqLogic_id($elogic->getId());
-                $cmdlogic->setEqType('Abeille');
-                $cmdlogic->setLogicalId($cmd);
-                $cmdlogic->setOrder($cmdValueDefaut["order"]);
-                $cmdlogic->setName($cmdValueDefaut["name"]);
-                // value
+                    $cmdlogic = new AbeilleCmd();
+                    // id
+                    $cmdlogic->setEqLogic_id($elogic->getId());
+                    $cmdlogic->setEqType('Abeille');
+                    $cmdlogic->setLogicalId($cmd);
+                    $cmdlogic->setOrder($cmdValueDefaut["order"]);
+                    $cmdlogic->setName($cmdValueDefaut["name"]);
+                    // value
 
-                if ($cmdValueDefaut["Type"] == "info") {
-                    // $cmdlogic->setConfiguration('topic', $nodeid . '/' . $cmd);
-                    $cmdlogic->setConfiguration('topic', $cmd);
-                }
-                if ($cmdValueDefaut["Type"] == "action") {
-                    // $cmdlogic->setConfiguration('retain', '0'); // not needed anymore, was used for mosquitto
-
-                    if (isset($cmdValueDefaut["value"])) {
-                        // value: pour les commandes action, contient la commande info qui est la valeur actuel de la variable controlée.
-                        log::add('Abeille', 'debug', 'Define cmd info pour cmd action: ' . $elogic->getHumanName() . " - " . $cmdValueDefaut["value"]);
-
-                        $cmdPointeur_Value = cmd::byTypeEqLogicNameCmdName("Abeille", $elogic->getName(), $cmdValueDefaut["value"]);
-                        $cmdlogic->setValue($cmdPointeur_Value->getId());
+                    if ($cmdValueDefaut["Type"] == "info") {
+                        // $cmdlogic->setConfiguration('topic', $nodeid . '/' . $cmd);
+                        $cmdlogic->setConfiguration('topic', $cmd);
                     }
-                }
+                    if ($cmdValueDefaut["Type"] == "action") {
+                        // $cmdlogic->setConfiguration('retain', '0'); // not needed anymore, was used for mosquitto
 
-                // La boucle est pour info et pour action
-                foreach ($cmdValueDefaut["configuration"] as $confKey => $confValue) {
-                    // Pour certaine Action on doit remplacer le #addr# par la vrai valeur
-                    // $cmdlogic->setConfiguration($confKey, str_replace('#addr#', $addr, $confValue)); // Ce n'est plus necessaire car l adresse est maintenant dans le logicalId
-                    $cmdlogic->setConfiguration($confKey, $confValue);
+                        if (isset($cmdValueDefaut["value"])) {
+                            // value: pour les commandes action, contient la commande info qui est la valeur actuel de la variable controlée.
+                            log::add('Abeille', 'debug', 'Define cmd info pour cmd action: ' . $elogic->getHumanName() . " - " . $cmdValueDefaut["value"]);
 
-                    // Ne pas effacer, en cours de dev.
-                    // $cmdlogic->setConfiguration($confKey, str_replace('#addrIEEE#',     '#addrIEEE#',   $confValue));
-                    // $cmdlogic->setConfiguration($confKey, str_replace('#ZiGateIEEE#',   '#ZiGateIEEE#', $confValue));
-                }
-                // On conserve l info du template pour la visibility
-                $cmdlogic->setConfiguration("visibiltyTemplate", $cmdValueDefaut["isVisible"]);
+                            $cmdPointeur_Value = cmd::byTypeEqLogicNameCmdName("Abeille", $elogic->getName(), $cmdValueDefaut["value"]);
+                            $cmdlogic->setValue($cmdPointeur_Value->getId());
+                        }
+                    }
 
-                // template
-                if (isset($cmdValueDefaut["template"])) {
-                    $cmdlogic->setTemplate('dashboard', $cmdValueDefaut["template"]);
-                    $cmdlogic->setTemplate('mobile', $cmdValueDefaut["template"]);
-                }
-                $cmdlogic->setIsHistorized($cmdValueDefaut["isHistorized"]);
-                $cmdlogic->setType($cmdValueDefaut["Type"]);
-                $cmdlogic->setSubType($cmdValueDefaut["subType"]);
-                if (array_key_exists("generic_type", $cmdValueDefaut))
-                    $cmdlogic->setGeneric_type($cmdValueDefaut["generic_type"]);
-                // unite
-                if (isset($cmdValueDefaut["unite"])) {
-                    $cmdlogic->setUnite($cmdValueDefaut["unite"]);
-                }
-
-                if (isset($cmdValueDefaut["invertBinary"])) {
-                    $cmdlogic->setDisplay('invertBinary', $cmdValueDefaut["invertBinary"]);
-                }
-                // La boucle est pour info et pour action
-                // isVisible
-                $parameters_info = AbeilleTools::getParameters();
-                $isVisible = $cmdValueDefaut["isVisible"];
-
-                if (array_key_exists("display", $cmdValueDefaut))
-                    foreach ($cmdValueDefaut["display"] as $confKey => $confValue) {
+                    // La boucle est pour info et pour action
+                    foreach ($cmdValueDefaut["configuration"] as $confKey => $confValue) {
                         // Pour certaine Action on doit remplacer le #addr# par la vrai valeur
-                        $cmdlogic->setDisplay($confKey, $confValue);
+                        // $cmdlogic->setConfiguration($confKey, str_replace('#addr#', $addr, $confValue)); // Ce n'est plus necessaire car l adresse est maintenant dans le logicalId
+                        $cmdlogic->setConfiguration($confKey, $confValue);
+
+                        // Ne pas effacer, en cours de dev.
+                        // $cmdlogic->setConfiguration($confKey, str_replace('#addrIEEE#',     '#addrIEEE#',   $confValue));
+                        // $cmdlogic->setConfiguration($confKey, str_replace('#ZiGateIEEE#',   '#ZiGateIEEE#', $confValue));
+                    }
+                    // On conserve l info du template pour la visibility
+                    $cmdlogic->setConfiguration("visibiltyTemplate", $cmdValueDefaut["isVisible"]);
+
+                    // template
+                    if (isset($cmdValueDefaut["template"])) {
+                        $cmdlogic->setTemplate('dashboard', $cmdValueDefaut["template"]);
+                        $cmdlogic->setTemplate('mobile', $cmdValueDefaut["template"]);
+                    }
+                    $cmdlogic->setIsHistorized($cmdValueDefaut["isHistorized"]);
+                    $cmdlogic->setType($cmdValueDefaut["Type"]);
+                    $cmdlogic->setSubType($cmdValueDefaut["subType"]);
+                    if (array_key_exists("generic_type", $cmdValueDefaut))
+                        $cmdlogic->setGeneric_type($cmdValueDefaut["generic_type"]);
+                    // unite
+                    if (isset($cmdValueDefaut["unite"])) {
+                        $cmdlogic->setUnite($cmdValueDefaut["unite"]);
                     }
 
-                $cmdlogic->setIsVisible($isVisible);
+                    if (isset($cmdValueDefaut["invertBinary"])) {
+                        $cmdlogic->setDisplay('invertBinary', $cmdValueDefaut["invertBinary"]);
+                    }
+                    // La boucle est pour info et pour action
+                    // isVisible
+                    $parameters_info = AbeilleTools::getParameters();
+                    $isVisible = $cmdValueDefaut["isVisible"];
 
-                // html
-                // alert
+                    if (array_key_exists("display", $cmdValueDefaut))
+                        foreach ($cmdValueDefaut["display"] as $confKey => $confValue) {
+                            // Pour certaine Action on doit remplacer le #addr# par la vrai valeur
+                            $cmdlogic->setDisplay($confKey, $confValue);
+                        }
 
-                $cmdlogic->save();
+                    $cmdlogic->setIsVisible($isVisible);
+                    $cmdlogic->save();
 
-                // $elogic->checkAndUpdateCmd( $cmdlogic, $cmdValueDefaut["value"] );
+                    // $elogic->checkAndUpdateCmd( $cmdlogic, $cmdValueDefaut["value"] );
 
-                if ($cmdlogic->getName() == "Short-Addr") {
-                    $elogic->checkAndUpdateCmd($cmdlogic, $addr);
+                    if ($cmdlogic->getName() == "Short-Addr") {
+                        $elogic->checkAndUpdateCmd($cmdlogic, $addr);
+                    }
+                }
+            } else {
+                foreach ($objetDefSpecific['Commandes'] as $cmd => $cmdValueDefaut) {
+                    log::add('Abeille', 'info', 'Creation de la commande: ' . $cmdValueDefaut["name"].' ('.$cmd.')' . ' suivant le model de l objet pour l objet: ' . $name);
+                    // 'Creation de la commande: ' . $nodeid . '/' . $cmd . ' suivant model de l objet pour l objet: ' . $name
+
+                    $cmdlogic = new AbeilleCmd();
+                    // id
+                    $cmdlogic->setEqLogic_id($elogic->getId());
+                    $cmdlogic->setEqType('Abeille');
+                    $cmdlogic->setLogicalId($cmd);
+                    $cmdlogic->setOrder($cmdValueDefaut["order"]);
+                    $cmdlogic->setName($cmdValueDefaut["name"]);
+                    // value
+
+                    if ($cmdValueDefaut["Type"] == "info") {
+                        // $cmdlogic->setConfiguration('topic', $nodeid . '/' . $cmd);
+                        $cmdlogic->setConfiguration('topic', $cmd);
+                    }
+                    if ($cmdValueDefaut["Type"] == "action") {
+                        // $cmdlogic->setConfiguration('retain', '0'); // not needed anymore, was used for mosquitto
+
+                        if (isset($cmdValueDefaut["value"])) {
+                            // value: pour les commandes action, contient la commande info qui est la valeur actuel de la variable controlée.
+                            log::add('Abeille', 'debug', 'Define cmd info pour cmd action: ' . $elogic->getHumanName() . " - " . $cmdValueDefaut["value"]);
+
+                            $cmdPointeur_Value = cmd::byTypeEqLogicNameCmdName("Abeille", $elogic->getName(), $cmdValueDefaut["value"]);
+                            $cmdlogic->setValue($cmdPointeur_Value->getId());
+                        }
+                    }
+
+                    // La boucle est pour info et pour action
+                    foreach ($cmdValueDefaut["configuration"] as $confKey => $confValue) {
+                        // Pour certaine Action on doit remplacer le #addr# par la vrai valeur
+                        // $cmdlogic->setConfiguration($confKey, str_replace('#addr#', $addr, $confValue)); // Ce n'est plus necessaire car l adresse est maintenant dans le logicalId
+                        $cmdlogic->setConfiguration($confKey, $confValue);
+
+                        // Ne pas effacer, en cours de dev.
+                        // $cmdlogic->setConfiguration($confKey, str_replace('#addrIEEE#',     '#addrIEEE#',   $confValue));
+                        // $cmdlogic->setConfiguration($confKey, str_replace('#ZiGateIEEE#',   '#ZiGateIEEE#', $confValue));
+                    }
+                    // On conserve l info du template pour la visibility
+                    $cmdlogic->setConfiguration("visibiltyTemplate", $cmdValueDefaut["isVisible"]);
+
+                    // template
+                    if (isset($cmdValueDefaut["template"])) {
+                        $cmdlogic->setTemplate('dashboard', $cmdValueDefaut["template"]);
+                        $cmdlogic->setTemplate('mobile', $cmdValueDefaut["template"]);
+                    }
+                    $cmdlogic->setIsHistorized($cmdValueDefaut["isHistorized"]);
+                    $cmdlogic->setType($cmdValueDefaut["Type"]);
+                    $cmdlogic->setSubType($cmdValueDefaut["subType"]);
+                    if (array_key_exists("generic_type", $cmdValueDefaut))
+                        $cmdlogic->setGeneric_type($cmdValueDefaut["generic_type"]);
+                    // unite
+                    if (isset($cmdValueDefaut["unite"])) {
+                        $cmdlogic->setUnite($cmdValueDefaut["unite"]);
+                    }
+
+                    if (isset($cmdValueDefaut["invertBinary"])) {
+                        $cmdlogic->setDisplay('invertBinary', $cmdValueDefaut["invertBinary"]);
+                    }
+                    // La boucle est pour info et pour action
+                    // isVisible
+                    $parameters_info = AbeilleTools::getParameters();
+                    $isVisible = $cmdValueDefaut["isVisible"];
+
+                    if (array_key_exists("display", $cmdValueDefaut))
+                        foreach ($cmdValueDefaut["display"] as $confKey => $confValue) {
+                            // Pour certaine Action on doit remplacer le #addr# par la vrai valeur
+                            $cmdlogic->setDisplay($confKey, $confValue);
+                        }
+
+                    $cmdlogic->setIsVisible($isVisible);
+
+                    // html
+                    // alert
+
+                    $cmdlogic->save();
+
+                    // $elogic->checkAndUpdateCmd( $cmdlogic, $cmdValueDefaut["value"] );
+
+                    if ($cmdlogic->getName() == "Short-Addr") {
+                        $elogic->checkAndUpdateCmd($cmdlogic, $addr);
+                    }
                 }
             }
 

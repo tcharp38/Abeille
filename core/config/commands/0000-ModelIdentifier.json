@@ -4,7 +4,7 @@
     "name": "0000-ModelIdentifier",
     "order": 0,
     "isHistorized": "0",
-    "Type": "info",
+    "type": "info",
     "subType": "string",
     "invertBinary": "0",
     "template": "",
