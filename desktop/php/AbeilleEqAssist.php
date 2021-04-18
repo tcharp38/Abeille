@@ -800,6 +800,19 @@ console.log(eq);
                 "0009" : { "name" : "ValidUntilTime", "type" : "RW" },
                 // No cmds
             },
+            "0014": { // Multistate Value cluster
+                "000E" : { "name" : "StateText", "type" : "RW" },
+                "001C" : { "name" : "Description", "type" : "RW" },
+                "004A" : { "name" : "NumberOfStates", "type" : "RW" },
+                "0051" : { "name" : "OutOfService", "type" : "RW" },
+                "0055" : { "name" : "PresentValue", "type" : "RW" },
+                "0057" : { "name" : "PriorityArray", "type" : "RW" },
+                "0067" : { "name" : "Reliability", "type" : "RW" },
+                "0068" : { "name" : "RelinquishDefault", "type" : "RW" },
+                "006F" : { "name" : "StatusFlags", "type" : "R" },
+                "0100" : { "name" : "ApplicationType", "type" : "R" },
+                // No cmds
+            },
             "0020": { // Poll control cluster
                 "0000" : { "name" : "CheckInInterval", "type" : "RW" },
                 "0001" : { "name" : "LongPollInterval", "type" : "R" },
