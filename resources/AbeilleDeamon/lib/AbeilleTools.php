@@ -90,7 +90,7 @@ class AbeilleTools
     {
         if (is_file(self::cmdsDir.$cmd.'.json')) {
             $cmdFilename = self::cmdsDir.$cmd.'.json';
-        } else {
+        } else { // Obsolete location (devices/Template)
             $cmdFilename = self::templateDir.$cmd.'.json';
             if (!is_file($cmdFilename)) {
                 log::add('Abeille', 'error', 'getJSonConfigFilebyDevices: filename is not a file: '.$cmdFilename);
@@ -152,7 +152,7 @@ class AbeilleTools
             }
             // Ajoute les commandes au master
             $deviceTemplate[$device]['commands'] = $deviceCmds;
-        } else if (isset($deviceTemplate[$device]['Commandes'])) {
+        } else if (isset($deviceTemplate[$device]['Commandes'])) { // Obsolete JSON naming
             foreach ($deviceTemplate[$device]['Commandes'] as $cmd => $file) {
                 if (substr($cmd, 0, 7) == "include") {
                     $deviceCmds += self::getJSonConfigFilebyCmd($file);

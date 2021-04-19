@@ -15,9 +15,9 @@
     },
     "commands": {
       "include2": "0000-ModelIdentifier",
-      "include3": "etatDoor",
-      "include4": "Batterie-Volt",
-      "include5": "Batterie-Pourcent",
+      "include3": "0006-OnOff",
+      "include4": "Battery-Volt",
+      "include5": "Battery-Pourcent",
       "include6": "Xiaomi-ff01"
     }
   }

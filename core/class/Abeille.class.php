@@ -1584,9 +1584,10 @@ while ($cron->running()) {
             $elogic->setConfiguration('lastCommunicationTimeOut', $lastCommTimeout);
             $elogic->setConfiguration('type', $type);
 
-            if (isset($objetConfiguration['battery_type'])) {
+            if (isset($objetConfiguration['batteryType']))
+                $elogic->setConfiguration('battery_type', $objetConfiguration['batteryType']);
+            else if (isset($objetConfiguration['battery_type'])) // Obsolete JSON naming
                 $elogic->setConfiguration('battery_type', $objetConfiguration['battery_type']);
-            }
             if (isset($objetConfiguration['paramType']))
                 $elogic->setConfiguration('paramType', $objetConfiguration['paramType']);
             if (isset($objetConfiguration['Groupe'])) { // Tcharp38: What for ? Telecommande Innr - KiwiHC16: on doit pouvoir simplifier ce code. Mais comme c etait la premiere version j ai fait detaillé.
@@ -1638,7 +1639,7 @@ while ($cron->running()) {
 
             if (isset($objetDefSpecific["category"]))
                 $elogic->setCategory(array_keys($objetDefSpecific["category"])[0], $objetDefSpecific["category"][array_keys($objetDefSpecific["category"])[0]]);
-            else if (isset($objetDefSpecific["Categorie"]))
+            else if (isset($objetDefSpecific["Categorie"])) // Obsolete JSON naming
                 $elogic->setCategory(array_keys($objetDefSpecific["Categorie"])[0], $objetDefSpecific["Categorie"][array_keys($objetDefSpecific["Categorie"])[0]]);
             // display
             // order

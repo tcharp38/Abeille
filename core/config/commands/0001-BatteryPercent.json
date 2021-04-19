@@ -1,0 +1,21 @@
+{
+  "0001-#EP#-0021": {
+    "comment": "Cluster 0x0001, attrib 0x0021, BatteryPercentageRemaining uint8 0x00 – 0xff",
+    "isVisible": 0,
+    "name": "Batterie",
+    "order": 9,
+    "isHistorized": "1",
+    "Type": "info",
+    "subType": "numeric",
+    "generic_type": "BATTERY",
+    "invertBinary": "0",
+    "template": "vuMeter",
+    "unite": "%",
+    "configuration": {
+	"uniqId": "5c07c7662165e",
+      "minValue": "0",
+      "maxValue": "100",
+      "visibilityCategory": "All"
+    }
+  }
+}
