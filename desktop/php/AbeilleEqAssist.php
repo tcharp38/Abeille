@@ -227,6 +227,17 @@
 
             <div class="row">
                 <label class="col-lg-2 control-label" for="fname">Localisation:</label>
+<<<<<<< HEAD
+=======
+                <div class="col-lg-10">
+                    <a class="btn btn-warning" title="Raffraichi la localisation" onclick="refreshXName('Location')"><i class="fas fa-sync"></i></a>
+                    <input type="text" id="idZigbeeLocation" value="" readonly>
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-lg-2 control-label" for="fname">End points:</label>
+>>>>>>> b8a70385 (EQ discovery assistant)
                 <div class="col-lg-10">
                     <!-- <a class="btn btn-warning" title="Raffraichi la localisation" onclick="refreshXName('Location')"><i class="fas fa-sync"></i></a> -->
                     <a class="btn btn-warning" title="Raffraichi la localisation" onclick="requestInfos('location')"><i class="fas fa-sync"></i></a>
@@ -557,10 +568,12 @@
                     console.log("nb of attr="+attrCount)
                     for (attrIdx = 0; attrIdx < attrCount; attrIdx++) {
                         rattr = attributes[attrIdx];
+                        if (rattr.Status != "00")
+                            continue;
 
                         a = new Object();
-                        a.type = rattr.Type;
                         a.id = rattr.Id;
+                        // a.type = rattr.Type;
                         clust.attrList.push(a);
 
                         var newCol = line.insertCell(-1);
@@ -571,65 +584,65 @@
         });
     }
 
-    function getAttributsList(epIdx, outClust, clustIdx) {
-        console.log("getAttributsList(epIdx="+epIdx+", outClust="+outClust+", clustIdx="+clustIdx+")");
+    // function getAttributsList(epIdx, outClust, clustIdx) {
+    //     console.log("getAttributsList(epIdx="+epIdx+", outClust="+outClust+", clustIdx="+clustIdx+")");
 
-        ep = eq.epList[epIdx];
-        epNb = ep.id;
-        if (outClust)
-            clust = ep.outClustList[clustIdx];
-        else
-            clust = ep.inClustList[clustIdx];
-        clustId = clust.id;
-        document.getElementById("idStatus").value = "EP"+epNb+"/Clust"+clustId+": recherche des 'Attributs'";
+    //     ep = eq.epList[epIdx];
+    //     epNb = ep.id;
+    //     if (outClust)
+    //         clust = ep.outClustList[clustIdx];
+    //     else
+    //         clust = ep.inClustList[clustIdx];
+    //     clustId = clust.id;
+    //     document.getElementById("idStatus").value = "EP"+epNb+"/Clust"+clustId+": recherche des 'Attributs'";
 
-        // idInClustx => table of input clusters (col1=clustId, col2+=attribut)
-        // idOutClustx => table of output clusters (col1=clustId, col2+=attribut)
-        if (outClust) {
-            var clustTable = document.getElementById("idOutClust"+epIdx);
-            var line = clustTable.rows[clustIdx];
-        } else {
-            var clustTable = document.getElementById("idInClust"+epIdx);
-            var line = clustTable.rows[clustIdx];
-        }
-        $.ajax({
-            type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
-            data: {
-                action: 'getAttrDiscResp',
-                zgNb: js_zgNb,
-                eqAddr: js_eqAddr,
-                eqEP: epNb, // EP number
-                clustId: clustId,
-            },
-            dataType: 'json',
-            global: false,
-            async: false,
-            error: function (request, status, error) {
-                bootbox.alert("ERREUR 'getAttrDiscResp' !<br>Votre installation semble corrompue.<br>"+error);
-            },
-            success: function (json_res) {
-                res = JSON.parse(json_res.result);
-                if (res.status != 0)
-                    console.log("error="+res.error);
-                else {
-                    console.log("res.resp follows:");
-                    console.log(res.resp);
-                    var resp = res.resp;
+    //     // idInClustx => table of input clusters (col1=clustId, col2+=attribut)
+    //     // idOutClustx => table of output clusters (col1=clustId, col2+=attribut)
+    //     if (outClust) {
+    //         var clustTable = document.getElementById("idOutClust"+epIdx);
+    //         var line = clustTable.rows[clustIdx];
+    //     } else {
+    //         var clustTable = document.getElementById("idInClust"+epIdx);
+    //         var line = clustTable.rows[clustIdx];
+    //     }
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
+    //         data: {
+    //             action: 'getAttrDiscResp',
+    //             zgNb: js_zgNb,
+    //             eqAddr: js_eqAddr,
+    //             eqEP: epNb, // EP number
+    //             clustId: clustId,
+    //         },
+    //         dataType: 'json',
+    //         global: false,
+    //         async: false,
+    //         error: function (request, status, error) {
+    //             bootbox.alert("ERREUR 'getAttrDiscResp' !<br>Votre installation semble corrompue.<br>"+error);
+    //         },
+    //         success: function (json_res) {
+    //             res = JSON.parse(json_res.result);
+    //             if (res.status != 0)
+    //                 console.log("error="+res.error);
+    //             else {
+    //                 console.log("res.resp follows:");
+    //                 console.log(res.resp);
+    //                 var resp = res.resp;
 
-                    a = new Object();
-                    a.type = resp.AttrType;
-                    a.id = resp.AttrId;
-                    clust.attrList.push(a);
+    //                 a = new Object();
+    //                 a.type = resp.AttrType;
+    //                 a.id = resp.AttrId;
+    //                 clust.attrList.push(a);
 
-                    var newCol = line.insertCell(-1);
-                    newCol.innerHTML += a.id+"/"+a.type;
+    //                 var newCol = line.insertCell(-1);
+    //                 newCol.innerHTML += a.id+"/"+a.type;
 
-                    document.getElementById("idStatus").value = "";
-                }
-            }
-        });
-    }
+    //                 document.getElementById("idStatus").value = "";
+    //             }
+    //         }
+    //     });
+    // }
 
     /* Interrogate EQ to get clusters list. */
     function refreshClustersList(epIdx) {
@@ -795,10 +808,14 @@ console.log(eq);
             document.getElementById("idStatus").value = "Mise-à-jour du fabricant";
             var attrId = "0004";
             var field = document.getElementById("idZigbeeManuf");
-        } else {
+        } else if (x == "Model") {
             document.getElementById("idStatus").value = "Mise-à-jour du modèle";
             var attrId = "0005";
             var field = document.getElementById("idZigbeeModel");
+        } else {
+            document.getElementById("idStatus").value = "Mise-à-jour de la localisation";
+            var attrId = "0010";
+            var field = document.getElementById("idZigbeeLocation");
         }
 
         // return new Promise((resolve, reject) => {
@@ -914,6 +931,7 @@ console.log(eq);
 
         /* First of all, ensure eq is responding */
         // status = await waitAlive(10);
+<<<<<<< HEAD
 >>>>>>> e8157c77 (EQ discovery assistant)
 
 //         /* Do the request to EQ */
@@ -1191,6 +1209,16 @@ console.log(eq);
 //         .then(function(value) {
 //     console.log("Successful ajax call, but no data was returned");
 // });
+=======
+
+        $.when(refreshXName("Manuf"))
+        .then(refreshXName("Model"))
+        .then(refreshXName("Location"))
+        .then(refreshEPList())
+        .then(function(value) {
+    console.log("Successful ajax call, but no data was returned");
+});
+>>>>>>> b8a70385 (EQ discovery assistant)
         /* Refreshing everything in order */
         // refreshXName("Manuf")
         // .then(console.log("c est fini"));
@@ -1524,6 +1552,7 @@ console.log(eq);
                 "0008" : { "name" : "LastSetTime", "type" : "R" },
                 "0009" : { "name" : "ValidUntilTime", "type" : "RW" },
                 // Cmds: none
+<<<<<<< HEAD
             },
             "0014": { // Multistate Value cluster
                 // Attributes
@@ -1538,6 +1567,8 @@ console.log(eq);
                 "006F" : { "name" : "StatusFlags", "type" : "R" },
                 "0100" : { "name" : "ApplicationType", "type" : "R" },
                 // Cmds: none
+=======
+>>>>>>> b8a70385 (EQ discovery assistant)
             },
             "0014": { // Multistate Value cluster
                 "000E" : { "name" : "StateText", "type" : "RW" },
@@ -1550,7 +1581,7 @@ console.log(eq);
                 "0068" : { "name" : "RelinquishDefault", "type" : "RW" },
                 "006F" : { "name" : "StatusFlags", "type" : "R" },
                 "0100" : { "name" : "ApplicationType", "type" : "R" },
-                // No cmds
+                // Cmds: none
             },
             "0020": { // Poll control cluster
                 // Attributes
@@ -1564,7 +1595,10 @@ console.log(eq);
                 "cmd1" : { "name" : "CheckIn" },
             },
             "0100": { // Shade Configuration cluster
+<<<<<<< HEAD
                 // Attributes
+=======
+>>>>>>> b8a70385 (EQ discovery assistant)
                 "0000" : { "name" : "PhysicalClosedLimit", "type" : "R" },
                 "0001" : { "name" : "MotorStepSize", "type" : "R" },
                 "0002" : { "name" : "Status", "type" : "RW" },
