@@ -3842,7 +3842,13 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
                     $volt = hexdec($batteryVoltage) / 10;
                     parserLog('debug', '  BatteryVoltage='.$batteryVoltage.' => '.$volt.'V');
                 }
-            }
+
+                else if ($AttributId == "0021") { // BatteryPercentageRemaining
+                    $BatteryPercent = substr($Attribut, 0, 2);
+                    $percent = hexdec($BatteryPercent) / 2;
+                    parserLog('debug', '  Battery%='.$BatteryPercent.' => '.$percent.'%');
+                }
+            } // End cluster 0001/power configuration
 
                 else if ($AttributId == "0021") { // BatteryPercentageRemaining
                     $BatteryPercent = substr($Attribut, 0, 2);
