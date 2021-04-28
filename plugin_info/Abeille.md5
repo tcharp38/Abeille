@@ -12,6 +12,12 @@ xxxxxxxxx-md5-skipped-xxxxxxxxxx *.idea/Abeille.iml
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/check_json.php
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/create_branch.sh
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/git_push.sh
+xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/save_changes.sh
+xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/set_git_config.sh
+xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/set_git_noproxy.sh
+xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/set_python3.sh
+xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/sync_all.sh
+xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/sync_changes.sh
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/update_changelog.sh
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/update_json.php
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.tools/update_md5.sh
