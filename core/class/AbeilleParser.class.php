@@ -3846,7 +3846,7 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
                 else if ($AttributId == "0021") { // BatteryPercentageRemaining
                     $BatteryPercent = substr($Attribut, 0, 2);
                     $percent = hexdec($BatteryPercent) / 2;
-                    parserLog('debug', '  Battery%='.$BatteryPercent.' => '.$percent.'%');
+                    parserLog('debug', '  BatteryPercent='.$BatteryPercent.' => '.$percent.'%');
                 }
             } // End cluster 0001/power configuration
 
