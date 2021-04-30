@@ -859,7 +859,7 @@ if (0) {
     /* Jeedom required function.
        Starts all daemons.
        Note: incorrect naming 'deamon' instead of 'daemon' due to Jeedom mistake. */
-    public static function deamon_start($_debug = false)
+    public static function deamon_start()
     {
         log::add('Abeille', 'debug', 'deamon_start(): Démarrage');
 
