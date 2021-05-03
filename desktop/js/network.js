@@ -527,7 +527,7 @@ function displayLinksTable(zigateX) {
                 tbody += '<div style="opacity:0.5"><i>' + nodes[nodeFromJson].NE_Name + '</i></div>';
                 tbody += '</td>';
 
-                tbody += '<td id="neName" bgcolor="gainsboro">';
+                tbody += '<td id="neName">';
                 tbody += '<div style="opacity:0.5"><i>' + nodes[nodeFromJson].NE_Objet + '</i></div>';
                 tbody += '</td>';
 
@@ -559,7 +559,7 @@ function displayLinksTable(zigateX) {
                 tbody += '<span class="label label-success" style="font-size : 1em;" >' + nodes[nodeFromJson].Type + '</span>';
                 tbody += '</td>';
 
-                tbody += '<td bgcolor="gainsboro">';
+                tbody += '<td>';
                 tbody += '<span class="label label-success" style="font-size : 1em;">' + nodes[nodeFromJson].Relationship + '</span>';
                 tbody += '</td>';
                 tbody += '<td>';
