@@ -1661,6 +1661,7 @@ while ($cron->running()) {
            Device creation is now triggered by Parser 'eqAnnounce' msg when device is identified.
            Treated by 'msgFromParser()' */
         // Si l objet n existe pas et je recoie son nom => je créé l objet.
+<<<<<<< HEAD
         // if (!is_object($elogic)
         //     && (preg_match("/^0000-[0-9A-Fa-f]*-*0005/", $cmdId)
         //         || preg_match("/^0000-[0-9A-Fa-f]*-*0010/", $cmdId)
@@ -1705,6 +1706,155 @@ while ($cron->running()) {
         //     if (array_key_exists('defaultUnknown', $AbeilleObjetDefinition)) {
         //         $jsonName = 'defaultUnknown';
         //     }
+=======
+        if (!is_object($elogic)
+            && (preg_match("/^0000-[0-9A-Fa-f]*-*0005/", $cmdId)
+                || preg_match("/^0000-[0-9A-Fa-f]*-*0010/", $cmdId)
+                || preg_match("/^SimpleDesc-[0-9A-Fa-f]*-*DeviceDescription/", $cmdId)
+            )
+        ) {
+            $trimmedValue = $value;
+            log::add('Abeille', 'info', 'Recherche objet: '.$value.' dans les objets connus');
+
+            /* Remove leading "lumi." from name as all xiaomi devices who start with this prefix. */
+            if (!strncasecmp($trimmedValue, "lumi.", 5))
+                $trimmedValue = substr($trimmedValue, 5); // Remove leading "lumi." case insensitive
+
+            //remove all space in names for easier filename handling
+            $trimmedValue = str_replace(' ', '', $trimmedValue);
+
+            // On enleve le / comme par exemple le nom des equipements Legrand
+            $trimmedValue = str_replace('/', '', $trimmedValue);
+
+            // On enleve le * Ampoules GU10 Philips #1778
+            $trimmedValue = str_replace('*', '', $trimmedValue);
+
+            // On enleve les 0x00 comme par exemple le nom des equipements Legrand
+            $trimmedValue = str_replace("\0", '', $trimmedValue);
+
+            log::add('Abeille', 'debug', 'value:'.$value.' / trimmed value: ->'.$trimmedValue.'<-');
+            $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($trimmedValue);
+            log::add('Abeille', 'debug', 'Template initial: '.json_encode($AbeilleObjetDefinition));
+
+            // On recupere le EP
+            // $EP = substr($cmdId,5,2);
+            $EP = explode('-', $cmdId)[1];
+            log::add('Abeille', 'debug', 'EP: '.$EP);
+            $AbeilleObjetDefinitionJson = json_encode($AbeilleObjetDefinition);
+            $AbeilleObjetDefinitionJson = str_replace('#EP#', $EP, $AbeilleObjetDefinitionJson);
+            $AbeilleObjetDefinition = json_decode($AbeilleObjetDefinitionJson, true);
+            log::add('Abeille', 'debug', 'Template mis a jour avec EP: '.json_encode($AbeilleObjetDefinition));
+
+            if (array_key_exists($trimmedValue, $AbeilleObjetDefinition)) {
+                $jsonName = $trimmedValue;
+            }
+            if (array_key_exists('defaultUnknown', $AbeilleObjetDefinition)) {
+                $jsonName = 'defaultUnknown';
+            }
+
+            /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+            // Creation de l objet Abeille
+            // Exemple pour les objets créés par les commandes Ruche.
+            if (strlen($addr) != 4) {
+                $index = rand(1000, 9999);
+                $addr = $addr."-".$index;
+                $nodeid = $nodeid."-".$index;
+            }
+
+            $elogic = new Abeille();
+            $elogic->setEqType_name('Abeille');
+            $elogic->setName("nouveau-".$addr); // Temp name to have it non empty
+            $elogic->save(); // Save to force Jeedom to assign an ID
+
+            $name = $Filter."-".$elogic->getId();
+            message::add("Abeille", "Nouvel équipement détecté: ".$name.". Création en cours. Rafraîchissez votre dashboard dans qq secondes.", '');
+            $elogic->setName($name);
+            $elogic->setLogicalId($nodeid);
+            $elogic->setObject_id($parameters_info['AbeilleParentId']);
+            $objetDefSpecific = $AbeilleObjetDefinition[$jsonName];
+            $objetConfiguration = $objetDefSpecific["configuration"];
+            log::add('Abeille', 'debug', 'Template configuration: '.json_encode($objetConfiguration));
+            $elogic->setConfiguration('modeleJson', $trimmedValue);
+            // $elogic->setConfiguration('topic', $nodeid); // not needed as the info is in logicalId.
+            $elogic->setConfiguration('type', $type);
+            $elogic->setConfiguration('uniqId', $objetConfiguration["uniqId"]);
+            $elogic->setConfiguration('icone', $objetConfiguration["icone"]);
+            $elogic->setConfiguration('mainEP', $objetConfiguration["mainEP"]);
+            $lastCommTimeout = (array_key_exists("lastCommunicationTimeOut", $objetConfiguration) ? $objetConfiguration["lastCommunicationTimeOut"] : '-1');
+            $elogic->setConfiguration('lastCommunicationTimeOut', $lastCommTimeout);
+            $elogic->setConfiguration('type', $type);
+
+            if (isset($objetConfiguration['battery_type'])) {
+                $elogic->setConfiguration('battery_type', $objetConfiguration['battery_type']);
+            }
+            if (isset($objetConfiguration['paramType']))
+                $elogic->setConfiguration('paramType', $objetConfiguration['paramType']);
+            if (isset($objetConfiguration['Groupe'])) { // Tcharp38: What for ? Telecommande Innr - KiwiHC16: on doit pouvoir simplifier ce code. Mais comme c etait la premiere version j ai fait detaillé.
+                $elogic->setConfiguration('Groupe', $objetConfiguration['Groupe']);
+            }
+            if (isset($objetConfiguration['Groupe'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('Groupe', $objetConfiguration['Groupe']);
+            }
+            if (isset($objetConfiguration['GroupeEP1'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP1', $objetConfiguration['GroupeEP1']);
+            }
+            if (isset($objetConfiguration['GroupeEP3'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP3', $objetConfiguration['GroupeEP3']);
+            }
+            if (isset($objetConfiguration['GroupeEP4'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP4', $objetConfiguration['GroupeEP4']);
+            }
+            if (isset($objetConfiguration['GroupeEP5'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP5', $objetConfiguration['GroupeEP5']);
+            }
+            if (isset($objetConfiguration['GroupeEP6'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP6', $objetConfiguration['GroupeEP6']);
+            }
+            if (isset($objetConfiguration['GroupeEP7'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP7', $objetConfiguration['GroupeEP7']);
+            }
+            if (isset($objetConfiguration['GroupeEP8'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('GroupeEP8', $objetConfiguration['GroupeEP8']);
+            }
+            if (isset($objetConfiguration['onTime'])) { // Tcharp38: What for ?
+                $elogic->setConfiguration('onTime', $objetConfiguration['onTime']);
+            }
+            if (isset($objetConfiguration['Zigate'])) {
+                $elogic->setConfiguration('Zigate', $objetConfiguration['Zigate']);
+            }
+            if (isset($objetConfiguration['protocol'])) {
+                $elogic->setConfiguration('protocol', $objetConfiguration['protocol']);
+            }
+            if (isset($objetConfiguration['poll'])) {
+                $elogic->setConfiguration('poll', $objetConfiguration['poll']);
+            }
+           if (isset($objetDefSpecific["isVisible"]))
+               $elogic->setIsVisible($objetDefSpecific["isVisible"]);
+           else
+               $elogic->setIsVisible(1);
+
+            // eqReal_id
+            $elogic->setIsEnable("1");
+            // status
+            // timeout
+            $elogic->setTimeout($objetDefSpecific["timeout"]);
+
+            $elogic->setCategory(array_keys($objetDefSpecific["Categorie"])[0], $objetDefSpecific["Categorie"][array_keys($objetDefSpecific["Categorie"])[0]]);
+            // display
+            // order
+            // comment
+
+            //log::add('Abeille', 'info', 'Saving device '.$nodeid);
+            //$elogic->save();
+            $elogic->setStatus('lastCommunication', date('Y-m-d H:i:s'));
+            $elogic->save();
+
+            // Creation des commandes pour l objet Abeille juste créé.
+            if (isset($GLOBALS['debugKIWI']) && $GLOBALS['debugKIWI']) {
+                echo "On va creer les commandes.\n";
+                print_r($objetDefSpecific['Commandes']);
+            }
+>>>>>>> 78a3ebcf (Cosmetic)
 
         //     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
         //     // Creation de l objet Abeille
