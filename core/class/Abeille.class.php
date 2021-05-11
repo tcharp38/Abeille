@@ -1169,6 +1169,15 @@ while ($cron->running()) {
         // Tcharp38: Moved from deamon_start()
         self::refreshCmd();
 
+<<<<<<< HEAD
+=======
+        /* Building list of supported devices.
+           This will help deciding which JSON to take when modelIdentifier is a "common" one */
+        $GLOBALS['supportedDevList'] = AbeilleTools::getDevicesList("Abeille");
+        $GLOBALS['customDevList'] = AbeilleTools::getDevicesList("local");
+        // log::add('Abeille', 'debug', 'deamon(): devList='.json_encode($GLOBALS['supportedDevList']));
+
+>>>>>>> e57a04d6 (Support for common modelId)
         try {
             $queueKeyAbeilleToAbeille = msg_get_queue(queueKeyAbeilleToAbeille);
             $queueKeyParserToAbeille = msg_get_queue(queueKeyParserToAbeille);
@@ -1714,7 +1723,7 @@ while ($cron->running()) {
             )
         ) {
             $trimmedValue = $value;
-            log::add('Abeille', 'info', 'Recherche objet: '.$value.' dans les objets connus');
+            log::add('Abeille', 'debug', 'Recherche objet: '.$value.' dans les objets connus');
 
             /* Remove leading "lumi." from name as all xiaomi devices who start with this prefix. */
             if (!strncasecmp($trimmedValue, "lumi.", 5))
@@ -1732,9 +1741,44 @@ while ($cron->running()) {
             // On enleve les 0x00 comme par exemple le nom des equipements Legrand
             $trimmedValue = str_replace("\0", '', $trimmedValue);
 
-            log::add('Abeille', 'debug', 'value:'.$value.' / trimmed value: ->'.$trimmedValue.'<-');
-            $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($trimmedValue);
-            log::add('Abeille', 'debug', 'Template initial: '.json_encode($AbeilleObjetDefinition));
+            log::add('Abeille', 'debug', "value='".$value."' => trimmed value='".$trimmedValue."'");
+            // $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($trimmedValue);
+            // log::add('Abeille', 'debug', 'Template initial: '.json_encode($AbeilleObjetDefinition));
+
+            /* Selecting proper JSON in the following order:
+               - check if '<modelId>_<manufacturer>' is supported
+               - if not check if '<modelId>' is supported
+               - if not use 'defaultUnknown' */
+            $jsonName = '';
+            global $supportedDevList, $customDevList;
+            if ($manufacturer != '') {
+                $identifier = $trimmedValue.'_'.$manufacturer; // '<modelId>_<manufacturer>'
+                if (in_array($identifier, $supportedDevList)) {
+                    $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($identifier);
+                    log::add('Abeille', 'debug', 'Supported EQ found: '.$identifier);
+                    $jsonName = $identifier;
+                } else if (in_array($identifier, $customDevList)) {
+                    $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($identifier);
+                    log::add('Abeille', 'debug', 'User/custom EQ found: '.$identifier);
+                    $jsonName = $identifier;
+                }
+            }
+            if ($jsonName == '') {
+log::add('Abeille', 'debug', 'LA '.json_encode($supportedDevList));
+                if (in_array($trimmedValue, $supportedDevList)) { // '<modelId>'
+                    $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($trimmedValue);
+                    log::add('Abeille', 'debug', 'Supported EQ found: '.$trimmedValue);
+                    $jsonName = $trimmedValue;
+                } else if (in_array($trimmedValue, $customDevList)) { // '<modelId>'
+                    $AbeilleObjetDefinition = AbeilleTools::getJSonConfigFilebyDevicesTemplate($trimmedValue);
+                    log::add('Abeille', 'debug', 'User/custom EQ found: '.$trimmedValue);
+                    $jsonName = $trimmedValue;
+                }
+            }
+            if ($jsonName == '') {
+                log::add('Abeille', 'debug', 'Unsupported EQ. Using defaultUnknown');
+                $jsonName = 'defaultUnknown';
+            }
 
             // On recupere le EP
             // $EP = substr($cmdId,5,2);
@@ -1745,12 +1789,12 @@ while ($cron->running()) {
             $AbeilleObjetDefinition = json_decode($AbeilleObjetDefinitionJson, true);
             log::add('Abeille', 'debug', 'Template mis a jour avec EP: '.json_encode($AbeilleObjetDefinition));
 
-            if (array_key_exists($trimmedValue, $AbeilleObjetDefinition)) {
-                $jsonName = $trimmedValue;
-            }
-            if (array_key_exists('defaultUnknown', $AbeilleObjetDefinition)) {
-                $jsonName = 'defaultUnknown';
-            }
+            // if (array_key_exists($trimmedValue, $AbeilleObjetDefinition)) {
+            //     $jsonName = $trimmedValue;
+            // }
+            // if (array_key_exists('defaultUnknown', $AbeilleObjetDefinition)) {
+            //     $jsonName = 'defaultUnknown';
+            // }
 
             /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
             // Creation de l objet Abeille

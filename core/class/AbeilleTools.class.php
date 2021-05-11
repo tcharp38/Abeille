@@ -81,6 +81,7 @@ class AbeilleTools
         }
     }
 
+<<<<<<< HEAD
     /* Get list of supported devices ($from="Abeille"), or user/custom ones ($from="local")
        Returns: Associative array; $devicesList[$identifier] = array(), or false if error */
     public static function getDevicesList($from = "Abeille") {
@@ -98,6 +99,21 @@ class AbeilleTools
         $dh = opendir($rootDir);
         if ($dh === false) {
             log::add('Abeille', 'error', 'getDevicesList(): opendir('.$rootDir.') error');
+=======
+    /* Get list of supported devices ($type="Abeille"), or user/custom ones ($type="local")
+       Returns: Associative array; $devicesList[$identifier] = array(), or false if error */
+    public static function getDevicesList($type = "Abeille") {
+        $devicesList = [];
+
+        if ($type == "Abeille")
+            $dir = devicesDir;
+        else // type == 'local'
+            $dir = devicesLocalDir;
+
+        $dh = opendir($dir);
+        if ($dh === false) {
+            log::add('Abeille', 'error', 'getDevicesList(): opendir() error ');
+>>>>>>> 220c2edb (Support for common modelId)
             return false;
         }
         while (($dirEntry = readdir($dh)) !== false) {
@@ -106,7 +122,11 @@ class AbeilleTools
                 continue;
             // Tcharp38: TODO: Ignore non directories entries instead
 
+<<<<<<< HEAD
             $fullPath = $rootDir.$dirEntry.'/'.$dirEntry.".json";
+=======
+            $fullPath = devicesDir.'/'.$dirEntry.'/'.$dirEntry.".json";
+>>>>>>> 220c2edb (Support for common modelId)
             if (!file_exists($fullPath)) {
                 log::add('Abeille', 'debug', 'getDevicesList(): path access error '.$fullPath);
                 continue;
@@ -126,7 +146,11 @@ class AbeilleTools
             $dev = array(
                 'modelId' => $modelId,
                 'manufacturer' => $manufacturer,
+<<<<<<< HEAD
                 'type' => $from
+=======
+                'type' => $type
+>>>>>>> 220c2edb (Support for common modelId)
             );
             $devicesList[$dirEntry] = $dev;
         }
