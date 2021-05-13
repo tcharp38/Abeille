@@ -106,14 +106,22 @@ class AbeilleTools
         $devicesList = [];
 
         if ($type == "Abeille")
-            $dir = devicesDir;
-        else // type == 'local'
-            $dir = devicesLocalDir;
+            $rootDir = devicesDir;
+        else if ($type == "local")
+            $rootDir = devicesLocalDir;
+        else {
+            log::add('Abeille', 'error', 'getDevicesList(): wrong type '.$type);
+            return false;
+        }
 
-        $dh = opendir($dir);
+        $dh = opendir($rootDir);
         if ($dh === false) {
+<<<<<<< HEAD
             log::add('Abeille', 'error', 'getDevicesList(): opendir() error ');
 >>>>>>> 220c2edb (Support for common modelId)
+=======
+            log::add('Abeille', 'error', 'getDevicesList(): opendir('.$rootDir.') error');
+>>>>>>> 4f26c75a (New inclusion process with common modelId support)
             return false;
         }
         while (($dirEntry = readdir($dh)) !== false) {
@@ -123,10 +131,14 @@ class AbeilleTools
             // Tcharp38: TODO: Ignore non directories entries instead
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             $fullPath = $rootDir.$dirEntry.'/'.$dirEntry.".json";
 =======
             $fullPath = devicesDir.'/'.$dirEntry.'/'.$dirEntry.".json";
 >>>>>>> 220c2edb (Support for common modelId)
+=======
+            $fullPath = $rootDir.$dirEntry.'/'.$dirEntry.".json";
+>>>>>>> 4f26c75a (New inclusion process with common modelId support)
             if (!file_exists($fullPath)) {
                 log::add('Abeille', 'debug', 'getDevicesList(): path access error '.$fullPath);
                 continue;
