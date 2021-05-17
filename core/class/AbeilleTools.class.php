@@ -82,6 +82,7 @@ class AbeilleTools
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* Get list of supported devices ($from="Abeille"), or user/custom ones ($from="local")
        Returns: Associative array; $devicesList[$identifier] = array(), or false if error */
     public static function getDevicesList($from = "Abeille") {
@@ -101,16 +102,19 @@ class AbeilleTools
             log::add('Abeille', 'error', 'getDevicesList(): opendir('.$rootDir.') error');
 =======
     /* Get list of supported devices ($type="Abeille"), or user/custom ones ($type="local")
+=======
+    /* Get list of supported devices ($from="Abeille"), or user/custom ones ($from="local")
+>>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
        Returns: Associative array; $devicesList[$identifier] = array(), or false if error */
-    public static function getDevicesList($type = "Abeille") {
+    public static function getDevicesList($from = "Abeille") {
         $devicesList = [];
 
-        if ($type == "Abeille")
+        if ($from == "Abeille")
             $rootDir = devicesDir;
-        else if ($type == "local")
+        else if ($from == "local")
             $rootDir = devicesLocalDir;
         else {
-            log::add('Abeille', 'error', 'getDevicesList(): wrong type '.$type);
+            log::add('Abeille', 'error', 'getDevicesList(): wrong type '.$from);
             return false;
         }
 
@@ -159,10 +163,14 @@ class AbeilleTools
                 'modelId' => $modelId,
                 'manufacturer' => $manufacturer,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 'type' => $from
 =======
                 'type' => $type
 >>>>>>> 220c2edb (Support for common modelId)
+=======
+                'type' => $from
+>>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
             );
             $devicesList[$dirEntry] = $dev;
         }
@@ -183,10 +191,15 @@ class AbeilleTools
             return false;
         }
         while (($entry = readdir($dh)) !== false) {
+<<<<<<< HEAD
             /* Ignoring non json files */
             if (in_array($entry, array(".", "..")))
                 continue;
             if (pathinfo($entry, PATHINFO_EXTENSION) != "json")
+=======
+            /* Ignoring some entries */
+            if (in_array($entry, array(".", "..", "README.txt", "LISEZMOI.txt")))
+>>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
                 continue;
 
             $fullPath = $rootDir.$entry;
@@ -195,10 +208,16 @@ class AbeilleTools
                 continue;
             }
 
+<<<<<<< HEAD
             $commandsList[] = substr($entry, 0, -5); // Removing ".json"
         }
         closedir($dh);
         sort($commandsList);
+=======
+            $commandsList[] = $entry;
+        }
+        closedir($dh);
+>>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
 
         return $commandsList;
     }
