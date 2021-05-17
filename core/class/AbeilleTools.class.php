@@ -81,8 +81,6 @@ class AbeilleTools
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     /* Get list of supported devices ($from="Abeille"), or user/custom ones ($from="local")
        Returns: Associative array; $devicesList[$identifier] = array(), or false if error */
     public static function getDevicesList($from = "Abeille") {
@@ -100,32 +98,6 @@ class AbeilleTools
         $dh = opendir($rootDir);
         if ($dh === false) {
             log::add('Abeille', 'error', 'getDevicesList(): opendir('.$rootDir.') error');
-=======
-    /* Get list of supported devices ($type="Abeille"), or user/custom ones ($type="local")
-=======
-    /* Get list of supported devices ($from="Abeille"), or user/custom ones ($from="local")
->>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
-       Returns: Associative array; $devicesList[$identifier] = array(), or false if error */
-    public static function getDevicesList($from = "Abeille") {
-        $devicesList = [];
-
-        if ($from == "Abeille")
-            $rootDir = devicesDir;
-        else if ($from == "local")
-            $rootDir = devicesLocalDir;
-        else {
-            log::add('Abeille', 'error', 'getDevicesList(): wrong type '.$from);
-            return false;
-        }
-
-        $dh = opendir($rootDir);
-        if ($dh === false) {
-<<<<<<< HEAD
-            log::add('Abeille', 'error', 'getDevicesList(): opendir() error ');
->>>>>>> 220c2edb (Support for common modelId)
-=======
-            log::add('Abeille', 'error', 'getDevicesList(): opendir('.$rootDir.') error');
->>>>>>> 4f26c75a (New inclusion process with common modelId support)
             return false;
         }
         while (($dirEntry = readdir($dh)) !== false) {
@@ -134,15 +106,7 @@ class AbeilleTools
                 continue;
             // Tcharp38: TODO: Ignore non directories entries instead
 
-<<<<<<< HEAD
-<<<<<<< HEAD
             $fullPath = $rootDir.$dirEntry.'/'.$dirEntry.".json";
-=======
-            $fullPath = devicesDir.'/'.$dirEntry.'/'.$dirEntry.".json";
->>>>>>> 220c2edb (Support for common modelId)
-=======
-            $fullPath = $rootDir.$dirEntry.'/'.$dirEntry.".json";
->>>>>>> 4f26c75a (New inclusion process with common modelId support)
             if (!file_exists($fullPath)) {
                 log::add('Abeille', 'debug', 'getDevicesList(): path access error '.$fullPath);
                 continue;
@@ -162,15 +126,7 @@ class AbeilleTools
             $dev = array(
                 'modelId' => $modelId,
                 'manufacturer' => $manufacturer,
-<<<<<<< HEAD
-<<<<<<< HEAD
                 'type' => $from
-=======
-                'type' => $type
->>>>>>> 220c2edb (Support for common modelId)
-=======
-                'type' => $from
->>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
             );
             $devicesList[$dirEntry] = $dev;
         }
@@ -191,21 +147,10 @@ class AbeilleTools
             return false;
         }
         while (($entry = readdir($dh)) !== false) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 84a62a80 (Profalux + EQ page/cmds update)
             /* Ignoring non json files */
             if (in_array($entry, array(".", "..")))
                 continue;
             if (pathinfo($entry, PATHINFO_EXTENSION) != "json")
-<<<<<<< HEAD
-=======
-            /* Ignoring some entries */
-            if (in_array($entry, array(".", "..", "README.txt", "LISEZMOI.txt")))
->>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
-=======
->>>>>>> 84a62a80 (Profalux + EQ page/cmds update)
                 continue;
 
             $fullPath = $rootDir.$entry;
@@ -214,23 +159,10 @@ class AbeilleTools
                 continue;
             }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
             $commandsList[] = substr($entry, 0, -5); // Removing ".json"
         }
         closedir($dh);
         sort($commandsList);
-=======
-            $commandsList[] = $entry;
-        }
-        closedir($dh);
->>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
-=======
-            $commandsList[] = substr($entry, 0, -5); // Removing ".json"
-        }
-        closedir($dh);
-        sort($commandsList);
->>>>>>> 84a62a80 (Profalux + EQ page/cmds update)
 
         return $commandsList;
     }
