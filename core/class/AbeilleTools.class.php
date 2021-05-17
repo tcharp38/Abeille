@@ -192,14 +192,20 @@ class AbeilleTools
         }
         while (($entry = readdir($dh)) !== false) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 84a62a80 (Profalux + EQ page/cmds update)
             /* Ignoring non json files */
             if (in_array($entry, array(".", "..")))
                 continue;
             if (pathinfo($entry, PATHINFO_EXTENSION) != "json")
+<<<<<<< HEAD
 =======
             /* Ignoring some entries */
             if (in_array($entry, array(".", "..", "README.txt", "LISEZMOI.txt")))
 >>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
+=======
+>>>>>>> 84a62a80 (Profalux + EQ page/cmds update)
                 continue;
 
             $fullPath = $rootDir.$entry;
@@ -208,6 +214,7 @@ class AbeilleTools
                 continue;
             }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             $commandsList[] = substr($entry, 0, -5); // Removing ".json"
         }
@@ -218,6 +225,12 @@ class AbeilleTools
         }
         closedir($dh);
 >>>>>>> d0c6e707 (EQ page/commands: new cmd from JSON prelim)
+=======
+            $commandsList[] = substr($entry, 0, -5); // Removing ".json"
+        }
+        closedir($dh);
+        sort($commandsList);
+>>>>>>> 84a62a80 (Profalux + EQ page/cmds update)
 
         return $commandsList;
     }
