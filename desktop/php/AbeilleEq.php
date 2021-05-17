@@ -484,6 +484,13 @@
             }
             tr += '</td>';
 
+            // Tcharp38: logicalId seems not really used so displaying 'topic' too
+            tr += '<td>'; // Col 4.1 = Topic
+            if (init(_cmd.type) == 'action') {
+                tr += '     <input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="topic" style="height : 33px;" placeholder="{{topic}}">';
+            }
+            tr += '</td>';
+
             tr += '<td>'; // Col 5 = Abeille cmd params
             if ((init(_cmd.type) == 'info') || (init(_cmd.type) == '')) { // Info or new cmd
             } else if (init(_cmd.type) == 'action') {
