@@ -50,11 +50,15 @@ while read -r; do
         fi
         echo "?? : '$REPLY'"
         if [ -d ${ARG2} ]; then
+            FILES=`find ${ARG2}`
+            for F in ${FILES}; do
+                echo "     $F"
+            done
+
             echo "     Creating and transfering directory"
             echo "mkdir ${ARG2}" >> ${SFTP_SCRIPT}
-            FILES=`ls -1 ${ARG2}`
             for F in ${FILES}; do
-                echo "put ${ARG2}/$F ${ARG2}/$F" >> ${SFTP_SCRIPT}
+                echo "put $F $F" >> ${SFTP_SCRIPT}
             done
         else
             echo "put ${ARG2} ${ARG2}" >> ${SFTP_SCRIPT}
