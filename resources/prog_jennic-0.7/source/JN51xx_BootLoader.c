@@ -135,6 +135,7 @@ typedef enum
 	E_BL_MSG_TYPE_SET_BAUD_RESPONSE						= 0x28,
 	E_BL_MSG_TYPE_FLASH_SELECT_TYPE_REQUEST				= 0x2c,
 	E_BL_MSG_TYPE_FLASH_SELECT_TYPE_RESPONSE			= 0x2d,
+
     E_BL_MSG_TYPE_GET_CHIPID_REQUEST                    = 0x32,
     E_BL_MSG_TYPE_GET_CHIPID_RESPONSE                   = 0x33,
 	 /* Flash programmer extension commands */
@@ -275,6 +276,7 @@ teStatus BL_eGetChipId(int iUartFd, tsChipDetails *psChipDetails)
     uint8_t au8Buffer[6];
 
     DBG_vPrintf(TRACE_BOOTLOADER, "Get Chip ID\n");
+
     if(psChipDetails == NULL)
     {
         return E_STATUS_NULL_PARAMETER;
@@ -301,6 +303,7 @@ teStatus BL_eGetChipId(int iUartFd, tsChipDetails *psChipDetails)
             psChipDetails->u32ChipId |= au8Buffer[3] << 0;
         }
     }
+
     if (CHIP_ID_PART(psChipDetails->u32ChipId) == CHIP_ID_PART(CHIP_ID_JN5168))
     {
         DBG_vPrintf(TRACE_BOOTLOADER, "Reading 6x data\n");
@@ -316,6 +319,7 @@ teStatus BL_eGetChipId(int iUartFd, tsChipDetails *psChipDetails)
             psChipDetails->u32BootloaderVersion |= au8Buffer[1] << 16;
             psChipDetails->u32BootloaderVersion |= au8Buffer[2] << 8;
             psChipDetails->u32BootloaderVersion |= au8Buffer[3] << 0;
+
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x Bootloader version 0x%08x\n", psChipDetails->u32BootloaderVersion);
         }
 
@@ -333,6 +337,7 @@ teStatus BL_eGetChipId(int iUartFd, tsChipDetails *psChipDetails)
                 (psChipDetails->u32FlashSize << 16) |
                 (psChipDetails->u32RamSize   << 24) |
                 (0x08));
+
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x RAM size %dk\n", (psChipDetails->u32RamSize * 8) + 8);
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x Flash size %dk\n", (psChipDetails->u32FlashSize * 32) + 32);
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x Bootloader version 0x%08x\n", psChipDetails->u32BootloaderVersion);
@@ -396,6 +401,7 @@ teStatus BL_eGetChipId(int iUartFd, tsChipDetails *psChipDetails)
                 (psChipDetails->u32RamSize   << 24) |
                 (0x08));
             psChipDetails->u32SupportedFirmware = 0x0f03000b;					//!!!
+
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x RAM size %dk\n", (psChipDetails->u32RamSize * 8) + 8);
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x Flash size %dk\n", (psChipDetails->u32FlashSize * 32) + 32);
             DBG_vPrintf(TRACE_BOOTLOADER, "JN516x Bootloader version 0x%08x\n", psChipDetails->u32BootloaderVersion);
@@ -417,6 +423,7 @@ teStatus BL_eGetChipId(int iUartFd, tsChipDetails *psChipDetails)
             psChipDetails->u32SupportedFirmware |= au8Buffer[3] << 0;
         }
     }
+
     return E_STATUS_OK;
 }
 
@@ -493,11 +500,13 @@ teStatus BL_eGetMacAddress(int iUartFd, tsChipDetails *psChipDetails)
 teStatus BL_eGetChipDetails(int iUartFd, tsChipDetails *psChipDetails)
 {
     teStatus eStatus;
+
     eStatus = BL_eGetChipId(iUartFd, psChipDetails);
     if (eStatus != E_STATUS_OK)
     {
         return eStatus;
     }
+
     eStatus = BL_eGetMacAddress(iUartFd, psChipDetails);
     if (eStatus != E_STATUS_OK)
     {
@@ -653,6 +662,7 @@ teStatus BL_eReprogram(int iUartFd, tsChipDetails *psChipDetails, tsFW_Info *psF
             else
             {
                 DBG_vPrintf(TRACE_BOOTLOADER, "Flash erase success\n");
+
                 if (iVerbosity > 0)
                 {
                     printf("%c[AErasing:   100%%\n", 0x1B);
@@ -747,6 +757,7 @@ teStatus BL_eSetBaudrate(int iUartFd, uint32_t u32Baudrate)
     uint8_t u8RxDataLen = 0;
     uint8_t au8Buffer[6];
     uint32_t u32Divisor;
+
     // Divide 1MHz clock bu baudrate to get the divisor, round to closest
     u32Divisor = (1000000+u32Baudrate/2) / u32Baudrate;
 
@@ -769,6 +780,7 @@ teStatus BL_eSetBaudrate(int iUartFd, uint32_t u32Baudrate)
 
 teStatus BL_EEPROMErase(int iUartFd, uint32_t iEraseAll)
 {
+
     teBL_Response eResponse = 0;
     teBL_MessageType eRxType = 0;
 	uint8_t au8CmdBuffer[1];
@@ -854,6 +866,7 @@ int iBL_DownloadFirmwareToRam(tsFW_Info *psFW_Info, uint64_t *pu64MAC_Address)
         {
             u8ChunkSize = psFW_Info->u32TextSectionLength - n;
         }
+
         if(iBL_WriteRAM(psFW_Info->u32TextSectionLoadAddress + n, u8ChunkSize, psFW_Info->pu8TextData + n) == -1)
         {
             DBG_vPrintf(TRACE_BOOTLOADER, "\nProblem writing chunk");
@@ -861,6 +874,7 @@ int iBL_DownloadFirmwareToRam(tsFW_Info *psFW_Info, uint64_t *pu64MAC_Address)
         }
 
         printf("Wrote chunk length %d at address 0x%08x: 0x%08x\n", u8ChunkSize, psFW_Info->u32TextSectionLoadAddress + n, ntohl(*((uint32_t*)(psFW_Info->pu8TextData + n))));
+
         if (1)
         {
             uint8_t au8Buffer[BL_MAX_CHUNK_SIZE + 1];
@@ -1519,6 +1533,7 @@ static teBL_Response eBL_ReadMessage(int iUartFd, int iTimeoutMicroseconds, teBL
 		DBG_vPrintf(TRACE_BOOTLOADER, "Checksum bad, got %02x expected %02x\n", u8CalculatedCheckSum, 0);
 		return(E_BL_RESPONSE_CRC_ERROR);
 	}
+
 	*peType = au8Msg[0];
 	*pu8Length = u8Length - 3;
 	eResponse = au8Msg[1];
@@ -1582,6 +1597,7 @@ int BL_DownloadExtensionToRamBeforeErase(int iUartFd, tsFW_Info *psFW_Info)
 	DBG_vPrintf(TRACE_BOOTLOADER, "\nBSS  Start 0x%08x - Len %d bytes", psFW_Info->u32BssSectionLoadAddress, psFW_Info->u32BssSectionLength);
 	DBG_vPrintf(TRACE_BOOTLOADER, "\nReset entry point 0x%08x", ntohl(psFW_Info->u32ResetEntryPoint));
     DBG_vPrintf(TRACE_BOOTLOADER, "\nWake entry point 0x%08x",  ntohl(psFW_Info->u32WakeUpEntryPoint));
+
 	for(n = 0; n < 0x0000097c;)
     {
         if((0x0000097c - n) > 128)
@@ -1600,6 +1616,7 @@ int BL_DownloadExtensionToRamBeforeErase(int iUartFd, tsFW_Info *psFW_Info)
         }
 
         DBG_vPrintf(TRACE_BOOTLOADER,"Wrote chunk length %d at address 0x%08x: 0x%08x\n", u8ChunkSize, 0x04000400 + n, ntohl(*((uint32_t*)(FlashProgrammerExtension_JN5168_bin + n))));
+
         if (1)
         {
             uint8_t au8Buffer[128 + 1];
@@ -1628,6 +1645,7 @@ int BL_DownloadExtensionToRamBeforeErase(int iUartFd, tsFW_Info *psFW_Info)
 	BL_EEPROMErase(iUartFd,1);
 	DBG_vPrintf(TRACE_BOOTLOADER, "\nErase OK");
 	iBL_RunRAM(iUartFd, 0x66000000);
+
 	return(0);
 }
 
