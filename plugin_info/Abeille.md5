@@ -778,6 +778,7 @@ f6fc2cf32a29787b940390b28b098cc9 *desktop/js/network.js
 f7ea42019e240a2daae60b6fc6488f64 *desktop/modal/AbeilleHealth.modal.php
 066eb590e69ec549df11007e773aaf63 *desktop/modal/AbeilleLoadJsonCmd.modal.php
 946562ee36ee9641ddd2aabd22e51fd3 *desktop/modal/AbeilleNetwork.modal.php
+5c68fc4d3fb28c9199a3e169ce705bdd *desktop/modal/cleanBees.php
 865d017d1316e11b19d058c0d1ff6304 *desktop/modal/healthShort.php
 6751162df1530c93e749729ea65f4e7a *desktop/modal/inconnu.php
 7a6053367d930d7503ed68aed902f177 *desktop/modal/installSocat.abeille.php
