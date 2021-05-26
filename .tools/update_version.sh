@@ -55,14 +55,17 @@ echo "- ${FILE} updated"
 # Updating plugin_info/info.json for Changelog
 FILE=plugin_info/info.json
 FILE_TMP=plugin_info/info.json.tmp
+rm -f ${FILE_TMP} >/dev/null
 cat ${FILE} |
 while IFS= read -r L
 do
     if [[ "${L}" == *"changelog"* ]]; then
-        echo '  "changelog": "https://kiwihc16.github.io/AbeilleDoc/Changelog.html#${VERSION_NEW}",' >> ${FILE_TMP}
+        echo "  \"changelog\": \"https://kiwihc16.github.io/AbeilleDoc/Changelog.html#${VERSION_NEW}\"," >> ${FILE_TMP}
     else
         echo "${L}" >> ${FILE_TMP}
     fi
 done
+mv ${FILE_TMP} ${FILE}
+echo "- ${FILE} updated"
 
 exit 0
