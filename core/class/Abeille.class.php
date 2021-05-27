@@ -2937,5 +2937,21 @@ while ($cron->running()) {
         else
             $eqLogic->checkAndUpdateCmd($cmdlogic, 1);
     }
+
+    /* Update all infos related to last communication time of given device.
+       This is based on timestamp of last communication received from device itself. */
+    public static function updateTimestamp($eqLogic, $timestamp) {
+        log::add('Abeille', 'debug', "Updating 'time' & 'online' fields for ".$eqLogic->getName());
+        $eqId = $eqLogic->getId();
+
+        $cmdlogic = AbeilleCmd::byEqLogicIdAndLogicalId($eqId, "Time-TimeStamp");
+        $eqLogic->checkAndUpdateCmd($cmdlogic, $timestamp);
+
+        $cmdlogic = AbeilleCmd::byEqLogicIdAndLogicalId($eqId, "Time-Time");
+        $eqLogic->checkAndUpdateCmd($cmdlogic, date("Y-m-d H:i:s", $timestamp));
+
+        $cmdlogic = AbeilleCmd::byEqLogicIdAndLogicalId($eqId, 'online');
+        $eqLogic->checkAndUpdateCmd($cmdlogic, 1);
+    }
 }
 
