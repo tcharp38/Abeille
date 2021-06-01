@@ -2937,38 +2937,5 @@ while ($cron->running()) {
         else
             $eqLogic->checkAndUpdateCmd($cmdlogic, 1);
     }
-
-    /* Update all infos related to last communication time of given device.
-       This is based on timestamp of last communication received from device itself. */
-    public static function updateTimestamp($eqLogic, $timestamp) {
-        log::add('Abeille', 'debug', "Updating 'time' & 'online' fields for ".$eqLogic->getName());
-        $eqId = $eqLogic->getId();
-        $eqName = $eqLogic->getName();
-
-        // Updating directly eqLogic/setStatus/'lastCommunication' & 'timeout' with real timestamp
-        $eqLogic->setStatus(array('lastCommunication' => date('Y-m-d H:i:s', $timestamp), 'timeout' => 0));
-
-        /* Tcharp38 note:
-           The cases hereafter could be removed. Using 'lastCommunication' allows to no longer
-           use these 3 specific & redondant commands. To be discussed. */
-
-        $cmdlogic = AbeilleCmd::byEqLogicIdAndLogicalId($eqId, "Time-TimeStamp");
-        if (!is_object($cmdlogic))
-            log::add('Abeille', 'debug', 'updateTimestamp(): WARNING: '.$eqName.", missing cmd 'Time-TimeStamp'");
-        else
-            $eqLogic->checkAndUpdateCmd($cmdlogic, $timestamp);
-
-        $cmdlogic = AbeilleCmd::byEqLogicIdAndLogicalId($eqId, "Time-Time");
-        if (!is_object($cmdlogic))
-            log::add('Abeille', 'debug', 'updateTimestamp(): WARNING: '.$eqName.", missing cmd 'Time-Time'");
-        else
-            $eqLogic->checkAndUpdateCmd($cmdlogic, date("Y-m-d H:i:s", $timestamp));
-
-        $cmdlogic = AbeilleCmd::byEqLogicIdAndLogicalId($eqId, 'online');
-        if (!is_object($cmdlogic))
-            log::add('Abeille', 'debug', 'updateTimestamp(): WARNING: '.$eqName.", missing cmd 'online'");
-        else
-            $eqLogic->checkAndUpdateCmd($cmdlogic, 1);
-    }
 }
 
