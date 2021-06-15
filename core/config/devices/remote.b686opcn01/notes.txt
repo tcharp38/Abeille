@@ -1,3 +1,7 @@
+[2021-06-15 15:35:52] Abeille1, Type=004d/Device announce, Addr=7F30, ExtAddr=04CF8CDF3C7D57E3, MACCapa=84, Rejoin=00
+[2021-06-15 15:35:52]   EQ already known: Addr updated from DB4C to 7F30
+[2021-06-15 15:35:52]   updateEq('epList', '01/02/03/04/05/06'), status=idle
+
 Manufacturer: 'LUMI'
 ModelId: 'remote.b686opcn01'
 Location: ''

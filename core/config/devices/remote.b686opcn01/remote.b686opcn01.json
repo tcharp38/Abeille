@@ -1,13 +1,14 @@
 {
   "remote.b686opcn01": {
     "nameJeedom": "Aqara Opple wireless switch 6 buttons",
+    "comment": "TO BE COMPLETED. ALL CMDS ARE WRONG",
     "manufacturer": "Xiaomi",
     "model": "WXCJKG13LM",
     "Categorie": {
       "automatism": "1"
     },
     "configuration": {
-      "icone": "XiaomiButtonb286acn02",
+      "icone": "Aqara-Opple-6buttons",
       "battery_type": "1x3V CR2032",
       "mainEP": "#EP#"
     },
