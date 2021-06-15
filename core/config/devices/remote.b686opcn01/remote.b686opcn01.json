@@ -1,0 +1,23 @@
+{
+  "remote.b686opcn01": {
+    "nameJeedom": "Aqara Opple wireless switch 6 buttons",
+    "manufacturer": "Xiaomi",
+    "model": "WXCJKG13LM",
+    "Categorie": {
+      "automatism": "1"
+    },
+    "configuration": {
+      "icone": "XiaomiButtonb286acn02",
+      "battery_type": "1x3V CR2032",
+      "mainEP": "#EP#"
+    },
+    "Commandes": {
+      "include4": "etatSwitchDoubleb286acn01_1",
+      "include4 3": "etatSwitchDoubleb286acn01_2",
+      "include4 3 2": "etatSwitchDoubleb286acn01_3",
+      "include4 2": "Batterie-Volt",
+      "include5": "Batterie-Pourcent",
+      "include6": "Xiaomi-ff01"
+    }
+  }
+}
