@@ -203,7 +203,7 @@
                 <label class="col-lg-2 control-label" for="fname">End points:</label>
                 <div class="col-lg-10">
                     <!-- <a class="btn btn-warning" title="Raffraichi la liste des End Points" onclick="refreshEPList()"><i class="fas fa-sync"></i></a> -->
-                    <a class="btn btn-warning" title="Raffraichi la liste des End Points" onclick="requestDevInfo('epList')"><i class="fas fa-sync"></i></a>
+                    <a class="btn btn-warning" title="Raffraichi la liste des End Points" onclick="requestInfos('epList')"><i class="fas fa-sync"></i></a>
                     <input type="text" id="idEPList" value="" readonly>
                 </div>
             </div>
