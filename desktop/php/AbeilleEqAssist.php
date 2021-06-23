@@ -430,13 +430,13 @@
             clust = ep.inClustList[clustIdx];
         clustId = clust.id;
 
-        // idInClustx => table of input clusters (col1=clustId, col2+=attribut)
-        // idOutClustx => table of output clusters (col1=clustId, col2+=attribut)
+        // idServClustx => table of input clusters (col1=clustId, col2+=attribut)
+        // idCliClustx => table of output clusters (col1=clustId, col2+=attribut)
         if (outClust) {
-            var clustTable = document.getElementById("idOutClust"+epIdx);
+            var clustTable = document.getElementById("idCliClust"+epIdx);
             var line = clustTable.rows[clustIdx];
         } else {
-            var clustTable = document.getElementById("idInClust"+epIdx);
+            var clustTable = document.getElementById("idServClust"+epIdx);
             var line = clustTable.rows[clustIdx];
         }
         /* Cleanup tables: remove all columns except first one (cluster ID) */
