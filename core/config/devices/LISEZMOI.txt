@@ -66,6 +66,7 @@ Exemple: BASICZBR3.json
 * zbManufacturer: identifiant zigbee du fabricant
 
 * timeout: délai (en min) au dela duquel l'équipement est considéré "mort" si aucune nouvelle de lui
+
 * category: OBLIGATOIRE, le ou les catégories auxquelles l'équipement appartient.
   - light
   - heating
@@ -74,7 +75,6 @@ Exemple: BASICZBR3.json
   - automatism
   - multimedia
   - default
-
 * configuration: OBLIGATOIRE
   A COMPLETER
   - batteryType: Description type de batterie
