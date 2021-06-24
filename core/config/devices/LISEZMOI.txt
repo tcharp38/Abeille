@@ -75,6 +75,7 @@ Exemple: BASICZBR3.json
   - automatism
   - multimedia
   - default
+  
 * configuration: OBLIGATOIRE
   A COMPLETER
   - batteryType: Description type de batterie
