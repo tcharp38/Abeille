@@ -418,76 +418,97 @@
     //     });
     // }
 
-    /* Use 0140+8002 cmd to get supported attributs list */
-    function refreshAttributsList0140(epIdx, outClust, clustIdx) {
-        console.log("refreshAttributsList0140(epIdx="+epIdx+", outClust="+outClust+", clustIdx="+clustIdx+")");
+    //                 attributes = resp.Attributes;
+    //                 let attrCount = attributes.length;
+    //                 console.log("nb of attr="+attrCount)
+    //                 for (attrIdx = 0; attrIdx < attrCount; attrIdx++) {
+    //                     rattr = attributes[attrIdx];
+    //                     if (rattr.Status != "00")
+    //                         continue;
 
-        ep = eq.epList[epIdx];
-        epNb = ep.id;
-        if (outClust)
-            clust = ep.outClustList[clustIdx];
-        else
-            clust = ep.inClustList[clustIdx];
-        clustId = clust.id;
+    //                     a = new Object();
+    //                     a.id = rattr.Id;
+    //                     // a.type = rattr.Type;
+    //                     clust.attrList.push(a);
 
-        // idServClustx => table of input clusters (col1=clustId, col2+=attribut)
-        // idCliClustx => table of output clusters (col1=clustId, col2+=attribut)
-        if (outClust) {
-            var clustTable = document.getElementById("idCliClust"+epIdx);
-            var line = clustTable.rows[clustIdx];
-        } else {
-            var clustTable = document.getElementById("idServClust"+epIdx);
-            var line = clustTable.rows[clustIdx];
-        }
-        /* Cleanup tables: remove all columns except first one (cluster ID) */
-        var colCount = line.cells.length;
-        for (var i = colCount - 1; i >= 1; i--) {
-            line.deleteCell(i);
-        }
+    //                     var newCol = line.insertCell(-1);
+    //                     newCol.innerHTML = rattr.Id;
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
-        $.ajax({
-            type: 'POST',
-            url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
-            data: {
-                action: 'getAttrDiscResp',
-                zgNb: js_zgNb,
-                eqAddr: js_eqAddr,
-                eqEP: epNb, // EP number
-                clustId: clustId,
-            },
-            dataType: 'json',
-            global: false,
-            async: false,
-            error: function (request, status, error) {
-                bootbox.alert("ERREUR 'getAttrDiscResp' !<br>Votre installation semble corrompue.<br>"+error);
-            },
-            success: function (json_res) {
-                res = JSON.parse(json_res.result);
-                if (res.status != 0)
-                    console.log("error="+res.error);
-                else {
-                    console.log("res.resp follows:");
-                    console.log(res.resp);
-                    var resp = res.resp;
+    // /* Use 0140+8002 cmd to get supported attributs list */
+    // function refreshAttributsList0140(epIdx, outClust, clustIdx) {
+    //     console.log("refreshAttributsList0140(epIdx="+epIdx+", outClust="+outClust+", clustIdx="+clustIdx+")");
 
-                    attributes = resp.Attributes;
-                    let attrCount = attributes.length;
-                    console.log("nb of attr="+attrCount)
-                    for (attrIdx = 0; attrIdx < attrCount; attrIdx++) {
-                        rattr = attributes[attrIdx];
+    //     ep = eq.epList[epIdx];
+    //     epNb = ep.id;
+    //     if (outClust)
+    //         clust = ep.outClustList[clustIdx];
+    //     else
+    //         clust = ep.inClustList[clustIdx];
+    //     clustId = clust.id;
 
-                        a = new Object();
-                        a.id = rattr.Id;
-                        // a.type = rattr.Type;
-                        clust.attrList.push(a);
+    //     // idServClustx => table of input clusters (col1=clustId, col2+=attribut)
+    //     // idCliClustx => table of output clusters (col1=clustId, col2+=attribut)
+    //     if (outClust) {
+    //         var clustTable = document.getElementById("idCliClust"+epIdx);
+    //         var line = clustTable.rows[clustIdx];
+    //     } else {
+    //         var clustTable = document.getElementById("idServClust"+epIdx);
+    //         var line = clustTable.rows[clustIdx];
+    //     }
+    //     /* Cleanup tables: remove all columns except first one (cluster ID) */
+    //     var colCount = line.cells.length;
+    //     for (var i = colCount - 1; i >= 1; i--) {
+    //         line.deleteCell(i);
+    //     }
 
-                        var newCol = line.insertCell(-1);
-                        newCol.innerHTML = rattr.Id;
-                    }
-                }
-            }
-        });
-    }
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'plugins/Abeille/core/ajax/AbeilleEqAssist.ajax.php',
+    //         data: {
+    //             action: 'getAttrDiscResp',
+    //             zgNb: js_zgNb,
+    //             eqAddr: js_eqAddr,
+    //             eqEP: epNb, // EP number
+    //             clustId: clustId,
+    //         },
+    //         dataType: 'json',
+    //         global: false,
+    //         async: false,
+    //         error: function (request, status, error) {
+    //             bootbox.alert("ERREUR 'getAttrDiscResp' !<br>Votre installation semble corrompue.<br>"+error);
+    //         },
+    //         success: function (json_res) {
+    //             res = JSON.parse(json_res.result);
+    //             if (res.status != 0)
+    //                 console.log("error="+res.error);
+    //             else {
+    //                 console.log("res.resp follows:");
+    //                 console.log(res.resp);
+    //                 var resp = res.resp;
+
+    //                 attributes = resp.Attributes;
+    //                 let attrCount = attributes.length;
+    //                 console.log("nb of attr="+attrCount)
+    //                 for (attrIdx = 0; attrIdx < attrCount; attrIdx++) {
+    //                     rattr = attributes[attrIdx];
+
+    //                     a = new Object();
+    //                     a.id = rattr.Id;
+    //                     // a.type = rattr.Type;
+    //                     clust.attrList.push(a);
+
+    //                     var newCol = line.insertCell(-1);
+    //                     newCol.innerHTML = rattr.Id;
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
     // function getAttributsList(epIdx, outClust, clustIdx) {
     //     console.log("getAttributsList(epIdx="+epIdx+", outClust="+outClust+", clustIdx="+clustIdx+")");
