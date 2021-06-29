@@ -3847,6 +3847,7 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
                     $BatteryPercent = substr($Attribut, 0, 2);
                     $percent = hexdec($BatteryPercent) / 2;
                     parserLog('debug', '  BatteryPercent='.$BatteryPercent.' => '.$percent.'%');
+                    $data = $percent;
                 }
             } // End cluster 0001/power configuration
 
