@@ -1,13 +1,13 @@
 {
   "plug.maeu01": {
     "nameJeedom": "Aqara SmartPlug",
+    "manufacturer": "Xiaomi",
     "timeout": "60",
     "Comment": "https://github.com/KiwiHC16/Abeille/issues/1578",
     "Categorie": {
       "automatism": "1"
     },
     "configuration": {
-      "uniqId": "20210127_2358",
       "icone": "plug.maeu01",
       "mainEP": "#EP#"
     },
@@ -15,13 +15,14 @@
       "include1": "SW",
       "include2": "societe",
       "include3": "nom",
-      "include4": "etat",
-      "include5": "On",
-      "include6": "Off",
-      "include7": "Toggle",
-      "include8": "getEtat",
       "include9": "getManufacturerName",
       "include10": "getModelIdentifier",
+
+      "include5": "On",
+      "include6": "Off",
+      "include4": "etat",
+      "include8": "getEtat",
+
       "include13": "puissanceEP15",
       "include13 2": "conso",
       "include13 2 2": "VoltagePrise",
