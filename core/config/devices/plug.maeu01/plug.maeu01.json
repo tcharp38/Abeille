@@ -23,11 +23,17 @@
       "include4": "etat",
       "include8": "getEtat",
 
-      "include13": "puissanceEP15",
-      "include13 2": "conso",
-      "include13 2 2": "VoltagePrise",
-      "include13 2 2 2": "CurrentPrise_mA",
-      "include13 2 2 2 2": "temperaturePrise"
+      "include0702-1": "zb-0702-CurrentSummationDelivered-KWh-div10",
+      "include0702-2": "zb-0702-UnitOfMeasure",
+      "include0702-3": "zbGet-0702-UnitOfMeasure",
+      "include0702-4": "zb-0702-Multiplier",
+      "include0702-5": "zbGet-0702-Multiplier",
+      "include0702-6": "zb-0702-Divisor",
+      "include0702-7": "zbGet-0702-Divisor",
+      "include0702-8": "zb-0702-SummationFormatting",
+      "include0702-9": "zbGet-0702-SummationFormatting",
+
+      "include0B04-1": "zb-0B04-ActivePower"
     }
   }
 }
