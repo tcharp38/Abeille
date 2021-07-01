@@ -2,6 +2,7 @@
   "plug.maeu01": {
     "nameJeedom": "Aqara SmartPlug",
     "manufacturer": "Xiaomi",
+    "model": "SP-EUC01 ?",
     "timeout": "60",
     "Comment": "https://github.com/KiwiHC16/Abeille/issues/1578",
     "Categorie": {
@@ -32,8 +33,12 @@
       "include0702-7": "zbGet-0702-Divisor",
       "include0702-8": "zb-0702-SummationFormatting",
       "include0702-9": "zbGet-0702-SummationFormatting",
+      "include0006-5": "bindToZigate-EP01-0702",
+      "include0B04-6": "setReport-EP01-0702-0000",
 
-      "include0B04-1": "zb-0B04-ActivePower"
+      "include0B04-1": "zb-0B04-ActivePower",
+      "include0B04-5": "bindToZigate-EP01-0B04",
+      "include0B04-6": "setReport-EP01-0B04-050B"
     }
   }
 }
