@@ -1,0 +1,15 @@
+{
+  "0006-01-0000": {
+    "isVisible": 1,
+    "name": "Switch 1",
+    "isHistorized": 0,
+    "Type": "info",
+    "subType": "numeric",
+    "generic_type": "",
+    "invertBinary": "1",
+    "template": "badge",
+    "configuration": {
+      "visibilityCategory": "All"
+    }
+  }
+}

@@ -10,15 +10,19 @@
     "configuration": {
       "icone": "Aqara-Opple-6buttons",
       "battery_type": "1x3V CR2032",
+      "paramType": "telecommande",
       "mainEP": "#EP#"
     },
     "Commandes": {
-      "include4": "etatSwitchDoubleb286acn01_1",
-      "include4 3": "etatSwitchDoubleb286acn01_2",
-      "include4 3 2": "etatSwitchDoubleb286acn01_3",
+      "include0006-1": "bindToZigate-EP01-0006",
+      "include0006-2": "setReport-EP01-0006-0000",
+      "include0006-3": "status-EP01-0006",
+      "include0006-4": "bindToZigate-EP02-0006",
+      "include0006-5": "setReport-EP02-0006-0000",
+      "include0006-6": "status-EP02-0006",
+
       "include4 2": "Batterie-Volt",
-      "include5": "Batterie-Pourcent",
-      "include6": "Xiaomi-ff01"
+      "include5": "Batterie-Pourcent"
     }
   }
 }
