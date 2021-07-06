@@ -617,7 +617,6 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
 
             $eq = &$GLOBALS['eqList'][$net][$addr];
             $eq['status'] = 'discovering';
-            $eq['time'] = time();
 
             $this->discoverLog('***');
             $this->discoverLog('*** New equipement discovery');
