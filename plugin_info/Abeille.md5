@@ -51,6 +51,7 @@ a5d78aa22a50e40b07931d9e3d2120b7 *Zigate_Module/ReadJN5168/EEPROMRead1OnlyFlashe
 7a14355baf9dfab5221fea2724816253 *Zigate_Module/ReadJN5168/EEPROMRead5SetMask24StartNetworkAddXiaomiTempRond.bin
 be0bfa546083c6e0e079bb6b25adab5c *Zigate_Module/ReadJN5168/EEPROMRead6ProductionJeedomZwave.bin
 ee2be2ec60cb3b00ed0501cb232f7166 *Zigate_Module/ReadJN5168/read.php
+75e655a414b0bf4c966c97cef31aa00e *core/ajax/AbeilleClean.ajax.php
 303ad0491eac16e9e38f0967285cce0e *core/ajax/AbeilleDev.ajax.php
 2898de944ba6316254c45378e224bbc6 *core/ajax/AbeilleEqAssist.ajax.php
 cb4c19627f5c54337889f0a1277fb17b *core/ajax/AbeilleFiles.ajax.php
@@ -217,6 +218,8 @@ e333982d451b2bbfd5baddb7f8feabcc *core/config/commands/addGroupEP6.json
 81ac513569fda018b437e81fb7948d8a *core/config/commands/addGroupEP7.json
 9797c15d4c693f7cbf1d6760267498d2 *core/config/commands/addGroupEP8.json
 ab67ecf01928afb98dffcb4c193d401b *core/config/commands/bindToZigate-EP01-0006.json
+0a4cecbeeac200a71ef0178f2e61be9d *core/config/commands/bindToZigate-EP01-0702.json
+c655be0a82dabad273b56dd589eb4226 *core/config/commands/bindToZigate-EP01-0B04.json
 2ea4e06ad74d1a1484fc0a8709e6cb7b *core/config/commands/bindToZigate-EP02-0006.json
 e9cb25223709d30644978717a6048045 *core/config/commands/bindToZigate-EP03-0006.json
 beab85edc8a2132b35ccbd5f11cb500d *core/config/commands/bindToZigate.json
@@ -403,6 +406,8 @@ b9ad04ccdcac0fd1c1f909901b02f449 *core/config/commands/setLivoloOn.json
 eadb4a6a6e78186108df516bb5052926 *core/config/commands/setLivoloOn2.json
 a0eb8cdf09aa42edee79fce83fc79bdd *core/config/commands/setRGB.json
 f8d0bddc3eda0d513189b677740dcd68 *core/config/commands/setReport-EP01-0006-0000.json
+fd8f0ca3555340f9b4c33a74290f8f6c *core/config/commands/setReport-EP01-0702-0000.json
+bcf64ea41d576dc87e9e57df88ab1d0c *core/config/commands/setReport-EP01-0B04-050B.json
 9f541abbde8e07a2aef9c2b22bbcafcf *core/config/commands/setReport-EP02-0006-0000.json
 686e7e173bb88384f7423ce81db0a01f *core/config/commands/setReport-EP03-0006-0000.json
 401b63d5c81d46d63262a8103c7a7d86 *core/config/commands/setReport.json
@@ -465,6 +470,8 @@ ab8d7473df386326f355fe57b5ea42a6 *core/config/commands/spiritTrvModeSetValve.jso
 e6fceb7cca047b4ba9e478e906d854eb *core/config/commands/spiritValvePosition.json
 8811075ce8cf3602bb59afd063bba49e *core/config/commands/spiritValvePositionGet.json
 4926a818f1323d4d25ce9a78c73451d8 *core/config/commands/spiritValvePositionSet.json
+b78eb56680a9a00c8354690ba5aefaa5 *core/config/commands/status-EP01-0006.json
+d9942999fe30246b39d783888141e743 *core/config/commands/status-EP02-0006.json
 55f3da57a83917723e2db5d59a8dda66 *core/config/commands/temperature.json
 bcce49b78520ff4034bb9885f08440cf *core/config/commands/temperatureLight.json
 072692794f424767da4d160bce41f9cd *core/config/commands/temperatureLight1.json
@@ -482,11 +489,15 @@ bce22cf73dce957269c414f136d7883a *core/config/commands/temperaturePrise.json
 b897c3f0c53513e1304cca474a3e8878 *core/config/commands/writeAttributeRequestIAS_WD_Sound.json
 0b07bc316edcef7c2c62a7fe5057c2d9 *core/config/commands/zb-0702-CurrentSummationDelivered-KWh-div10.json
 092923013d467ab054b09087fa9f3484 *core/config/commands/zb-0702-CurrentSummationDelivered-KWh-div1000.json
+e0020e2a3080aabc610ff80df56c2ea0 *core/config/commands/zb-0702-Divisor.json
+6b78d1bd474eed644b3218a18a914150 *core/config/commands/zb-0702-Multiplier.json
 406b1b88462cd04bf7df6393da42bb66 *core/config/commands/zb-0702-SummationFormatting.json
 34ed42a8d2ce82885857e3b75d277d5f *core/config/commands/zb-0702-UnitOfMeasure.json
 4b3f2e267b2d16fe07d7798ddc3ecfd0 *core/config/commands/zb-0B04-ActivePower.json
 11eb5ccf3855a3ab081a6d69a0e87158 *core/config/commands/zb-0B04-RMSCurrent.json
 754f01471ff3255f6d597cd3b0b7be42 *core/config/commands/zb-0B04-RMSVoltage.json
+77eefe61f1b03c00c04505b26938a890 *core/config/commands/zbGet-0702-Divisor.json
+e61cb0fac7af553debade81836765f17 *core/config/commands/zbGet-0702-Multiplier.json
 eba28b94150284e2ad7d6a7066384a60 *core/config/commands/zbGet-0702-SummationFormatting.json
 1ae269a4f75739ec973de6e2687e1e90 *core/config/commands/zbGet-0702-UnitOfMeasure.json
 42f8cadc59fa3e62bfbf8bc5466c2797 *core/config/devices/01MINIZB/01MINIZB.json
@@ -576,6 +587,7 @@ d87396b3b72853c5e7f3e211373642fc *core/config/devices/OSRAMSwitch/OSRAMSwitch.js
 3beddcf6a05b8f13ebff74f51e470425 *core/config/devices/PAR16RGBWZ3/PAR16RGBWZ3.json
 a922686213a09defbd603983cc0be1f7 *core/config/devices/PRZ/PRZ.json
 173ba4df71e993baae7aa8f003a7cf10 *core/config/devices/PSE03-v1.1.0/PSE03-v1.1.0.json
+be7c8a7a86fb26c7b4b07071bcd3efce *core/config/devices/PSE03-v1.1.0/notes.txt
 827b438560fa25b358134934715f990f *core/config/devices/Plug01/Plug01.json
 0677823501ddfd2315aeb05ba9072af0 *core/config/devices/PlugZ3/PlugZ3.json
 abf54429c67e94034a3ebc6bae47f68d *core/config/devices/RB165/RB165.json
@@ -686,7 +698,8 @@ a94bbe4279f98d80383c0041d83fa1b5 *core/config/devices/ctrl_ln2.aq1/ctrl_ln2.aq1.
 7051af284665f3f65f81428778967a36 *core/config/devices/eTRV0100/eTRV0100.json
 c69240582b6698033b88dc902b23d769 *core/config/devices/fuel-tank-level/fuel-tank-level.json
 4472404220d2274dda13fc1cbe576d33 *core/config/devices/light.aqcn02/light.aqcn02.json
-7b808098e6c353475f17114d06c0f09b *core/config/devices/plug.maeu01/plug.maeu01.json
+03dd8caf51b3f992f1a3b1e90825227f *core/config/devices/plug.maeu01/notes.txt
+a3ace55a53cae928d054e369144ac379 *core/config/devices/plug.maeu01/plug.maeu01.json
 29a6654de62782ee0f7e49e017c2cb22 *core/config/devices/plug.mmeu01/plug.mmeu01.json
 6739e6ceb83f0c2fcfb81257f9557cf6 *core/config/devices/plug/plug.json
 a7d26c685f9f7d36c9667d76bd1edc11 *core/config/devices/plug01OutDoor/plug01OutDoor.json
