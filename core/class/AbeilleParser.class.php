@@ -1512,6 +1512,34 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
                 return;
             }
 
+            // Binding Table Response (Mgmt_Bind_rsp)
+            if (($profile == "0000") && ($cluster == "8033")) {
+
+                $sqn        = substr($pl, 0, 2);
+                $status     = substr($pl, 2, 2);
+                $tableSize  = hexdec(substr($pl, 4, 2));
+                $index      = hexdec(substr($pl, 6, 2));
+                $tableCount = hexdec(substr($pl, 8, 2));
+
+                parserLog('debug', '  Binding table response'
+                           .', SQN='.$sqn
+                           .', Status='.$status
+                           .', tableSize='.$tableSize
+                           .', index='.$index
+                           .', tableCount='.$tableCount, "8002");
+
+                $pl = substr($pl, 10);
+                for ($i = 0; $i < $tableCount; $i++) {
+                    $srcIeee  = substr($pl, ($i * 28) + 0, 16);
+                    $srcEP  = substr($pl, ($i * 28) + 16, 2);
+                    $clustId  = substr($pl, ($i * 28) + 18, 4);
+                    $destEP  = substr($pl, ($i * 28) + 22, 2);
+                    $destAddr  = substr($pl, ($i * 28) + 24, 4);
+                    parserLog('debug', '  '.$srcIeee.', '.$srcEP.', '.$clustId.' => EP'.$destEP.'@'.$destAddr);
+                }
+                return;
+            }
+
             // Tcharp38: profId=104 & clustId=0001 does not mean it is power report. It could be
             //   plenty of other "response" (ex: discover attribut response)
             // // Cluster 0x0001 Power
