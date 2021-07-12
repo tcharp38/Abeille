@@ -1529,13 +1529,28 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
                            .', tableCount='.$tableCount, "8002");
 
                 $pl = substr($pl, 10);
-                for ($i = 0; $i < $tableCount; $i++) {
+                for ($i = 0; $i < $tableCount; ) {
                     $srcIeee  = substr($pl, ($i * 28) + 0, 16);
+                    $srcIeee = AbeilleTools::reverseHex($srcIeee);
                     $srcEP  = substr($pl, ($i * 28) + 16, 2);
                     $clustId  = substr($pl, ($i * 28) + 18, 4);
-                    $destEP  = substr($pl, ($i * 28) + 22, 2);
-                    $destAddr  = substr($pl, ($i * 28) + 24, 4);
-                    parserLog('debug', '  '.$srcIeee.', '.$srcEP.', '.$clustId.' => EP'.$destEP.'@'.$destAddr);
+                    $destAddrMode = substr($pl, ($i * 28) + 22, 2);
+                    if ($destAddrMode == "01") {
+                        // 16-bit group address for DstAddr and DstEndpoint not present
+                        $destAddr  = substr($pl, ($i * 28) + 24, 4);
+                        parserLog('debug', '  '.$srcIeee.', '.$srcEP.', '.$clustId.' => group '.$destAddr);
+                        $i += 28;
+                    } else if ($destAddrMode == "03") {
+                        // 64-bit extended address for DstAddr and DstEndp present
+                        $destIeee  = substr($pl, ($i * 28) + 24, 16);
+                        $destIeee = AbeilleTools::reverseHex($destIeee);
+                        $destEP  = substr($pl, ($i * 28) + 40, 2);
+                        parserLog('debug', '  '.$srcIeee.', '.$srcEP.', '.$clustId.' => EP'.$destEP.' @'.$destIeee);
+                        $i += 42;
+                    } else {
+                        parserLog('debug', '  ERROR: Unexpected destAddrMode '.$destAddrMode);
+                        return;
+                    }
                 }
                 return;
             }
