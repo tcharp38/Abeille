@@ -1512,56 +1512,6 @@ parserLog('debug', '      topic='.$topic.', request='.$request);
                 return;
             }
 
-                    /* Parser exemple
-                    Abeille1, Type=8002/Data indication, Status=00, ProfId=0000, ClustId=8033, SrcEP=00, DestEP=00, SrcAddrMode=02, SrcAddr=9007, DestAddrMode=02, DestAddr=0000
-                        Binding table response, SQN=12, Status=00, tableSize=2, index=0, tableCount=2
-                        04CF8CDF3C77164B, 01, 0004 => EP01 @00158D0001ED3365
-                        04CF8CDF3C77164B, 01, 0100 => EP01 @00158D0001ED3365 */
-
-                    $sqn        = substr($pl, 0, 2);
-                    $status     = substr($pl, 2, 2);
-                    $tableSize  = hexdec(substr($pl, 4, 2));
-                    $index      = hexdec(substr($pl, 6, 2));
-                    $tableCount = hexdec(substr($pl, 8, 2));
-
-                    parserLog('debug', '  Binding table response'
-                            .', SQN='.$sqn
-                            .', Status='.$status
-                            .', tableSize='.$tableSize
-                            .', index='.$index
-                            .', tableCount='.$tableCount, "8002");
-
-                    $pl = substr($pl, 10);
-                    for ($i = 0; $i < $tableCount; $i++) {
-                        $srcIeee  = substr($pl, 0, 16);
-                        $srcIeee = AbeilleTools::reverseHex($srcIeee);
-                        $srcEP  = substr($pl, 16, 2);
-                        $clustId  = substr($pl, 18, 4);
-                        $destAddrMode = substr($pl, 22, 2);
-                        if ($destAddrMode == "01") {
-                            // 16-bit group address for DstAddr and DstEndpoint not present
-                            $destAddr  = substr($pl, 24, 4);
-                            parserLog('debug', '  '.$srcIeee.', '.$srcEP.', '.$clustId.' => group '.$destAddr);
-                            $pl = substr($pl, 28);
-                        } else if ($destAddrMode == "03") {
-                            // 64-bit extended address for DstAddr and DstEndp present
-                            $destIeee  = substr($pl, 24, 16);
-                            $destIeee = AbeilleTools::reverseHex($destIeee);
-                            $destEP  = substr($pl, 40, 2);
-                            parserLog('debug', '  '.$srcIeee.', '.$srcEP.', '.$clustId.' => EP'.$destEP.' @'.$destIeee);
-                            $pl = substr($pl, 42);
-                        } else {
-                            parserLog('debug', '  ERROR: Unexpected destAddrMode '.$destAddrMode);
-                            return;
-                        }
-                    }
-                    return;
-                }
-
-                parserLog('debug', '  Unsupported/ignored profile 0000 message');
-                return;
-            }
-
             // Tcharp38: profId=104 & clustId=0001 does not mean it is power report. It could be
             //   plenty of other "response" (ex: discover attribut response)
             // // Cluster 0x0001 Power

@@ -1,6 +1,7 @@
 ChangeLog
 =========
 
+- Xiaomi plug EU: JSON revisité (#1578)
 - ATTENTION: Format JSON des fichiers de commande modifié !
 - Osram classic B40TW: support préliminaire.
 - Xiaomi Luminosite: Ajout pourcentage batterie basé sur retour tension (#1166).
