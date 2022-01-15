@@ -40,7 +40,11 @@
         echo "debug","(fichier xmlhttpMQQTSend) could not add message to queue";
     }
 
+<<<<<<< HEAD
     if (msg_send($queueKeyXmlToCmd, 1, $msg, true, false)) {
+=======
+    if (msg_send( $queueKeyXmlToCmd, 1, $msg, true, false)) {
+>>>>>>> c53a62bf (msgAbeille => msg + format simplified)
         echo "(fichier xmlhttpMQQTSend) added to queue: ".json_encode($msg);
         // print_r(msg_stat_queue($queue));
     }
