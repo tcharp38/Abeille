@@ -41,10 +41,14 @@
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (msg_send($queueKeyXmlToCmd, 1, $msg, true, false)) {
 =======
     if (msg_send( $queueKeyXmlToCmd, 1, $msg, true, false)) {
 >>>>>>> c53a62bf (msgAbeille => msg + format simplified)
+=======
+    if (msg_send($queueKeyXmlToCmd, 1, $msg, true, false)) {
+>>>>>>> 90af900d (Queues again)
         echo "(fichier xmlhttpMQQTSend) added to queue: ".json_encode($msg);
         // print_r(msg_stat_queue($queue));
     }
