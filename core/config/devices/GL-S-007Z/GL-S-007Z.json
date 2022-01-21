@@ -1,7 +1,10 @@
 {
     "GL-S-007Z": {
         "type": "Gledopto GL-S-007Z GU10 Bulb RGB+CCT",
+<<<<<<< HEAD
         "comment": "Cool white or warm white or color",
+=======
+>>>>>>> 072c1919 (Gledopto GU10 buld GL-S-007Z)
         "manufacturer": "Gledopto",
         "model": "GL-S-007Z",
         "timeout": "60",
@@ -42,7 +45,11 @@
             },
             "Bind 0006-ToZigate": {
                 "use": "zbBindToZigate",
+<<<<<<< HEAD
                 "params": "clustId=0006",
+=======
+                "params": "clustId=0008",
+>>>>>>> 072c1919 (Gledopto GU10 buld GL-S-007Z)
                 "execAtCreation": "Yes",
                 "execAtCreationDelay": 9
             },
@@ -66,12 +73,15 @@
                 "use": "zbReadAttribute",
                 "params": "clustId=0008&attrId=0000"
             },
+<<<<<<< HEAD
             "Bind 0008-ToZigate": {
                 "use": "zbBindToZigate",
                 "params": "clustId=0008",
                 "execAtCreation": "Yes",
                 "execAtCreationDelay": 9
             },
+=======
+>>>>>>> 072c1919 (Gledopto GU10 buld GL-S-007Z)
             "SetReporting 0008-0000": {
                 "use": "zbConfigureReporting",
                 "params": "clustId=0008&attrType=10&attrId=0000&minInterval=0000&maxInterval=0000&changeVal=",
@@ -85,6 +95,10 @@
             },
             "Color Mode": {
                 "use": "zb-0300-ColorMode",
+<<<<<<< HEAD
+=======
+                "isVisible": "1",
+>>>>>>> 072c1919 (Gledopto GU10 buld GL-S-007Z)
                 "nextLine": "after"
             },
 
@@ -120,12 +134,18 @@
             "Green": {
                 "use": "zbCmd-0300-MoveToColor",
                 "params": "X=147A&Y=D709",
+<<<<<<< HEAD
                 "isVisible": 1
+=======
+                "isVisible": 1,
+                "nextLine": "after"
+>>>>>>> 072c1919 (Gledopto GU10 buld GL-S-007Z)
             },
             "Set RGB": {
                 "use": "setRGB",
                 "isVisible": 1,
                 "nextLine": "after"
+<<<<<<< HEAD
             },
             "Cool white": {
                 "use": "zbCmd-0300-MoveToColorTemp",
@@ -145,6 +165,8 @@
             "Get ColorTemperatureMireds": {
                 "use": "zbReadAttribute",
                 "params": "clustId=0300&attrId=0007"
+=======
+>>>>>>> 072c1919 (Gledopto GU10 buld GL-S-007Z)
             }
         }
     }
