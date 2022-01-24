@@ -141,6 +141,12 @@
                 "maxValue": "6500",
                 "isVisible": "1"
             },
+            "Set ColorTemperature": {
+                "use": "zbCmd-0300-MoveToColorTemp",
+                "minValue": "2200",
+                "maxValue": "6500",
+                "isVisible": "1"
+            },
             "ColorTemperature": {
                 "use": "zb-0300-ColorTemperatureMireds",
                 "isVisible": "1"
