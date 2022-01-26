@@ -141,6 +141,12 @@
                 "maxValue": "6500",
                 "isVisible": "1"
             },
+            "Set RGB": {
+                "use": "setRGB",
+                "isVisible": 1,
+                "nextLine": "after"
+            },
+
             "Set ColorTemperature": {
                 "use": "zbCmd-0300-MoveToColorTemp",
                 "minValue": "2200",
