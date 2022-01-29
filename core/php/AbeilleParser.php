@@ -187,7 +187,6 @@
 
         // If IEEE is defined let's check if exists
         if ($ieee) {
-parserLog('debug', '  TOTO ieee='.$ieee);
             foreach ($GLOBALS['eqList'][$net] as $oldaddr => $eq) {
                 if ($eq['ieee'] !== $ieee)
                     continue;
