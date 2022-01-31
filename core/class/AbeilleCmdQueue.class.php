@@ -639,6 +639,7 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                 unset($removeCmd); // Unset in case set in previous msg
                 if ($msg['type'] == "8000") {
                     $m = "Msg from parser: 8000: ".$msg['net'].", Status=".$msg['status'].", SQN=".$msg['sqn'].", SQNAPS=".$msg['sqnAps'].", PackType=".$msg['packetType'].", NPDU=".$nPDU.", APDU=".$aPDU;
+<<<<<<< HEAD
 
                     if ($zg['sentPri'] == PRIO_HIGH)
                         $queue = &$zg['cmdQueueHigh'];
@@ -648,6 +649,8 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                     if ($queueSize > 0)
                         $cmd = &$queue[0];
 
+=======
+>>>>>>> 71d7ee04 (Cmd: debug msg)
                     // Checking sent cmd vs received ack misalignment
                     if (($queueSize == 0) || ($msg['packetType'] != $cmd['cmd'])) {
                         cmdLog("debug", $m." => ignored");
@@ -675,6 +678,7 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                             cmdLog("debug", "  WARNING: Something failed. Cmd will be retried ".$cmd['try']." time(s) max.");
                         }
                     }
+<<<<<<< HEAD
                 } else {
                     // 8011, 8012 or 8702
                     $c = $this->getCmd($msg['sqnAps'], $zg); // Return is array
@@ -709,6 +713,28 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                         $cmd['status'] = '8702';
                     } else {
                         cmdLog("debug", $type." msg: WARNING. What's that ???");
+=======
+                } else if ($msg['type'] == "8011") {
+                    $m = "Msg from parser: 8011: ".$msg['net'].", Status=".$msg['status'].", Addr=".$msg['addr'].", SQNAPS=".$msg['sqnAps'];
+                    if ($queueSize == 0) {
+                        cmdLog("debug", $m." => ignored");
+                        continue;
+                    }
+                    cmdLog("debug", $m);
+                    $cmd['status'] = '8011';
+                } else if ($msg['type'] == "8012") {
+                    $m = "Msg from parser: 8012: ".$msg['net'].", Status=".$msg['status'].", Addr=".$msg['addr'].", SQNAPS=".$msg['sqnAps'].", NPDU=".$nPDU.", APDU=".$aPDU;
+                    if ($queueSize == 0) {
+                        cmdLog("debug", $m." => ignored");
+                        continue;
+                    }
+                    cmdLog("debug", $m);
+                    $cmd['status'] = '8012';
+                } else if ($msg['type'] == "8702") {
+                    $m = "Msg from parser: 8702: ".$msg['net'].", Status=".$msg['status'].", Addr=".$msg['addr'].", SQNAPS=".$msg['sqnAps'].", NPDU=".$nPDU.", APDU=".$aPDU;
+                    if ($queueSize == 0) {
+                        cmdLog("debug", $m." => ignored");
+>>>>>>> 71d7ee04 (Cmd: debug msg)
                         continue;
                     }
                 }
@@ -746,6 +772,11 @@ cmdLog('debug', '  queue before='.json_encode($zg['cmdQueue']));
                     else
                         array_shift($zg['cmdQueue']); // Removing cmd
 cmdLog('debug', '  queue after='.json_encode($zg['cmdQueue']));
+<<<<<<< HEAD
+=======
+                }
+                if ($removeCmd || $zigateIsFree)
+>>>>>>> 71d7ee04 (Cmd: debug msg)
                     $zg['available'] = 1; // Zigate is free again
                 }
             }
