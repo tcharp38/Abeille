@@ -637,8 +637,11 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                     $aPDU = "?";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 unset($removeCmd); // Unset in case set in previous msg
 =======
+=======
+>>>>>>> d4ccea32 (AbeilleCmd flow control)
 <<<<<<< HEAD
                 // $removeCmd = false;
 >>>>>>> e43c02c0 (send to zigate flow control)
@@ -665,11 +668,24 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                 if ($queueSize > 0)
                     $cmd = &$queue[0];
 
+=======
+>>>>>>> 359498a5 (AbeilleCmd flow control)
                 // $removeCmd = false;
                 if ($msg['type'] == "8000") {
                     $m = "Msg from parser: 8000: ".$msg['net'].", Status=".$msg['status'].", SQN=".$msg['sqn'].", SQNAPS=".$msg['sqnAps'].", PackType=".$msg['packetType'].", NPDU=".$nPDU.", APDU=".$aPDU;
 
+<<<<<<< HEAD
 >>>>>>> fc06c023 (send to zigate flow control)
+=======
+                    if ($zg['sentPri'] == PRIO_HIGH)
+                        $queue = &$zg['cmdQueueHigh'];
+                    else
+                        $queue = &$zg['cmdQueue'];
+                    $queueSize = count($queue);
+                    if ($queueSize > 0)
+                        $cmd = &$queue[0];
+
+>>>>>>> 359498a5 (AbeilleCmd flow control)
                     // Checking sent cmd vs received ack misalignment
                     if (($queueSize == 0) || ($msg['packetType'] != $cmd['cmd'])) {
                         cmdLog("debug", $m." => ignored");
@@ -698,6 +714,9 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                         }
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 359498a5 (AbeilleCmd flow control)
                 } else {
                     // 8011, 8012 or 8702
                     $c = $this->getCmd($msg['sqnAps'], $zg); // Return is array
@@ -732,6 +751,7 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                         $cmd['status'] = '8702';
                     } else {
                         cmdLog("debug", $type." msg: WARNING. What's that ???");
+<<<<<<< HEAD
 =======
                 } else if ($msg['type'] == "8011") {
                     $m = "Msg from parser: 8011: ".$msg['net'].", Status=".$msg['status'].", Addr=".$msg['addr'].", SQNAPS=".$msg['sqnAps'];
@@ -754,6 +774,8 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                     if ($queueSize == 0) {
                         cmdLog("debug", $m." => ignored");
 >>>>>>> 71d7ee04 (Cmd: debug msg)
+=======
+>>>>>>> 359498a5 (AbeilleCmd flow control)
                         continue;
                     }
                 }
@@ -766,9 +788,13 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                  */
                 if (!isset($removeCmd)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     $removeCmd = false;
 =======
 >>>>>>> fc06c023 (send to zigate flow control)
+=======
+                    $removeCmd = false;
+>>>>>>> 359498a5 (AbeilleCmd flow control)
                     if (isset($cmd['addrMode'])) { // FW >= 3.1e
                         if (($cmd['addrMode'] == "02") || ($cmd['addrMode'] == "03")) {
                             // Wait for 8012 or 8702 after 8000
