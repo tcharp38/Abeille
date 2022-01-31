@@ -636,7 +636,12 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                 } else
                     $aPDU = "?";
 
+<<<<<<< HEAD
                 unset($removeCmd); // Unset in case set in previous msg
+=======
+<<<<<<< HEAD
+                // $removeCmd = false;
+>>>>>>> e43c02c0 (send to zigate flow control)
                 if ($msg['type'] == "8000") {
                     $m = "Msg from parser: 8000: ".$msg['net'].", Status=".$msg['status'].", SQN=".$msg['sqn'].", SQNAPS=".$msg['sqnAps'].", PackType=".$msg['packetType'].", NPDU=".$nPDU.", APDU=".$aPDU;
 <<<<<<< HEAD
@@ -651,6 +656,20 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
 
 =======
 >>>>>>> 71d7ee04 (Cmd: debug msg)
+=======
+                if ($zg['sentPri'] == PRIO_HIGH)
+                    $queue = &$zg['cmdQueueHigh'];
+                else
+                    $queue = &$zg['cmdQueue'];
+                $queueSize = count($queue);
+                if ($queueSize > 0)
+                    $cmd = &$queue[0];
+
+                // $removeCmd = false;
+                if ($msg['type'] == "8000") {
+                    $m = "Msg from parser: 8000: ".$msg['net'].", Status=".$msg['status'].", SQN=".$msg['sqn'].", SQNAPS=".$msg['sqnAps'].", PackType=".$msg['packetType'].", NPDU=".$nPDU.", APDU=".$aPDU;
+
+>>>>>>> fc06c023 (send to zigate flow control)
                     // Checking sent cmd vs received ack misalignment
                     if (($queueSize == 0) || ($msg['packetType'] != $cmd['cmd'])) {
                         cmdLog("debug", $m." => ignored");
@@ -746,7 +765,10 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                     ?
                  */
                 if (!isset($removeCmd)) {
+<<<<<<< HEAD
                     $removeCmd = false;
+=======
+>>>>>>> fc06c023 (send to zigate flow control)
                     if (isset($cmd['addrMode'])) { // FW >= 3.1e
                         if (($cmd['addrMode'] == "02") || ($cmd['addrMode'] == "03")) {
                             // Wait for 8012 or 8702 after 8000
@@ -773,10 +795,13 @@ cmdLog('debug', '  queue before='.json_encode($zg['cmdQueue']));
                         array_shift($zg['cmdQueue']); // Removing cmd
 cmdLog('debug', '  queue after='.json_encode($zg['cmdQueue']));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 }
                 if ($removeCmd || $zigateIsFree)
 >>>>>>> 71d7ee04 (Cmd: debug msg)
+=======
+>>>>>>> fc06c023 (send to zigate flow control)
                     $zg['available'] = 1; // Zigate is free again
                 }
             }
