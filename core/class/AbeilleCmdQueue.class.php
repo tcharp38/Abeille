@@ -370,7 +370,7 @@
                 fclose($f);
             }
 
-            cmdLog('debug','sendCmdToZigate(Dest='.$dest.', cmd='.$cmd.', datas='.$datas.")", $this->debug['sendCmdToZigate']);
+            cmdLog('debug', 'sendCmdToZigate(Dest='.$dest.', cmd='.$cmd.', datas='.$datas.")", $this->debug['sendCmdToZigate']);
 
             $i = substr($dest, 7);
             $destSerial = config::byKey('AbeilleSerialPort'.$i, 'Abeille', '1', 1);
@@ -472,7 +472,7 @@
                 if ($zg['available'] == 0) continue;  // Not free
 
                 //$zg = &$this->zigates[$zgId];
-// cmdLog('debug', 'cmdQueue12='.json_encode($zg['cmdQueue']));
+                // cmdLog('debug', 'cmdQueue12='.json_encode($zg['cmdQueue']));
 
                 // Anything to send for this zigate ?
                 if (count($this->zigates[$zgId]['cmdQueueHigh']) > 0) {
@@ -524,17 +524,17 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                 if ($queuePri == PRIO_HIGH) {
                     $this->zigates[$zgId]['cmdQueueHigh'][0]['status'] = "SENT";
                     $this->zigates[$zgId]['cmdQueueHigh'][0]['sentTime'] = time();
-                    $this->zigates[$zgId]['cmdQueueHigh'][0]['try']--;    
+                    $this->zigates[$zgId]['cmdQueueHigh'][0]['try']--;
                 }
                 else if ($queuePri == PRIO_NORM) {
                     $this->zigates[$zgId]['cmdQueue'][0]['status'] = "SENT";
                     $this->zigates[$zgId]['cmdQueue'][0]['sentTime'] = time();
-                    $this->zigates[$zgId]['cmdQueue'][0]['try']--;    
+                    $this->zigates[$zgId]['cmdQueue'][0]['try']--;
                 }
                 else {
                     cmdLog('debug', "             processZigateCmdQueues() - WARNING: No queue to use");
                 }
-                
+
                 if (isset($GLOBALS["dbgMonitorAddr"]) && ($cmd['addr'] != "") && ($GLOBALS["dbgMonitorAddr"] != "") && !strncasecmp($cmd['addr'], $GLOBALS["dbgMonitorAddr"], 4))
                     monMsgToZigate($cmd['addr'], $cmd['cmd'].'-'.$cmd['datas']); // Monitor this addr ?
             }
@@ -660,7 +660,7 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
                         $cmd = $queue[0];
 
                     // Checking sent cmd vs received ack misalignment
-                    if ( $queueSize == 0 ) {
+                    if ($queueSize == 0) {
                         cmdLog("debug", $m." => ignored as queue is empty");
                         continue;
                     }
@@ -756,12 +756,12 @@ cmdLog('debug', "  cmd=".json_encode($cmd));
 
                 // Apply
                 if ($removeCmd) {
-cmdLog('debug', '  queue before='.json_encode($zg['cmdQueue']));
+                    cmdLog('debug', '  Removing cmd '.json_encode($cmd));
                     if ($this->zigates[$zgId]['sentPri'] == PRIO_HIGH)
                         array_shift($this->zigates[$zgId]['cmdQueueHigh']); // Removing cmd
                     else
                         array_shift($this->zigates[$zgId]['cmdQueue']); // Removing cmd
-cmdLog('debug', '  queue after='.json_encode($zg['cmdQueue']));
+                    // cmdLog('debug', '  queue after='.json_encode($zg['cmdQueue']));
                     $this->zigates[$zgId]['available'] = 1; // Zigate is free again
                 }
             }
@@ -792,7 +792,7 @@ cmdLog('debug', '  queue after='.json_encode($zg['cmdQueue']));
                 $this->zigates[$zgId]['available'] = 1;
                 if ($zg['sentPri'] == PRIO_HIGH) {
                     array_shift($this->zigates[$zgId]['cmdQueueHigh']); // Removing blocked cmd
-                } 
+                }
                 else {
                     array_shift($this->zigates[$zgId]['cmdQueue']); // Removing blocked cmd
                 }

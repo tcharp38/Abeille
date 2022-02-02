@@ -10,8 +10,10 @@
             $paramError = false;
             foreach ($required as $idx => $param) {
                 if (isset($Command[$param])) {
+                    if (gettype($Command[$param]) != "string")
+                        continue; // No other check on non string types
                     if ($Command[$param] != '')
-                        continue;
+                        continue; // String not empty => ok
                     cmdLog('debug', "    ERROR: Empty '".$param."'");
                 } else {
                     cmdLog('debug', "    ERROR: Missing '".$param."'");
