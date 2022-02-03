@@ -1,6 +1,8 @@
 ChangeLog
 =========
 
+- Interne: Correction erreur 'prepareCmd(): Mauvais format de message' (2302).
+
 220202-BETA-1
 -------------
 
