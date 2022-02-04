@@ -585,7 +585,7 @@
                 <attributes list: data list of uint16_t  each>
             */
 
-            $cmd = "0100";
+            $cmd = "0100"; // Cmd 100 request AckAPS based on ZigBee traces.
 
             $addrMode = "02";
             // TODO: Check 'addr' size
@@ -2492,10 +2492,10 @@
 
                 $cmd                    = "0092";
 
-                $addrMode            = $Command['addressMode']; // 01: Group, 02: device
+                $addrMode               = $Command['addressMode']; // 01: Group, 02: device
                 $address                = $Command['address'];
-                $srcEp         = "01";
-                $dstEp    = $Command['destinationEndpoint'];
+                $srcEp                  = "01";
+                $dstEp                  = $Command['destinationEndpoint'];
                 $action                 = $Command['action'];
 
                 $data = $addrMode.$address.$srcEp.$dstEp.$action;
