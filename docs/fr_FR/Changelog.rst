@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+- Erreur sur 'exclusion' d'équipement: Correction (2305)
+- Interne: AbeilleSerialRead: msg erreurs masqués (2306).
+
+220204-BETA-1
+-------------
+
 - Interne: Correction erreur 'prepareCmd(): Mauvais format de message' (2302).
 - Aucun équipement sélectionné: correction (2305).
 

@@ -4272,6 +4272,71 @@
                     return;
                 }
 
+                // ZCL cluster EF00 specific: e.g. Curtains motor Tuya https://github.com/KiwiHC16/Abeille/issues/2304
+                else if ($cmdName == 'cmd-EF00') {
+                    $required = ['addr', 'ep', 'cmd', 'param']; // Mandatory infos
+                    if (!$this->checkRequiredParams($required, $Command))
+                        return;
+
+                    $cmd = "0530";
+
+                    // <address mode: uint8_t>
+                    // <target short address: uint16_t>
+                    // <source endpoint: uint8_t>
+                    // <destination endpoint: uint8_t>
+                    // <profile ID: uint16_t>
+                    // <cluster ID: uint16_t>
+                    // <security mode: uint8_t>
+                    // <radius: uint8_t>
+                    // <data length: uint8_t>
+
+                    //  ZCL Control Field
+                    //  ZCL SQN
+                    //  Command Id
+                    //  ....
+
+                    // Data Point
+                    define('OpenCloseStop',   "01");
+                    define('GotoLevel',       "02");
+                    define('ForwardBackward', "05");
+
+                    // Data Type
+                    define('DataType_VALUE',  "02");
+                    define('DataType_ENUM',   "04");
+
+                    $addrMode   = "02";
+                    $addr       = $Command['addr'];
+                    $srcEp      = "01";
+                    $dstEp      = $Command['ep'];
+                    $profId     = "0104";
+                    $clustId    = 'EF00';
+                    $secMode    = "02";
+                    $radius     = "1E";
+        
+                    /* ZCL header */
+                    $fcf        = "11"; // Frame Control Field
+                    $sqn        = "23";
+                    $cmdId      = "00";
+        
+                    $status         = "00";
+                    $counterTuya    = "33"; // Set to 1, in traces increasse all the time. Not sure if mandatory to increase.
+                    $cmdTuya        = $Command['cmd'];
+                    if ($cmdTuya==GotoLevel) $type = DataType_VALUE; else $type = DataType_ENUM;
+                    $function         = "00";
+                    if ($type==DataType_VALUE) $len = "04"; else $len="01";
+                    if ($type==DataType_VALUE) $param = sprintf("%08s", dechex($Command['param'])); else $param = $Command['param'];  // Up=00, Stop: 01, Down: 02 
+        
+                    $data2 = $fcf.$sqn.$cmdId.$status.$counterTuya.$cmdTuya.$type.$function.$len.$param;
+                    $dataLen2 = sprintf("%02s", dechex(strlen($data2) / 2));
+        
+                    $data1 = $addrMode.$addr.$srcEp.$dstEp.$clustId.$profId.$secMode.$radius.$dataLen2;
+                    $data = $data1.$data2;
+        
+                    $this->addCmdToQueue2(priorityUserCmd, $dest, $cmd, $data, $addr, $addrMode, AckAPS);
+                    return;
+                }
+
+
                 else {
                     cmdLog('debug', "    ERROR: Unexpected command '".$cmdName."'");
                     return;
