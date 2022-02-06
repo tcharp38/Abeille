@@ -102,8 +102,6 @@
         'ota'       => array( 'bouton'=>'bt_Ota',                   'icon'=>'fa-paperclip',     'text'=>'{{Mises-à-jour OTA}}' ),
         'support'   => array( 'bouton'=>'bt_supportPage',           'icon'=>'fa-medkit',        'text'=>'{{Support}}' ),
     );
-    if (isset($dbgDeveloperMode))
-        $outils['graph'] = array( 'bouton'=>'bt_graph', 'icon'=>'fa-flask', 'text'=>'{{Graph}}' );
 ?>
 
 <!-- For all modals on 'Abeille' page. -->
@@ -132,18 +130,6 @@
         <?php include '060_AbeilleReHomePart.php'; ?>
 
         <?php include '070_AbeilleReplaceZigatePart.php'; ?>
-
-        <?php if (isset($dbgDeveloperMode)) { ?>
-        <legend><i class="fa fa-cogs"></i> {{Visible en MODE DEV UNIQUEMENT}}</legend>
-        <div class="form-group" style="background-color: rgba(var(--defaultBkg-color), var(--opacity)) !important; padding-left: 10px">
-
-            <?php include '025_AbeilleNEPart.php'; ?>
-
-            <!-- Gestion des scenes  -->
-            <?php include 'Abeille-Scenes.php'; ?>
-
-        </div>
-        <?php } ?>
 
     </div> <!-- Fin - Barre d outils horizontale  -->
 
