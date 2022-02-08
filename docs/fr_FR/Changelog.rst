@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+- Profalux v2: Amélioration support.
+- Auto-découverte équipement inconnu: Correction format json & améliorations.
+- Lexman E27 RGB bulb: Ajout support préliminaire (2295).
+
+220206-BETA-1
+-------------
+
 - Erreur sur 'exclusion' d'équipement: Correction (2305)
 - Interne: AbeilleSerialRead: msg erreurs masqués (2306).
 - Regression controle de 'level' (setLevel): Corrrection (1994).
