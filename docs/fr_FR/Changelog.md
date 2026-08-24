@@ -1,5 +1,7 @@
 # ChangeLog
 
+- Nouveauté: Support Sonoff SNZB-02M température/humidité/pression (2794).
+
 ## 260820-BETA-1
 
 - Amélioration: Interne MainD: 'createRemote' sorti de 'message()'.
