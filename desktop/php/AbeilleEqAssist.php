@@ -629,8 +629,23 @@
 
     /* Generate JSON model based on zigbee discovery datas */
     function zigbeeToModel() {
+
         console.log("zigbeeToModel()");
         console.log("zigbee=", zigbee);
+
+        var cmds = new Object();
+        var cmdNb = 0;
+        endPoints = zigbee.endPoints;
+        mainEp = -1;
+        minTimeout = 60; // Min timeout = 60min
+        if (typeof zigbee.macCapa != "undefined") {
+            mc = parseInt(zigbee.macCapa, 16);
+            if ((mc >> 3) & 1)
+                rxOnWhenIdle = true;
+            else
+                rxOnWhenIdle = false;
+        } else
+            rxOnWhenIdle = false;
 
         /* Jeedom commands naming reminder:
            - for attributes: ['Get-'/'Set-'/''][EP]-<clustId>-<attribute_name>
@@ -638,11 +653,6 @@
            EP is optional and must be set only if same
              attribute or command exists in another EP.
          */
-        var cmds = new Object();
-        var cmdNb = 0;
-        endPoints = zigbee.endPoints;
-        mainEp = -1;
-        minTimeout = 60; // Min timeout = 60min
 
         // 0000/Basic cluster on all EP
         for (var epId in endPoints) {
@@ -705,9 +715,11 @@
 
             /* 0003/Identify cluster */
             if (typeof ep.servClusters["0003"] !== "undefined") {
-                cmds["Identify"] = newCmd("act_zbCmdC-Identify");
-                // cmds["Identify"]["isVisible"] = 1; // Hidden by default. Rarely used
-                cmds["Identify"]["nextLine"] = "after";
+                if (rxOnWhenIdle) {
+                    cmds["Identify"] = newCmd("act_zbCmdC-Identify");
+                    // cmds["Identify"]["isVisible"] = 1; // Hidden by default. Rarely used
+                    cmds["Identify"]["nextLine"] = "after";
+                }
             }
 
             /* 0004/Groups cluster */
@@ -941,7 +953,8 @@
             if (isset(ep.servClusters["0402"]) && isset(ep.servClusters["0402"]['attributes'])) {
                 attributes = ep.servClusters["0402"]['attributes'];
                 if (isset(attributes['0000'])) {
-                    cmds["Get Temperature"] = newCmd("act_zbReadAttribute", "ep="+epId+"&clustId=0402&attrId=0000");
+                    if (rxOnWhenIdle)
+                        cmds["Get Temperature"] = newCmd("act_zbReadAttribute", "ep="+epId+"&clustId=0402&attrId=0000");
 
                     cmds["Temperature"] = newCmd("inf_zbAttr-0402-MeasuredValue", "ep="+epId);
                     cmds["Temperature"]["isVisible"] = 1;
@@ -954,11 +967,31 @@
                 }
             }
 
+            /* 0403/Pressure cluster */
+            if (isset(ep.servClusters["0403"]) && isset(ep.servClusters["0403"]['attributes'])) {
+                attributes = ep.servClusters["0403"]['attributes'];
+                if (isset(attributes['0000'])) {
+                    if (rxOnWhenIdle)
+                        cmds["Get Pressure"] = newCmd("act_zbReadAttribute", "ep="+epId+"&clustId=0402&attrId=0000");
+
+                    cmds["Pressure"] = newCmd("inf_zbAttr-0403-MeasuredValue", "ep="+epId);
+                    cmds["Pressure"]["isVisible"] = 1;
+                    cmds["Pressure"]["unit"] = "hPa";
+
+                    cmds["SetReporting "+epId+"-0403-0000"] = newCmd("act_zbConfigureReporting2", "ep="+epId+"&clustId=0403&attrId=0000&attrType=29&minInterval=540&maxInterval=600", "yes");
+                    cmds["SetReporting "+epId+"-0403-0000"]["comment"] = "Reporting every 9 to 10mins";
+                    cmds["Bind "+epId+"-0403-ToZigate"] = newCmd("act_zbBindToZigate", "ep="+epId+"&clustId=0403", "yes");
+                    if (minTimeout > 10)
+                        minTimeout = 10;
+                }
+            }
+
             /* 0405/Humidity cluster */
             if (isset(ep.servClusters["0405"]) && isset(ep.servClusters["0405"]['attributes'])) {
                 attributes = ep.servClusters["0405"]['attributes'];
                 if (isset(attributes['0000'])) {
-                    cmds["Get Humidity"] = newCmd("act_zbReadAttribute", "ep="+epId+"&clustId=0405&attrId=0000");
+                    if (rxOnWhenIdle)
+                        cmds["Get Humidity"] = newCmd("act_zbReadAttribute", "ep="+epId+"&clustId=0405&attrId=0000");
 
                     cmds["Humidity"] = newCmd("inf_zbAttr-0405-MeasuredValue", "ep="+epId);
                     cmds["Humidity"]["isVisible"] = 1;

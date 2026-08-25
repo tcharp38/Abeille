@@ -28,10 +28,6 @@
                 "params": "ep=01&clustId=0001",
                 "execAtCreation": "yes"
             },
-            "Get Temperature": {
-                "use": "act_zbReadAttribute",
-                "params": "ep=01&clustId=0402&attrId=0000"
-            },
             "Temperature": {
                 "use": "inf_zbAttr-0402-MeasuredValue",
                 "params": "ep=01",
@@ -47,10 +43,6 @@
                 "use": "act_zbBindToZigate",
                 "params": "ep=01&clustId=0402",
                 "execAtCreation": "yes"
-            },
-            "Get Humidity": {
-                "use": "act_zbReadAttribute",
-                "params": "ep=01&clustId=0405&attrId=0000"
             },
             "Humidity": {
                 "use": "inf_zbAttr-0405-MeasuredValue",
