@@ -977,6 +977,8 @@
                     cmds["Pressure"] = newCmd("inf_zbAttr-0403-MeasuredValue", "ep="+epId);
                     cmds["Pressure"]["isVisible"] = 1;
                     cmds["Pressure"]["unit"] = "hPa";
+                    // Note: 0403-0000 currently reported in 'kPa' by parser. Converting to more standard 'hPa'
+                    cmds["Pressure"]["calculValueOffset"] = "#value#*10";
 
                     cmds["SetReporting "+epId+"-0403-0000"] = newCmd("act_zbConfigureReporting2", "ep="+epId+"&clustId=0403&attrId=0000&attrType=29&minInterval=540&maxInterval=600", "yes");
                     cmds["SetReporting "+epId+"-0403-0000"]["comment"] = "Reporting every 9 to 10mins";

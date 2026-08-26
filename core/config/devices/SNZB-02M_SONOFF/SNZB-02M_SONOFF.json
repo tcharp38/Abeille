@@ -62,7 +62,8 @@
             },
             "Pressure": {
                 "use": "inf_zbAttr-0403-MeasuredValue",
-                "comment": "Pressure is reported thru attrib 0000 or privat attrib 0004",
+                "comment": "Pressure is reported in kPa thru attrib 0000 or private attrib 0004",
+                "calculValueOffset": "#value#*10",
                 "unit": "hPa",
                 "isVisible": 1
             }
