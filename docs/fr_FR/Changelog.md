@@ -1,5 +1,7 @@
 # ChangeLog
 
+## 260827-BETA-1
+
 - Nouveauté: Support Sonoff SNZB-02M température/humidité/pression (2794).
 - Amélioration: Interne. Assistant modèle (ajout 'Pressure' en 'hPa').
 

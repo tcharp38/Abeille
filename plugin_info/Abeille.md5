@@ -1,5 +1,5 @@
 # Auto-generated Abeille's MD5 file. DO NOT MODIFY !
-# VERSION="260820-BETA-1"
+# VERSION="260827-BETA-1"
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.editorconfig
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.gitattributes
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *.github/dependabot.yml
@@ -213,7 +213,7 @@ d75420894ef938ba4a62c2cbbd22b648 *core/config/commands/inf_zbAttr-0300-CurrentHu
 501b392b4ca5dc5510dccf3142f7f3dc *core/config/commands/inf_zbAttr-0300-CurrentY.json
 c072328f388a06c4bcac585e07f0744f *core/config/commands/inf_zbAttr-0400-MeasuredValue.json
 614e09f40b62a9ab8ec9416437a99c24 *core/config/commands/inf_zbAttr-0402-MeasuredValue.json
-130f595d052573e3ca69a1c735915f94 *core/config/commands/inf_zbAttr-0403-MeasuredValue.json
+384fa9f0c270a532f565595712a3a311 *core/config/commands/inf_zbAttr-0403-MeasuredValue.json
 b8a0fa3ca25b7ea4706b2b34b8b8cc7f *core/config/commands/inf_zbAttr-0403-ScaledValue.json
 e79ce71eb689f9ef5f81171d51fc8f6f *core/config/commands/inf_zbAttr-0405-MeasuredValue.json
 24eafcd3c6271b09e959cfc307456252 *core/config/commands/inf_zbAttr-0406-Occupancy.json
@@ -528,7 +528,7 @@ af9ad8e36eb871beaf1fedd3bc7f7b28 *core/config/devices/PIR323-PTH_OWON/PIR323-PTH
 fa1ef4c9c32d9370d6360e46a8ee70d0 *core/config/devices/PIRSensor-EF-3.0_HEIMAN/PIRSensor-EF-3.0_HEIMAN.json
 f9bac7896fc1205a90ed393845c27693 *core/config/devices/PIRSensor-EF-3.0_HEIMAN/discovery-PIRSensor-EF-3.0_HEIMAN.json
 c01407daa23f3b29fdc3934f1af1a3d3 *core/config/devices/PRZ/PRZ.json
-5c22eeaaa6f9d7b79d5f240db786a703 *core/config/devices/PSE03-v1.1.0/PSE03-v1.1.0.json
+002fcc00efb32b2faf9fd0080d4fbeff *core/config/devices/PSE03-v1.1.0/PSE03-v1.1.0.json
 be7c8a7a86fb26c7b4b07071bcd3efce *core/config/devices/PSE03-v1.1.0/notes.txt
 04798bceddac66cac33739048c8e3062 *core/config/devices/Plug01/Plug01.json
 d75a02d704957b5e589a42d465ed0dc0 *core/config/devices/PlugZ3/PlugZ3.json
@@ -577,6 +577,8 @@ b2f5b30c5827d52ac86802fa490a96ea *core/config/devices/SNZB-01M_SONOFF/SNZB-01M_S
 b4cf34a49f4977b2af2a167c91750669 *core/config/devices/SNZB-01P_eWeLink/discovery-SNZB-01P_eWeLink.json
 d8de06ca7086c320a473ea8307fde0c9 *core/config/devices/SNZB-02D_SONOFF/SNZB-02D_SONOFF.json
 6638da47cac1a93c227c8dabcc1ed433 *core/config/devices/SNZB-02D_SONOFF/discovery-SNZB-02D_SONOFF.json
+71c920d3b92b324ae81d7774aa1094d3 *core/config/devices/SNZB-02M_SONOFF/SNZB-02M_SONOFF.json
+13615422a81e2b353a1e6ec8ab2c6d6f *core/config/devices/SNZB-02M_SONOFF/discovery-SNZB-02M_SONOFF.json
 060374f2a437c396d0386affff9b4ce7 *core/config/devices/SNZB-02P_eWeLink/SNZB-02P_eWeLink.json
 1434814a4269bf1107354435056a0008 *core/config/devices/SNZB-02P_eWeLink/discovery-SNZB-02P_eWeLink.json
 6e2f0d4b2549739d71b0e3c54ee38877 *core/config/devices/SNZB-03P_eWeLink/SNZB-03P_eWeLink.json
@@ -1208,6 +1210,7 @@ b1973df4b6812978f494a4bea7974e6c *core/config/devices_images/node_Silvercrest-Sm
 7955afcf8b6be85fd8577da2dd81035b *core/config/devices_images/node_Silvercrest-SmartPlug-Power.png
 f7a65eca3cf57583929f4719e739eab9 *core/config/devices_images/node_SmokeSensor-EM.png
 5efc0afe25f9647ee3abe6d5c49fc232 *core/config/devices_images/node_Sonoff-01MINIZB.png
+bdbeae7da2a300b11027d279f6c176ea *core/config/devices_images/node_Sonoff-AirGuardTHPressure.png
 b47b765a6640f32aaddadd58dfb4b1c4 *core/config/devices_images/node_Sonoff-BASICZBR3.png
 da4acb14e31b31a09103c3eee5543af8 *core/config/devices_images/node_Sonoff-Button.png
 c4798a11da0bc32246d6784b4cfa59d2 *core/config/devices_images/node_Sonoff-DoorSensor.png
@@ -1464,7 +1467,7 @@ e58ece069945085312795ee80f4ec68c *desktop/php/Abeille-MigrateEq.php
 6a738c201f387c91b3a051053888c08b *desktop/php/Abeille-Scenes.php
 30a5951b65bb1959054beff6ba9ea77d *desktop/php/Abeille-TopButtons.php
 9c7747f4e4a0add2c0ddcea2c1f88c40 *desktop/php/Abeille.php
-a13a83a002571d6347b1e75a12d6412a *desktop/php/AbeilleEqAssist.php
+0f944403a4f413d6b7c38a162448cabc *desktop/php/AbeilleEqAssist.php
 4516d84ab76c42d1132cebc1ebe22dbe *desktop/php/AbeilleFormAction.php
 049be0afc8e0ae0caa7f7c8865e4201e *desktop/php/AbeilleGraph.php
 25c62538c9d1dff6a31ae1b9cbb0e2a3 *desktop/php/AbeilleMaintenance-Logs.php
@@ -1509,7 +1512,7 @@ xxxxxxxxx-md5-skipped-xxxxxxxxxx *docs/dev/private_support.txt
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *docs/dev/remote_controls.txt
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *docs/dev/tuya_support.txt
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *docs/dev/zigbee_notes.txt
-bc03b9f91667fcb54a4188488605477c *docs/fr_FR/Changelog.md
+0774682b9a6a5242a2842f987d843170 *docs/fr_FR/Changelog.md
 2d7942db30537f6f58c830ae01a9958d *images/AbeilleNetworkMap-1200.png
 50f49dd37c22f67d0df6cbf5f8499928 *images/AbeilleNetworkMap.png
 c5242209258a6a3fe0190fed4e97f623 *images/Abeille_icon.png
@@ -1518,11 +1521,11 @@ ef07bed7cde5d10d47bf2d186fe355c9 *images/death.png
 0d2a0e4b178ac89579af8d9b68dbc5d3 *mobile/html/Abeille.html
 2517e8996a5d2d8bef4dc938d927181d *mobile/js/Abeille.js
 xxxxxxxxx-md5-skipped-xxxxxxxxxx *plugin_info/Abeille.md5
-9414cf964d5dc954ac55f97fd5a3537f *plugin_info/Abeille.version
+fd49c59ddce259299691809e94891d91 *plugin_info/Abeille.version
 c5242209258a6a3fe0190fed4e97f623 *plugin_info/Abeille_icon-orig.png
 fb6b465ec4a792559cfcc138720be6e2 *plugin_info/Abeille_icon.png
 6d80d3934e14cf09d026bdb3c1c87df9 *plugin_info/configuration.php
-927f3bcaf5975ed9d2b29637e76369e3 *plugin_info/info.json
+3aea9e6ce4e883b0bfacf88654a36056 *plugin_info/info.json
 bfc35db7c6cb31030b98bf925fb293ea *plugin_info/install.php
 fa66c2e280e095a90334aa2c690f9158 *plugin_info/packages.json
 cbc04c02c72c949415f5d285181813e6 *plugin_info/pre_install.php
