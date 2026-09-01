@@ -154,21 +154,21 @@ fi
 VERSION=`cat plugin_info/Abeille.version | tail -1`
 echo "Committing"
 if [ "$TARG_BRANCH" == "beta" ]; then
-    git commit -q -m "Beta ${VERSION}"
+    git commit -q -m "Beta $VERSION"
 else
-    git commit -q -m "Stable ${VERSION}"
+    git commit -q -m "Stable $VERSION"
 fi
 if [ $? -ne 0 ]; then
     echo "= ERROR: Commit failed"
     exit 24
 fi
 
-git tag -a "${VERSION}" -m "Version ${VERSION}" >/dev/null
+git tag -a "$VERSION" -m "Version $VERSION" >/dev/null
 if [ $? -ne 0 ]; then
     echo "= ERROR: Tag failed"
     exit 25
 fi
-git push -q $TARG_REPO HEAD ${VERSION}
+git push -q $TARG_REPO HEAD $VERSION
 if [ $? -ne 0 ]; then
     echo "= ERROR: git push failed"
     exit 26
@@ -179,18 +179,18 @@ fi
 # Note: Local branch deleted if already exists
 TODAY=`date +"%y%m%d"`
 LOCAL_BRANCH="$TARG_BRANCH-temp-${TODAY}"
-git show-ref refs/heads/${LOCAL_BRANCH} >/dev/null
+git show-ref refs/heads/$LOCAL_BRANCH >/dev/null
 if [ $? -eq 0 ]; then
     # Note: -D to force delete
-    echo "Deleting temp '${LOCAL_BRANCH}' branch"
-    git branch -D ${LOCAL_BRANCH} >/dev/null
+    echo "Deleting temp '$LOCAL_BRANCH' branch"
+    git branch -D $LOCAL_BRANCH >/dev/null
     if [ $? -ne 0 ]; then
         echo "= ERROR"
         exit 30
     fi
 fi
-echo "Switching to ${LOCAL_BRANCH}"
-git checkout -q -b ${LOCAL_BRANCH}
+echo "Switching to $LOCAL_BRANCH"
+git checkout -q -b $LOCAL_BRANCH
 if [ $? -ne 0 ]; then
     echo "= ERROR"
     exit 31
@@ -199,7 +199,7 @@ fi
 # Before creating new 'stable' branch removing items not required
 #   for Jeedom. Not required for 'master' to 'beta'.
 if [ "$TARG_BRANCH" == "stable" ]; then
-    echo "Cleaning ${LOCAL_BRANCH}"
+    echo "Cleaning $LOCAL_BRANCH"
     IGNORE="core/config/ignore_on_push.txt"
     COMMIT_REQUIRED=0
     while IFS= read -r L
@@ -222,10 +222,10 @@ if [ "$TARG_BRANCH" == "stable" ]; then
     done <<< `cat ${IGNORE}`
     if [ ${COMMIT_REQUIRED} -eq 1 ]; then
         git add -u >/dev/null
-        git commit -q -m "${VERSION} cleanup"
+        git commit -q -m "$VERSION cleanup"
         if [ $? -ne 0 ]; then
             echo "= ERROR: Commit failed"
-            echo "=        cmd='git commit -q -m \"${VERSION} cleanup\"'"
+            echo "=        cmd='git commit -q -m \"$VERSION cleanup\"'"
             exit 32
         fi
     fi
@@ -241,7 +241,7 @@ if [ "${REM}" != "" ]; then
     if [ $? -ne 0 ]; then
         echo "= ERROR: git push failed"
         echo "=        cmd='git push -q $TARG_REPO --delete $TARG_BRANCH'"
-        echo "=   then cmd 'git push --force -q $TARG_REPO ${LOCAL_BRANCH}:$TARG_BRANCH'"
+        echo "=   then cmd 'git push --force -q $TARG_REPO $LOCAL_BRANCH:$TARG_BRANCH'"
         echo "=   then cmd 'git checkout -q $CUR_BRANCH'"
         exit 33
     fi
@@ -249,10 +249,10 @@ fi
 
 # Pushing branch
 echo "Creating $TARG_REPO/$TARG_BRANCH branch"
-git push --force -q $TARG_REPO ${LOCAL_BRANCH}:$TARG_BRANCH
+git push --force -q $TARG_REPO $LOCAL_BRANCH:$TARG_BRANCH
 if [ $? -ne 0 ]; then
     echo "= ERROR: git push failed"
-    echo "=        cmd='git push --force -q $TARG_REPO ${LOCAL_BRANCH}:$TARG_BRANCH'"
+    echo "=        cmd='git push --force -q $TARG_REPO $LOCAL_BRANCH:$TARG_BRANCH'"
     echo "=   then cmd 'git checkout -q $CUR_BRANCH'"
     exit 34
 fi
