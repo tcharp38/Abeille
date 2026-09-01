@@ -59,7 +59,7 @@ fi
 # - Stops if any uncommitted local modifs
 echo "Checking current branch & status"
 CUR_BRANCH=`git rev-parse --abbrev-ref HEAD`
-if [ ${FORCE} -eq 0 ] && [ "${CUR_BRANCH}" != "master" ] && [ "${CUR_BRANCH}" != "beta" ]; then
+if [ ${FORCE} -eq 0 ] && [ "$CUR_BRANCH" != "master" ] && [ "$CUR_BRANCH" != "beta" ]; then
     echo "= ERROR: Current branch must be either 'master' or 'beta'"
     exit 10
 fi
@@ -75,10 +75,10 @@ if [ $? -ne 0 ]; then
 fi
 
 # If TARG_BRANCH is undefined, let's gess
-if [ "${TARG_BRANCH}" == "" ]; then
-    if [ "${CUR_BRANCH}" == "master" ]; then
+if [ "$TARG_BRANCH" == "" ]; then
+    if [ "$CUR_BRANCH" == "master" ]; then
         TARG_BRANCH='beta'
-    elif [ "${CUR_BRANCH}" == "beta" ]; then
+    elif [ "$CUR_BRANCH" == "beta" ]; then
         TARG_BRANCH='stable'
     else
         echo "= ERROR: Missing argument to guess target branch"
@@ -91,11 +91,11 @@ fi
 #
 
 # Final check with user before starting if unusual config
-if [ "${CUR_BRANCH}" != "master" ] && [ "${CUR_BRANCH}" != "beta" ]; then
+if [ "$CUR_BRANCH" != "master" ] && [ "$CUR_BRANCH" != "beta" ]; then
     echo
     echo "   *** !! WARNING !!"
     echo "   *** This is an unexpected config."
-    echo "   *** You are going to create a '${TARG_BRANCH}' version from '${CUR_BRANCH}'."
+    echo "   *** You are going to create a '$TARG_BRANCH' version from '$CUR_BRANCH'."
     echo "   *** Are you sure you want to do that ?"
     read -p "   *** Enter y/n: " ANSWER
     if [ "${ANSWER}" != "y" ]; then
@@ -104,7 +104,7 @@ if [ "${CUR_BRANCH}" != "master" ] && [ "${CUR_BRANCH}" != "beta" ]; then
     fi
     echo
 else
-    echo "   *** You are going to create a '${TARG_BRANCH}' version from '${CUR_BRANCH}'."
+    echo "   *** You are going to create a '$TARG_BRANCH' version from '$CUR_BRANCH'."
     echo "   *** Are you sure you want to do that ?"
     read -p "   *** Enter y/n: " ANSWER
     if [ "${ANSWER}" != "y" ]; then
@@ -122,7 +122,7 @@ fi
 # - add+commit, then tag + push
 
 # Updating plugin version
-.tools/update_version.sh ${TARG_BRANCH}
+.tools/update_version.sh $TARG_BRANCH
 if [ $? -ne 0 ]; then
     echo "= ERROR"
     exit 20
@@ -153,7 +153,7 @@ fi
 
 VERSION=`cat plugin_info/Abeille.version | tail -1`
 echo "Committing"
-if [ "${TARG_BRANCH}" == "beta" ]; then
+if [ "$TARG_BRANCH" == "beta" ]; then
     git commit -q -m "Beta ${VERSION}"
 else
     git commit -q -m "Stable ${VERSION}"
@@ -168,7 +168,7 @@ if [ $? -ne 0 ]; then
     echo "= ERROR: Tag failed"
     exit 25
 fi
-git push -q ${TARG_REPO} HEAD ${VERSION}
+git push -q $TARG_REPO HEAD ${VERSION}
 if [ $? -ne 0 ]; then
     echo "= ERROR: git push failed"
     exit 26
@@ -178,7 +178,7 @@ fi
 # Create local temporary branch & switch to it
 # Note: Local branch deleted if already exists
 TODAY=`date +"%y%m%d"`
-LOCAL_BRANCH="${TARG_BRANCH}-temp-${TODAY}"
+LOCAL_BRANCH="$TARG_BRANCH-temp-${TODAY}"
 git show-ref refs/heads/${LOCAL_BRANCH} >/dev/null
 if [ $? -eq 0 ]; then
     # Note: -D to force delete
@@ -198,7 +198,7 @@ fi
 
 # Before creating new 'stable' branch removing items not required
 #   for Jeedom. Not required for 'master' to 'beta'.
-if [ "${TARG_BRANCH}" == "stable" ]; then
+if [ "$TARG_BRANCH" == "stable" ]; then
     echo "Cleaning ${LOCAL_BRANCH}"
     IGNORE="core/config/ignore_on_push.txt"
     COMMIT_REQUIRED=0
@@ -232,51 +232,60 @@ if [ "${TARG_BRANCH}" == "stable" ]; then
 fi
 
 # Delete target branch (origin/beta) & push new one
-#REM=`git branch -a | grep remotes/${TARG_REPO}/${TARG_BRANCH}`
-REM=`git ls-remote ${TARG_REPO} ${TARG_BRANCH}`
+#REM=`git branch -a | grep remotes/$TARG_REPO/$TARG_BRANCH`
+REM=`git ls-remote $TARG_REPO $TARG_BRANCH`
 #if [ $? -eq 0 ]; then
 if [ "${REM}" != "" ]; then
-    echo "Deleting ${TARG_REPO}/${TARG_BRANCH} branch"
-    git push -q ${TARG_REPO} --delete ${TARG_BRANCH}
+    echo "Deleting $TARG_REPO/$TARG_BRANCH branch"
+    git push -q $TARG_REPO --delete $TARG_BRANCH
     if [ $? -ne 0 ]; then
         echo "= ERROR: git push failed"
-        echo "=        cmd='git push -q ${TARG_REPO} --delete ${TARG_BRANCH}'"
-        echo "=   then cmd 'git push --force -q ${TARG_REPO} ${LOCAL_BRANCH}:${TARG_BRANCH}'"
-        echo "=   then cmd 'git checkout -q ${CUR_BRANCH}'"
+        echo "=        cmd='git push -q $TARG_REPO --delete $TARG_BRANCH'"
+        echo "=   then cmd 'git push --force -q $TARG_REPO ${LOCAL_BRANCH}:$TARG_BRANCH'"
+        echo "=   then cmd 'git checkout -q $CUR_BRANCH'"
         exit 33
     fi
 fi
 
 # Pushing branch
-echo "Creating ${TARG_REPO}/${TARG_BRANCH} branch"
-git push --force -q ${TARG_REPO} ${LOCAL_BRANCH}:${TARG_BRANCH}
+echo "Creating $TARG_REPO/$TARG_BRANCH branch"
+git push --force -q $TARG_REPO ${LOCAL_BRANCH}:$TARG_BRANCH
 if [ $? -ne 0 ]; then
     echo "= ERROR: git push failed"
-    echo "=        cmd='git push --force -q ${TARG_REPO} ${LOCAL_BRANCH}:${TARG_BRANCH}'"
-    echo "=   then cmd 'git checkout -q ${CUR_BRANCH}'"
+    echo "=        cmd='git push --force -q $TARG_REPO ${LOCAL_BRANCH}:$TARG_BRANCH'"
+    echo "=   then cmd 'git checkout -q $CUR_BRANCH'"
     exit 34
 fi
+    echo "= Push successful ($LOCAL_BRANCH => $TARG_REPO/$TARG_BRANCH)"
 
-echo "Switching back to '${CUR_BRANCH}' branch"
-git checkout -q ${CUR_BRANCH}
+echo "Switching back to '$CUR_BRANCH' branch"
+git checkout -q $CUR_BRANCH
 if [ $? -ne 0 ]; then
     echo "= ERROR: git checkout failed"
-    echo "=        cmd='git checkout -q ${CUR_BRANCH}'"
+    echo "=        cmd='git checkout -q $CUR_BRANCH'"
     exit 35
 else
     echo "= Ok"
 fi
 
 # Now trying to update ../AbeilleDoc.git
+ERR=0
 php .tools/gen_devices_list.php
-cd ../AbeilleDoc.git
-git pull
-cp ../Abeille.git/docs/fr_FR/Changelog.md source
-cp ../Abeille.git/CompatibilityList.rst source/devices
-./gen_docs.sh
-git add -u
-git commit -m "Changelog + compatibility list updates"
-git push
-cd ../Abeille.git
+if [ $? -ne 0 ]; then
+    ERR=1
+fi
+if [ $ERR -eq 0 ]; then
+    cd ../AbeilleDoc.git
+    git pull
+    cp ../Abeille.git/docs/fr_FR/Changelog.md source
+    cp ../Abeille.git/CompatibilityList.rst source/devices
+    ./gen_docs.sh
+    if [ $ERR -eq 0 ]; then
+        git add -u
+        git commit -m "Changelog + compatibility list updates"
+        git push
+    fi
+    cd ../Abeille.git
+fi
 
 exit 0
