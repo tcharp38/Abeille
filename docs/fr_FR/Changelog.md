@@ -1,5 +1,7 @@
 # ChangeLog
 
+- Amélioration: Infos clefs table 'cmd' tri par 'eqLogic_id'.
+
 ## 261027-BETA-2
 
 - Amélioration: Suppression arriere plan de qq icones.

@@ -78,7 +78,7 @@
         case "cron": $sql = "SELECT * FROM `cron` WHERE `class` = 'Abeille'"; break;
         case "config": $sql = "SELECT * FROM `config` WHERE `plugin` = 'Abeille'"; break;
         case "eqLogic": $sql = "SELECT * FROM `eqLogic` WHERE `eqType_name` = 'Abeille'"; break;
-        case "cmd": $sql = "SELECT * FROM `cmd` WHERE `eqType` = 'Abeille'"; break;
+        case "cmd": $sql = "SELECT * FROM `cmd` WHERE `eqType` = 'Abeille' ORDER BY `eqLogic_id` ASC"; break;
         }
         $i = 0;
         logIt("{\n");
