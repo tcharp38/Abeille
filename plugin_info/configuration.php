@@ -163,11 +163,14 @@
         $eqLogic = eqLogic::byLogicalId("Abeille$gtwId/0000", 'Abeille');
         if (!$eqLogic)
             continue;
-        $cmds = [];
+        $cmds = []; // Info cmds
         foreach($eqLogic->getCmd() as $jCmd) {
+            if ($jCmd->getType() != "info")
+                continue;
             $cmdLogicId = $jCmd->getLogicalId();
             $cmds[$cmdLogicId] = Array(
-                "id" => $jCmd->getId()
+                "id" => $jCmd->getId(),
+                "value" => $jCmd->execCmd() // Current value
             );
         }
         $gateways[$gtwId] = array(
@@ -222,13 +225,11 @@
     }
 
     function displayGateway($gtwId) {
+
         global $dbgTcharp38, $dbgDeveloperMode, $portsList;
         $eqLogic = eqLogic::byLogicalId('Abeille'.$gtwId.'/0000', 'Abeille');
-        if (!$eqLogic) {
-            // TODO: Unexpected
-            return;
-        }
-        $eqId = $eqLogic->getId();
+        if ($eqLogic)
+            $eqId = $eqLogic->getId();
 
         echo '<div class="form-group">';
             echo '<div class="col-lg-3">';
@@ -335,9 +336,10 @@
                 // echo '<div class="cmd cmd-widget" data-type="info" data-subtype="string" abCmdLogicId="FW-Version">';
                 // echo    '<span class="value">?</span>';
                 // echo '</div>';
-                echo "<div abGtwId=\"$eqId\" abCmdLogicId=\"FW-Version\">";
-                echo    '<input id="idFwVersion'.$gtwId.'" type="text" value="?" readonly style="width:100%">';
-                echo '</div>';
+                // echo "<div abGtwId=\"$eqId\" abCmdLogicId=\"FW-Version\">";
+                // echo    '<input id="idFwVersion'.$gtwId.'" type="text" value="?" readonly style="width:100%">';
+                // echo '</div>';
+                echo '<input abGtwId="'.$gtwId.'" abCmdLogicId="FW-Version" type="text" value="?" readonly style="width:100%">';
             echo '</div>';
             echo '<div class="col-lg-2">';
                 echo '<a id="idReadFwB'.$gtwId.'" class="btn btn-default form-control" onclick="checkSerialPort('.$gtwId.')" title="{{Lecture de la version du firmware}}"><i class="fas fa-sync"></i> {{Lire}}</a>';
@@ -583,7 +585,7 @@
                 <!-- </div> -->
             </div>
 
-            <!-- Display zigates 2 per line -->
+            <!-- Display 2 gateways per line -->
             <?php
             // How many zigates to display ? (check if enabled or not)
             $maxId = 1;
@@ -592,6 +594,9 @@
                 if ($status == "Y")
                     $maxId = $gtwId;
             }
+            if (($maxId % 2) !== 0)
+                $maxId++;
+            // Now displaying up to $maxId aligned on multiple of 2
             for ($gtwId = 1, $zgG = 1; $gtwId <= maxGateways; $gtwId++, $zgG++) {
                 if ($gtwId > $maxId)
                     echo '<div id="idGtwGroup'.$zgG.'" class="form-group" style="display:none">';
@@ -599,15 +604,15 @@
                     echo '<div id="idGtwGroup'.$zgG.'" class="form-group">';
                     $lastDisplayedG = $zgG;
                 }
+                echo '<div class="col-lg-6">';
+                    displayGateway($gtwId);
+                echo '</div>';
+                $gtwId++;
+                if ($gtwId <= maxGateways) {
                     echo '<div class="col-lg-6">';
                         displayGateway($gtwId);
                     echo '</div>';
-                    $gtwId++;
-                    if ($gtwId <= maxGateways) {
-                        echo '<div class="col-lg-6">';
-                            displayGateway($gtwId);
-                        echo '</div>';
-                    }
+                }
                 echo '</div>';
             }
             echo '<script>lastDisplayedG = '.$lastDisplayedG.'</script>';
@@ -994,7 +999,7 @@
                     console.log("FW="+fw)
                     $('.serialPortStatus' + gtwId).empty().append('<span class="label label-success" style="font-size:1em;">OK</span>');
                     // $('#idFwVersion'+gtwId).empty().append('<span class="label label-success" style="font-size:1em;">'+fw+'</span>');
-                    document.getElementById("idFwVersion"+gtwId).value = fw;
+                    // document.getElementById("idFwVersion"+gtwId).value = fw; // Updated by updateInfoCmd
                 } else {
                     $('.serialPortStatus' + gtwId).empty().append('<span class="label label-danger" style="font-size:1em;">NOK</span>');
                 }
@@ -1460,7 +1465,7 @@
         cmdId = _options.cmd_id;
         value = _options.display_value;
         console.log("updateInfoCmd(cmdId=" + cmdId + ", val=" + value + ")");
-        var elm = document.getElementById("abCmdId-" + cmdId);
+        // var elm = document.getElementById("abCmdId-" + cmdId);
         elm = document.querySelector('[abCmdId="' + cmdId + '"]');
         if (elm == null) {
             console.log("ERROR: Cannot find elm 'abCmdId=" + cmdId + "'");
@@ -1471,6 +1476,9 @@
         else elm.textContent = value; // Not <input>. Assuming <span>
     }
 
+    // throw new Error("Arrêt forcé ici.");
+    // console.log("J suis ici mais je ne devrais pas y etre.");
+
     $("#idAdvOptions").hide();
 
     // Install a way to monitor log level change
@@ -1480,25 +1488,6 @@
         if (!btSave.hasClass('ab::logLev')) { // Avoid multiple declaration of the event on the button
             btSave.addClass('ab::logLev');
             btSave.on('click', function() {
-                // var level = $('input.configKey[data-l1key="log::level::Abeille"]:checked')
-                // console.log('btSave click: level='+level.attr('data-l2key'));
-                // if (level.length == 1) { // Found 1 log::level::Abeille input checked
-                //     $.ajax({
-                //         type: 'POST',
-                //         url: 'plugins/Abeille/core/ajax/Abeille.ajax.php',
-                //         data: {
-                //             action: 'logLevelChanged',
-                //             level: level.attr('data-l2key') // 100, 200, ...
-                //         },
-                //         dataType: 'json',
-                //         global: false,
-                //         // error: function (request, status, error) {
-                //         //     bootbox.alert("ERREUR 'checkWifi' !<br>Votre installation semble corrompue.");
-                //         // },
-                //         success: function (json_res) {
-                //         }
-                //     });
-                // }
 
                 console.log("Restarting daemons");
                 $.ajax({
@@ -1522,98 +1511,6 @@
         console.log("bt_startDeamon event (saved=" + buttonStartDaemonEvent + ")");
         buttonStartDaemonEvent = 1;
     });
-
-    // $('#idZigatesShowHide').on('click', function () {
-    //     var Label = document.getElementById("idZigatesShowHide").innerText;
-    //     console.log("ZigatesShowHide click: Label=" + Label);
-    //     if (Label == "{{Afficher}}") {
-    //         document.getElementById("idZigatesShowHide").innerText = "{{Cacher}}";
-    //         document.getElementById("idZigatesShowHide").className = "btn btn-danger";
-    //         $("#idZigates").show();
-    //     } else {
-    //         document.getElementById("idZigatesShowHide").innerText = "{{Afficher}}";
-    //         document.getElementById("idZigatesShowHide").className = "btn btn-success";
-    //         $("#idZigates").hide();
-    //     }
-    // });
-
-    /* Number of zigates changed. Display more or less 'idGtwGroup'
-       and be sure any new zigate is disabled by default */
-    // $("#nbOfZigates").change(function() {
-    //     var nbOfZigates = Number($("#nbOfZigates").val());
-    //     console.log("Nb Zigates: now=" + nbOfZigates + ", prev=" + js_NbOfZigates);
-    //     if (nbOfZigates > js_NbOfZigates) {
-    //         for (z = js_NbOfZigates + 1; z <= nbOfZigates; z++) {
-    //             $("#idSelGtwStatus" + z).val('N'); // Disabled
-    //             $("#idSelGtwStatus" + z).change();
-    //             $("#idGtwGroup" + z).show();
-    //         }
-    //     } else if (nbOfZigates < js_NbOfZigates) {
-    //         for (z = nbOfZigates + 1; z <= js_NbOfZigates; z++) {
-    //             $("#idSelGtwStatus" + z).val('N'); // To be saved as disabled
-    //             $("#idGtwGroup" + z).hide();
-    //         }
-    //     }
-    //     js_NbOfZigates = nbOfZigates;
-    // });
-
-    /* Called when 'IP:port' test button is pressed (Wifi case) */
-    // function checkWifi(zgId) {
-        // console.log("checkWifi(zgId=" + zgId + ")");
-        // /* Note. Onclick seems still active even if button is disabled (wifi case) */
-        // var idCheckWifi = document.querySelector('#idCheckWifi' + zgId);
-        // if (idCheckWifi.getAttribute('disabled') != null) {
-            // console.log("=> Action ignored (diabled).");
-            // return;
-        // }
-        // var wifiAddr = document.getElementById("idWifiAddr" + zgId).value;
-        // if (wifiAddr == "") {
-            // alert("Merci d'entrer une adresse valide au format <addr>:<port>.\nEx: 192.168.1.12:9999");
-            // return;
-        // }
-        // var ssp = "/tmp/zigateWifi" + zgId; // Socat Serial Port
-        // console.log("wifiAddr=" + wifiAddr + ", ssp=" + ssp);
-        // $.ajax({
-            // type: 'POST',
-            // url: 'plugins/Abeille/core/ajax/Abeille.ajax.php',
-            // data: {
-                // action: 'checkWifi',
-                // zgport: wifiAddr,
-                // ssp: ssp,
-            // },
-            // dataType: 'json',
-            // global: false,
-            // error: function (request, status, error) {
-                // bootbox.alert("ERREUR 'checkWifi' !<br>Votre installation semble corrompue.");
-            // },
-            // success: function (json_res) {
-                // $res = JSON.parse(json_res.result);
-                // if ($res.status == 0) {
-                    // $fw = $res.fw;
-                    // $('.wifiStatus' + zgId).empty().append('<span class="label label-success" style="font-size:1em;">OK, FW ' + $fw + '</span>');
-                    // $('.wifiStatus' + zgId).empty().append('<span class="label label-success" style="font-size:1em;">OK</span>');
-                // } else {
-                    // $('.wifiStatus' + zgId).empty().append('<span class="label label-danger" style="font-size:1em;">NOK</span>');
-                // }
-            // }
-        // });
-    // }
-
-    // $('#idWifiShowHide').on('click', function () {
-    //         var Label = document.getElementById("idWifiShowHide").innerText;
-    //         console.log("WifiShowHide click: Label=" + Label);
-    //         if (Label == "{{Afficher}}") {
-    //             checkSocatInstallation();
-    //             document.getElementById("idWifiShowHide").innerText = "{{Cacher}}";
-    //             document.getElementById("idWifiShowHide").className = "btn btn-danger";
-    //             $("#zigatewifi").show();
-    //         } else {
-    //             document.getElementById("idWifiShowHide").innerText = "{{Afficher}}";
-    //             document.getElementById("idWifiShowHide").className = "btn btn-success";
-    //             $("#zigatewifi").hide();
-    //         }
-    //     }
-    // );
 
     $('#idUpdateCheckShowHide').on('click', function () {
         var Label = document.getElementById("idUpdateCheckShowHide").innerText;
@@ -1677,45 +1574,6 @@
             }
         });
     })
-
-    // $('#bt_checkTTY').on('click', function() {
-    //     let gtwType = $("#idSelGtwType" + gtwId).val();
-    //     if (gtwType == 'zigate')
-    //         gtwSubType = $("#idZigateSubType" + gtwId).val();
-    //     else
-    //         gtwSubType = $("#idEzspSubType" + gtwId).val();
-
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: 'plugins/Abeille/core/ajax/Abeille.ajax.php',
-    //         data: {
-    //             action: 'checkTTY',
-    //             zgport: document.getElementById("ZiGatePort").value,
-    //             zgtype: $("#idSelZgType" + zgId).val(),
-    //         },
-    //         dataType: 'json',
-    //         global: false,
-    //         error: function (request, status, error) {
-    //             bootbox.alert("ERREUR 'checkTTY' !<br>Votre installation semble corrompue.");
-    //         },
-    //         success: function (json_res) {
-    //             $res = JSON.parse(json_res.result);
-    //             if ($res.status == 0) {
-    //                 $('.TTYStatus').empty().append('<span class="label label-success" style="font-size:1em;">OK</span>');
-    //                 $fw = $res.fw;
-    //                 $label = '<span class="label label-success" style="font-size:1em;">' + $fw + '</span>';
-    //                 $('.CurrentFirmware').empty().append($label);
-    //             } else {
-    //                 $('.TTYStatus').empty().append('<span class="label label-danger" style="font-size:1em;">NOK</span>');
-    //                 $('.CurrentFirmware').empty().append('<span class="label label-danger" style="font-size:1em;">?</span>');
-    //             }
-    //         }
-    //     });
-    // });
-    // $('#bt_readFW').on('click', function() {
-    //     /* Click on 'read FW' as same effect than 'check TTY' */
-    //     $('#bt_checkTTY').click();
-    // });
 
     /* Developers mode only */
     if ((typeof js_dbgDeveloperMode != 'undefined')) {
@@ -1870,7 +1728,10 @@
                 continue;
             }
             cmdId = js_gateways[gtwId]['cmds'][cmdLogicId]['id'];
+            cmdValue = js_gateways[gtwId]['cmds'][cmdLogicId]['value'];
+            console.log("  cmdId=" + cmdId + ", cmdValue=" + cmdValue);
             elm.setAttribute('abCmdId', cmdId); // To allow updateInfoCmd() to identify element to update
+            elm.value = cmdValue; // Set current value
             jeedom.cmd.update[cmdId] = updateInfoCmd;
         }   
         console.log("  jeedom.cmd.update=", jeedom.cmd.update);
