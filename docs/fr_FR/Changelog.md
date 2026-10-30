@@ -1,6 +1,7 @@
 # ChangeLog
 
 - Amélioration: Infos clefs table 'cmd' tri par 'eqLogic_id'.
+- Amélioration: Interne page config. Mise-à-jour auto de certaines infos (EN COURS).
 
 ## 261027-BETA-2
 
