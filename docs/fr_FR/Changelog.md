@@ -2,6 +2,7 @@
 
 - Amélioration: Infos clefs table 'cmd' tri par 'eqLogic_id'.
 - Amélioration: Interne page config. Mise-à-jour auto de certaines infos.
+- Amélioration: Suppression arriere plan de qq icones.
 
 ## 261027-BETA-2
 
