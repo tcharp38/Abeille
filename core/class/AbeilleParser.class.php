@@ -4145,7 +4145,7 @@
                             $transition = AbeilleTools::reverseHex(substr($pl, 2, 4));
                             $optMask = substr($pl, 6, 2);
                             $optOverride = substr($pl, 8, 2);
-                            $value = $level; // Report level as value
+                            $value = hexdec($level); // Report level as integer value
 
                             $m = "  Move to level";
                             if ($cmd == "04")
