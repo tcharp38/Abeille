@@ -25,6 +25,12 @@
             "Humidity": {
                 "use": "inf_zbAttr-0405-MeasuredValue",
                 "isVisible": 1
+            },
+            "SetReporting 01-0402-0000": {
+                "use": "act_zbConfigureReporting2",
+                "params": "ep=01&clustId=0402&attrType=29&attrId=0000&minInterval=300&maxInterval=600",
+                "execAtCreation": "yes",
+                "comment": "Reporting every 5 to 10mins"
             }
         },
         "private": {
@@ -36,7 +42,8 @@
                 },
                 "05": {
                     "function": "rcvValue",
-                    "info": "0402-01-0000"
+                    "info": "0402-01-0000",
+                    "div": 10
                 },
                 "6D": {
                     "function": "rcvValue",
