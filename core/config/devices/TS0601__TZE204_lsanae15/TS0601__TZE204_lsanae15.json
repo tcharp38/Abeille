@@ -54,6 +54,7 @@
                 "logicalId": "fault",
                 "returnStateValue": "none",
                 "returnStateTime": "1",
+                "repeatEventManagement": "always",
                 "isVisible": 1
             }
         },

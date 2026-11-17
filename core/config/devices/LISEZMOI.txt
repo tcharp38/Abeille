@@ -156,11 +156,14 @@ Exemple
         Permet d'appliquer une formule sur la valeur avant action.
         Ex: "valueOffset": "#value#*10"
         Ex: "valueOffset": "#value#*#logicid0102-01-F003#/100"
-    returnStateTime: X
-        Permet d'indiquer à Jeedom de changer automatique la valeur au bout de X sec à celle de 'returnStateValue'
+    returnStateTime: X (en minutes)
+        Permet d'indiquer à Jeedom de changer automatique la valeur au bout de X minutes à celle donnée par 'returnStateValue'
+        Géré par Jeedom => 'Durée avant retour d'état'
     returnStateValue: Y
         Valeur de retour automatique pour une commande info.
-
+        Géré par Jeedom => 'Valeur retour d'état'
+    repeatEventManagement: always => Evenement redéclenché si valeur identique
+        Ex: "repeatEventManagement": "always"
 
   Exemples de nouvelle syntaxe:
     "Status 1": { "use": "zb-0006-OnOff", "params": "ep=01", "isVisible": 1, "nextLine": "after" },

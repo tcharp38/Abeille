@@ -47,3 +47,6 @@ alors que ca semble ok avec
 
     "returnStateValue": "0",
     "returnStateTime": "1"
+
+Autre point à clarifier, il se peut qu'il faille ajouter "repeatEventManagement" pour que le cron de retour d'état soit déclenché
+Ex: "repeatEventManagement": "always"
