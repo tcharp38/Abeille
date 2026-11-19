@@ -1,8 +1,8 @@
 {
     "RemoteControlN2_IKEAofSweden": {
-        "manufacturer": "IKEAofSweden",
-        "model": "RemoteControlN2",
-        "type": "STYRBAR",
+        "manufacturer": "Ikea",
+        "model": "STYRBAR",
+        "type": "Ikea Styrbar remote control",
         "genericType": "Light",
         "timeout": "60",
         "configuration": {
