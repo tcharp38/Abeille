@@ -1,5 +1,8 @@
 {
     "TRADFRIopencloseremote": {
+        "manufacturer": "Ikea",
+        "model": "E1766",
+        "type": "Ikea Tradfri open-close remote",
         "timeout": "60",
         "configuration": {
             "mainEP": "01",
@@ -9,7 +12,6 @@
         "category": {
             "light": "1"
         },
-        "type": "IKEA TRADFRI Carre 2 Boutons Remote Control livr\u00e9 avec Fyrtur Store",
         "commands": {
             "Battery-Percent": {
                 "use": "inf_zbAttr-0001-BatteryPercent",
