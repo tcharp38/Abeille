@@ -3,6 +3,7 @@
 - Correction: Interne page config: error JS (auInfoCmds already been declared).
 - Correction: Support Tuya energy meter (2801).
 - Amélioration: Docs.
+- Amélioration: Suppression du mode hybride des options avancées.
 
 ## 261116-BETA-1
 

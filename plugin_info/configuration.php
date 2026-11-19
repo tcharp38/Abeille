@@ -683,7 +683,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="col-lg-4 control-label" data-toggle="tooltip" title="{{Force le mode 'hybride' pour les Zigates}}">{{Zigates en mode 'hybride'}} : </label>
                 <div class="col-lg-5">
                     <select class="configKey form-control" data-l1key="ab::forceZigateHybridMode" style="width:150px" data-toggle="tooltip" title="{{Si 'Oui', les Zigates fonctionnent en mode 'hybride' au lieu de 'brut'}}">
@@ -691,7 +691,7 @@
                         <option value="N" selected>{{Non}}</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <label class="col-lg-4 control-label" data-toggle="tooltip" title="{{Mode dédié aux développeurs}}">{{Mode developpeur}} : </label>
