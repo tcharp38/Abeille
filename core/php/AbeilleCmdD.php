@@ -196,6 +196,7 @@
         // AbeilleCmdQueue::pushZigateCmd($zgId, PRIO_HIGH, "0020", "21758D1900481200", 0, "0000", null);
 
         global $config;
+cmdLog('debug', "  YOOOOOOO chan=".json_encode($config['ab::gtwChan'.$zgId]));
         $chan = isset($config['ab::gtwChan'.$zgId]) ? $config['ab::gtwChan'.$zgId] : 0; // Default = auto (all channels)
         if ($chan == 0)
             $mask = 0x7fff800; // All channels = auto
@@ -212,13 +213,13 @@
         AbeilleCmdQueue::pushZigateCmd($zgId, PRIO_HIGH, "0016", $data, 0, "0000", null, false);
 
         /* Set RAW mode unless hybrid requested (should not longer be required) */
-        if (isset($config['ab::forceZigateHybridMode']) && ($config['ab::forceZigateHybridMode'] == "Y")) {
-            $mode = "hybrid";
-            $mode2 = "02";
-        } else {
+        // if (isset($config['ab::forceZigateHybridMode']) && ($config['ab::forceZigateHybridMode'] == "Y")) {
+        //     $mode = "hybrid";
+        //     $mode2 = "02";
+        // } else {
             $mode = "raw";
             $mode2 = "01";
-        }
+        // }
         cmdLog('debug', "  Configuring Zigate $zgId in '$mode' mode");
         AbeilleCmdQueue::pushZigateCmd($zgId, PRIO_HIGH, "0002", $mode2, 0, "0000", null, false);
 

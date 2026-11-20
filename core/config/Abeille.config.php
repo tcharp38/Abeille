@@ -7,7 +7,7 @@
              As a general rule, use const by default for cleaner, faster, and more readable code.
              Reserve define() only when you strictly need conditional logic, dynamic names, or global initialization patterns. */
 
-    const lastDbVersion = 20260806;
+    const lastDbVersion = 20261120;
 
     $in = "/tmp/AbeilleDeamonInput";
     $resourcePath = realpath(__DIR__.'/../../resources');

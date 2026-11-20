@@ -5,6 +5,8 @@
 - Amélioration: Docs.
 - Amélioration: Suppression du mode hybride des options avancées.
 - Correction: Regression page config. Plus moyen de faire une mise-à-jour de Zigate.
+- Amélioration: Page config revue mineure + FW par défaut Zigate v2 = '0005-0324'.
+- Nouveauté: Zigate en 'Raw' seulement. 'Hybride' plus supporté.
 
 ## 261116-BETA-1
 

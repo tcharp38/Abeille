@@ -1,3 +1,10 @@
+Canal Zigbee
+    A REVOIR !! Ne semble pas effectif de suite et page de config pas en ligne avec le choix.
+    
+    Si changement de canal via onglet avancé et que page config ouverte avec ancien canal => PB !!
+    Page de config doit etre raffraichie une fois le changement de canal fait
+    => Déplacer choix Zigbee dans la page de config ?
+
 calculValueOffset
     Pour cmde info mais AUSSI pour cmde action.
     Dans les 2 cas configurable via interface Jeedom => onglet 'configuration', 'Formule de calcul'
@@ -70,8 +77,3 @@ Doc: Améliorer support de nouveau equipements
     Demander image PNG SANS arriere plan
     Demander type et nomber de batteries
     Demander ref/modele fabricant
-
-Canal Zigbee
-    Si changement de canal via onglet avancé et que page config ouverte avec ancien canal => PB !!
-    Page de config doit etre raffraichie une fois le changement de canal fait
-    => Déplacer choix Zigbee dans la page de config ?

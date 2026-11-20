@@ -258,29 +258,23 @@
         echo '<div class="form-group">';
             echo '<label class="col-lg-3 control-label" data-toggle="tooltip">{{Type}} : </label>';
             echo '<div class="col-lg-4">';
-                echo '<div class="form-group">';
-                    echo '<div class="col-lg-5">';
-                        echo '<select id="idSelGtwType'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwType'.$gtwId.'" onchange="gtwTypeChanged('.$gtwId.')"  title="{{Type de clef}}">';
-                            echo '<option value="zigate" selected>{{Zigate}}</option>';
-                            if (isset($dbgTcharp38))
-                                echo '<option value="ezsp">{{EmberZnet/EZSP}}</option>';
-                        echo '</select>';
-                    echo '</div>';
-                    echo '<div class="col-lg-7">';
-                        echo '<select id="idZigateSubType'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwSubType'.$gtwId.'" onchange="gtwSubTypeChanged('.$gtwId.')"  title="{{Modèle de clef}}">';
-                            echo '<option value="USB" selected>{{USB v1}}</option>';
-                            echo '<option value="WIFI">{{WIFI/Ethernet}}</option>';
-                            echo '<option value="PI">{{PI v1}}</option>';
-                            echo '<option value="DIN">{{DIN v1}}</option>';
-                            echo '<option value="USBv2">{{USB +/v2}}</option>';
-                            echo '<option value="PIv2">{{PI +/v2}}</option>';
-                            echo '<option value="DINv2">{{DIN +/v2}}</option>';
-                        echo '</select>';
-                        echo '<select id="idEzspSubType'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwSubType'.$gtwId.'" onchange="gtwSubTypeChanged('.$gtwId.')"  title="{{Modèle de clef}}" style="display:none">';
-                            echo '<option value="DEFAULT" selected>{{Défaut}}</option>';
-                        echo '</select>';
-                    echo '</div>';
-                echo '</div>';
+                echo '<select id="idSelGtwType'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwType'.$gtwId.'" onchange="gtwTypeChanged('.$gtwId.')"  title="{{Type de clef}}" style="width:49%; display:inline-block; margin-right:1%">';
+                    echo '<option value="zigate" selected>{{Zigate}}</option>';
+                    if (isset($dbgTcharp38))
+                        echo '<option value="ezsp">{{EmberZnet/EZSP}}</option>';
+                echo '</select>';
+                echo '<select id="idZigateSubType'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwSubType'.$gtwId.'" onchange="gtwSubTypeChanged('.$gtwId.')"  title="{{Modèle de clef}}" style="width:49%; display:inline-block; margin-left:1%">';
+                    echo '<option value="USB" selected>{{USB v1}}</option>';
+                    echo '<option value="WIFI">{{WIFI/Ethernet}}</option>';
+                    echo '<option value="PI">{{PI v1}}</option>';
+                    echo '<option value="DIN">{{DIN v1}}</option>';
+                    echo '<option value="USBv2">{{USB +/v2}}</option>';
+                    echo '<option value="PIv2">{{PI +/v2}}</option>';
+                    echo '<option value="DINv2">{{DIN +/v2}}</option>';
+                echo '</select>';
+                echo '<select id="idEzspSubType'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwSubType'.$gtwId.'" onchange="gtwSubTypeChanged('.$gtwId.')"  title="{{Modèle de clef}}" style="display:none; width:49%; display:inline-block; margin-left:1%">';
+                    echo '<option value="DEFAULT" selected>{{Défaut}}</option>';
+                echo '</select>';
             echo '</div>';
         echo '</div>';
 
@@ -328,23 +322,9 @@
 
         echo '<div class="form-group">';
             echo '<label class="col-lg-3 control-label" data-toggle="tooltip">{{Firmware}} : </label>';
-            echo '<div class="col-lg-2">';
-                // if (isset($eqId))
-                //     $fwVersion = getCmdValueByLogicId($eqId, "FW-Version");
-                // else
-                //     $fwVersion = "";
-                // echo '<input id="idFwVersion'.$gtwId.'" value="'.$fwVersion.'" type="text" class="cmd" data-type="info" data-subtype="string" data-cmd_id="" title="{{Version actuelle du firmware}}" readonly="readonly">';
-                // echo '<input abCmdLogicId="FW-Version" type="text" title="{{Version actuelle du firmware}}" readonly="readonly">';
-                // echo '<div class="cmd cmd-widget" data-type="info" data-subtype="string" abCmdLogicId="FW-Version">';
-                // echo    '<span class="value">?</span>';
-                // echo '</div>';
-                // echo "<div abGtwId=\"$eqId\" abCmdLogicId=\"FW-Version\">";
-                // echo    '<input id="idFwVersion'.$gtwId.'" type="text" value="?" readonly style="width:100%">';
-                // echo '</div>';
-                echo '<input abGtwId="'.$gtwId.'" abCmdLogicId="FW-Version" id="idFwVersion'.$gtwId.'" type="text" value="" readonly style="width:100%">';
-            echo '</div>';
-            echo '<div class="col-lg-2">';
-                echo '<a id="idReadFwB'.$gtwId.'" class="btn btn-default form-control" onclick="checkSerialPort('.$gtwId.')" title="{{Lecture de la version du firmware}}"><i class="fas fa-sync"></i> {{Lire}}</a>';
+            echo '<div class="col-lg-4">';
+                echo '<input abGtwId="'.$gtwId.'" abCmdLogicId="FW-Version" id="idFwVersion'.$gtwId.'" type="text" value="" title="{{Version actuelle du firmware}}" readonly style="width:50%">';
+                echo '<a id="idReadFwB'.$gtwId.'" class="btn btn-default form-control" onclick="checkSerialPort('.$gtwId.')" title="{{Lecture de la version du firmware}}"  style="width:50%"><i class="fas fa-sync"></i> {{Lire}}</a>';
             echo '</div>';
             echo '<div class="col-lg-5">';
                     echo '<div id="idUpdFw'.$gtwId.'">';
@@ -384,9 +364,11 @@
         echo '<div class="form-group">';
             echo '<label class="col-lg-3 control-label" data-toggle="tooltip">{{Canal Zigbee}} : </label>';
             echo '<div class="col-lg-4">';
-                echo '<select id="idSelChan'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwChan'.$gtwId.'" title="{{Canal Zigbee}}" disabled>';
+                echo '<input abGtwId="'.$gtwId.'" abCmdLogicId="Network-Channel" type="text" value="" title="{{Canal Zigbee actuel}}" readonly style="width:49%; display:inline-block; margin-right:1%">';
+                echo '<select id="idSelChan'.$gtwId.'" class="configKey form-control" data-l1key="ab::gtwChan'.$gtwId.'" title="{{Canal Zigbee choisi}}" disabled style="width:49%; display:inline-block; margin-left:1%">';
                     echo '<option value=0>auto</option>';
-                    for ($i = 11; $i < 27; $i++) {
+                    echo '<option value=11 selected>11</option>'; // Defaulting channel 11
+                    for ($i = 12; $i < 27; $i++) {
                         echo '<option value='.$i.'>'.$i.'</option>';
                     }
                     echo '</select>';
@@ -1021,11 +1003,10 @@
         if (gtwType == "zigate") {
             if ((gtwSubType == "PI") || (gtwSubType == "DIN")) {
                 list = js_fwListZgV1;
-                // defaultFw = "0004-0323-opdm";
                 defaultFw = "AB01-0000-opdm";
             } else { // Assuming PIv2 or DINv2
                 list = js_fwListZgV2;
-                defaultFw = "0005-0322-opdm";
+                defaultFw = "0005-0324-opdm";
             }
 
             console.log("list=", list);
@@ -1042,7 +1023,7 @@
                 idx++;
             }
         } else {
-            console.log("Unsupported gtw type");
+            console.log("Unsupported gtw type " + gtwType);
             return;
         }
     }

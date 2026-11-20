@@ -887,7 +887,8 @@ class Abeille extends eqLogic {
     } // End 'deamon_start()'
 
     /* Jeedom required function.
-       Stopping all daemons and removing queues */
+       Stopping all daemons and removing queues.
+       Returns: nothing */
     public static function deamon_stop() {
 
         if (!isset($GLOBALS['myPid']))
@@ -900,7 +901,7 @@ class Abeille extends eqLogic {
         $shm = shmop_open(shmKey, "w", 0644, 0);
         if ($shm === false) {
             log::add('Abeille', 'debug', "$myPid deamon_stop(): Failed to open shared mem");
-            return $status;
+            return;
         }
         $shmContent = shmop_read($shm, 0, shmop_size($shm));
         $endPos = strpos($shmContent, "\0");
