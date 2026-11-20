@@ -4,6 +4,7 @@
 - Correction: Support Tuya energy meter (2801).
 - Amélioration: Docs.
 - Amélioration: Suppression du mode hybride des options avancées.
+- Correction: Regression page config. Plus moyen de faire une mise-à-jour de Zigate.
 
 ## 261116-BETA-1
 

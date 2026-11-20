@@ -341,7 +341,7 @@
                 // echo "<div abGtwId=\"$eqId\" abCmdLogicId=\"FW-Version\">";
                 // echo    '<input id="idFwVersion'.$gtwId.'" type="text" value="?" readonly style="width:100%">';
                 // echo '</div>';
-                echo '<input abGtwId="'.$gtwId.'" abCmdLogicId="FW-Version" type="text" value="" readonly style="width:100%">';
+                echo '<input abGtwId="'.$gtwId.'" abCmdLogicId="FW-Version" id="idFwVersion'.$gtwId.'" type="text" value="" readonly style="width:100%">';
             echo '</div>';
             echo '<div class="col-lg-2">';
                 echo '<a id="idReadFwB'.$gtwId.'" class="btn btn-default form-control" onclick="checkSerialPort('.$gtwId.')" title="{{Lecture de la version du firmware}}"><i class="fas fa-sync"></i> {{Lire}}</a>';
